@@ -2713,236 +2713,235 @@ SERVICE_DATABASE = {
     "description": "Likely related to 'Network Resource Discovery' updates.",
     "impact": "May affect the system's ability to discover network resources."
   },
-    "com.apple.MessageUIMacHelperService": {
-        "description": "A helper service for the Mail app's user interface.",
-        "impact": "Certain UI elements or features within the Mail app may break.",
-    },
-    "com.apple.SpeechRecognitionCore.brokerd": {
-        "description": "A broker daemon for the Speech Recognition Core framework.",
-        "impact": "Core speech recognition functionalities used by Siri, Dictation, and other apps will fail.",
-    },
-    "com.apple.hiservices-xpcservice": {
-        "description": "An XPC service for HIToolbox, a legacy Carbon framework for user interface elements.",
-        "impact": "Older applications that rely on Carbon for their UI may not function correctly.",
-    },
-    "com.apple.iokit.IOServiceAuthorizeAgent": {
-        "description": "An agent that handles authorization requests for I/O Kit services, allowing user-space applications to access hardware.",
-        "impact": "Applications may be unable to get the necessary permissions to interact with certain hardware.",
-    },
-    "com.apple.installandsetup.migrationhelper.user": {
-        "description": "A user-level helper for the Migration Assistant.",
-        "impact": "The Migration Assistant may fail to transfer user-specific data and settings correctly.",
-    },
-    "com.apple.mdworker.mail": {
-        "description": "A Spotlight metadata importer specifically for indexing email content for Mail searches.",
-        "impact": "The content of your emails will not be searchable via Spotlight.",
-    },
-    "com.apple.mdworker.shared": {
-        "description": "A shared Spotlight metadata importer used by various applications.",
-        "impact": "Spotlight indexing for multiple file types may be incomplete, leading to poor search results.",
-    },
-    "com.apple.mdworker.single": {
-        "description": "A generic Spotlight metadata importer that runs as a single-use process for specific file types.",
-        "impact": "Spotlight indexing will be impaired, affecting search capabilities.",
-    },
-    "com.apple.metadata.mdbulkimport": {
-        "description": "A Spotlight service for importing large amounts of metadata in bulk.",
-        "impact": "Initial Spotlight indexing and re-indexing of large volumes may be slow or fail.",
-    },
-    "com.apple.netauth.user.auth": {
-        "description": "A user-level authentication service for network accounts.",
-          "impact": "Logging in with network-based user accounts will likely fail.",
-    },
-    "com.apple.pluginkit.pkd": {
-        "description": "The 'pkd' (PluginKit Daemon) is responsible for managing app extensions and plugins.",
-        "impact": "App extensions (like Share menu items, Notification Center widgets, Finder extensions) will not work.",
-    },
-    "com.apple.speech.speechsynthesisd": {
-        "description": "The primary daemon for speech synthesis (text-to-speech).",
-        "impact": "All text-to-speech functionality, including VoiceOver and 'Speak Selection', will be broken.",
-    },
-    "com.apple.usermanagerhelper": {
-        "description": "A helper tool for managing user accounts.",
-        "impact": "May cause issues with creating, deleting, or modifying user accounts in System Settings.",
-    },
-    "com.apple.ViewBridgeAuxiliary": {
-        "description": "An auxiliary service for ViewBridge, which securely embeds views from one process into another (e.g., app extensions).",
-        "impact": "UI elements from app extensions or helper apps may not display correctly.",
-    },
-    "com.apple.WorkflowKit.ShortcutsViewService": {
-        "description": "A service for displaying and managing views related to the Shortcuts app.",
-        "impact": "The Shortcuts app and its integration with the system may be broken.",
-    },
-     "com.apple.duetexpertd": {
-        "description": "The 'Duet Expert' daemon is part of the Duet Activity Scheduler, providing intelligence for proactive features.",
-        "impact": "Proactive suggestions, like predicting your next app launch, may not work. Could affect battery life.",
-    },
-    "com.apple.familynotificationd": {
-        "description": "Handles the delivery of notifications related to Family Sharing.",
-        "impact": "You will not receive notifications for Family Sharing events like purchase requests.",
-    },
-    "com.apple.generativeexperiencesd": {
-        "description": "A daemon for generative experiences, likely related to new on-device AI and ML features.",
-        "impact": "Emerging generative AI features within macOS will not be available.",
-    },
-    "com.apple.helpd": {
-        "description": "The daemon that powers the macOS Help Viewer.",
-        "impact": "You will not be able to access the built-in help manuals for macOS or its applications.",
-    },
-    "com.apple.icloud.fmfd": {
-        "description": "The 'Find My Friends' daemon, a legacy service for the Find My network.",
-        "impact": "Location sharing with friends and family via Find My may not function.",
-    },
-    "com.apple.icloud.searchpartyuseragent": {
-        "description": "A user agent for the 'Search Party' (Find My network), helping to locate offline devices.",
-        "impact": "The ability to find your Mac when it's offline will be disabled.",
-    },
-    "com.apple.icloudmailagent": {
-        "description": "An agent responsible for syncing Mail.app with iCloud.",
-        "impact": "iCloud email will not sync.",
-    },
-    "com.apple.imautomatichistorydeletionagent": {
-        "description": "An agent that automatically deletes old iMessage history based on user settings.",
-        "impact": "Your iMessage history may not be automatically pruned, potentially using more disk space.",
-    },
-    "com.apple.inputanalyticsd": {
-        "description": "A daemon that collects analytics about your use of keyboards and input methods.",
-        "impact": "No input device usage data will be sent to Apple. May be desirable for privacy.",
-    },
-    "com.apple.intelligencecontextd": {
-        "description": "A daemon that provides context to the on-device intelligence platform.",
-        "impact": "Many intelligent and proactive features will be less effective.",
-    },
-    "com.apple.intelligenceflowd": {
-        "description": "A daemon that manages the flow of data for the on-device intelligence platform.",
-        "impact": "Intelligent features may fail to process information correctly.",
-    },
-    "com.apple.knowledgeconstructiond": {
-        "description": "Constructs and maintains the on-device knowledge graph used by Siri and Spotlight.",
-        "impact": "Siri and Spotlight will have a reduced understanding of your personal data and context.",
-    },
-    "com.apple.navd": {
-        "description": "Navigation Daemon. Provides routing and navigation services, primarily for Apple Maps.",
-        "impact": "Turn-by-turn directions and route planning in Maps will fail.",
-    },
-    "com.apple.progressd": {
-        "description": "A system-wide daemon for tracking and displaying progress for tasks like file copies or downloads.",
-        "impact": "Progress indicators in Finder and other apps may not appear or may be inaccurate.",
-    },
-    "com.apple.replicatord": {
-        "description": "A file replication service, likely used for syncing data between devices or with iCloud.",
-        "impact": "The exact impact is unclear, but it could affect data syncing reliability.",
-    },
-    "com.apple.security.cloudkeychainproxy3": {
-        "description": "A proxy service for iCloud Keychain, facilitating communication for keychain syncing.",
-        "impact": "iCloud Keychain syncing may become unreliable or fail completely.",
-    },
-    "com.apple.sidecar-hid-relay": {
-        "description": "A relay service for Human Interface Devices (keyboard, mouse, trackpad) used with Sidecar.",
-        "impact": "You will not be able to use your Mac's keyboard and mouse to interact with the iPad in a Sidecar session.",
-    },
-    "com.apple.siriactionsd": {
-        "description": "The daemon that manages and executes Siri Actions and Shortcuts.",
-        "impact": "The Shortcuts app and any Siri-integrated shortcuts will not function.",
-      },
-    "com.apple.SiriTTSTrainingAgent": {
-        "description": "An agent that may be used for training or optimizing Siri's Text-to-Speech (TTS) capabilities.",
-        "impact": "No immediate user-facing impact, but may prevent improvements to Siri's voice.",
-    },
-    "com.apple.tipsd": {
-        "description": "The daemon for the Tips app, which provides suggestions on how to use macOS.",
-        "impact": "The Tips app and its related notifications will not work.",
-    },
-    "com.apple.UsageTrackingAgent": {
-        "description": "An agent that tracks application and system usage for Screen Time.",
-        "impact": "Screen Time data will be inaccurate or not collected at all.",
-    },
-    "com.apple.videosubscriptionsd": {
-        "description": "A daemon for managing video channel subscriptions within the TV app.",
-        "impact": "Subscriptions to Apple TV Channels may not work correctly.",
-    },
-    "com.apple.assistant_service": {
-        "description": "A core service for Siri (Assistant).",
-        "impact": "Siri will be completely non-functional.",
-    },
-    "com.apple.ContextStoreAgent": {
-        "description": "An agent that manages the storage of contextual data for proactive features.",
-        "impact": "Proactive suggestions and other intelligent features will be less effective.",
-    },
-    "com.apple.maps.destinationd": {
-        "description": "A daemon that likely manages recent and suggested destinations in Apple Maps.",
-        "impact": "Maps may not be able to provide suggestions for destinations.",
-    },
-    "com.apple.geoanalyticsd": {
-        "description": "A daemon that collects and processes analytics related to geolocation and Maps usage.",
-        "impact": "No location-based analytics will be sent to Apple.",
-    },
-    "com.apple.sirittsd": {
-        "description": "Siri Text-to-Speech daemon. Responsible for generating Siri's voice.",
-        "impact": "Siri will be unable to speak.",
-      },
-    "com.apple.cvmsCompAgent": {
-        "description": "A compute agent for the Core Video and Metal frameworks, managing GPU tasks.",
-        "impact": "Graphics-intensive applications and games may fail or perform poorly.",
-    },
-    "com.apple.metadata.mdflagwriter": {
-        "description": "A Spotlight helper that writes flags to metadata.",
-        "impact": "Spotlight indexing may not function correctly.",
-    },
-     "com.apple.screencaptureui": {
-        "description": "Handles the user interface for taking screenshots and screen recordings.",
-        "impact": "The built-in screenshot and screen recording tools (Cmd+Shift+5) will not work.",
-    },
-     # --- Third-Party Services Added Below ---
-    "com.google.keystone.user.agent": {
-        "description": "Google Keystone Agent. Part of Google Updater, it keeps Google applications (like Chrome) up-to-date.",
-        "impact": "Disabling will prevent automatic updates for Google software, which is a potential security risk.",
-    },
-    "com.google.keystone.user.xpcservice": {
-        "description": "Google Keystone XPC Service. Works with the main agent to handle update tasks.",
-        "impact": "Disabling will prevent automatic updates for Google software.",
-    },
-    "com.docker.helper": {
-        "description": "Docker Desktop Helper. A privileged helper tool that manages networking, filesystems, and other system-level resources for Docker Desktop.",
-        "impact": "CRITICAL: Docker Desktop will not be able to function without this helper.",
-    },
-    "com.adobe.GC.AGM": {
-        "description": "Adobe Genuine Service (AGM). Periodically validates your Adobe software licenses.",
-        "impact": "Adobe applications may complain about being non-genuine or may fail to launch.",
-    },
-    "com.adobe.GC.Scheduler-1.0": {
-        "description": "Adobe Genuine Copy Scheduler. Schedules tasks for the Adobe Genuine Service.",
-        "impact": "Adobe applications may complain about being non-genuine or may fail to launch.",
-    },
-    "com.microsoft.update.agent": {
-        "description": "Microsoft AutoUpdate Agent. Manages and applies updates for Microsoft Office applications.",
-        "impact": "Microsoft Office apps will not receive automatic updates, which is a potential security risk.",
-    },
-    "com.microsoft.autoupdate.helper": {
-        "description": "Microsoft AutoUpdate Helper. A privileged helper for installing updates for Microsoft products.",
-        "impact": "Microsoft Office apps will not be able to install updates.",
-    },
-    "2BUA8C4S2C.com.agilebits.onepassword7-helper": {
-        "description": "A helper agent for 1Password 7.",
-        "impact": "1Password 7 browser integration and other features may not work correctly.",
-    },
-    "com.1password.1password-launcher": {
-        "description": "The main launcher for the 1Password 8+ application helper.",
-        "impact": "1Password browser integration and other features may not work correctly.",
-    },
-    # --- Previously Researched Apple Services ---
-    "com.apple.CoreRoutine.helperservice": {
-        "description": "A helper service for the 'routined' daemon, which learns your frequently visited locations to provide proactive suggestions.",
-        "impact": "Disabling this may impair the functionality of location-based suggestions and the Significant Locations feature.",
-    },
-    "com.apple.DistributionKit.DistributionHelper": {
-        "description": "A helper tool for the DistributionKit framework, which is used by the macOS Installer for package distribution.",
-        "impact": "Installation of some software, particularly from `.pkg` files, may fail.",
-    },
-    "com.apple.DictionaryServiceHelper": {
-        "description": "A helper service for the built-in Dictionary application.",
-        "impact": "The Dictionary app and the 'Look Up' feature may not function correctly.",
-    },
+  "com.apple.MessageUIMacHelperService": {
+    "description": "A helper service for the Mail app's user interface.",
+    "impact": "Certain UI elements or features within the Mail app may break.",
+  },
+  "com.apple.SpeechRecognitionCore.brokerd": {
+    "description": "A broker daemon for the Speech Recognition Core framework.",
+    "impact": "Core speech recognition functionalities used by Siri, Dictation, and other apps will fail.",
+  },
+  "com.apple.hiservices-xpcservice": {
+    "description": "An XPC service for HIToolbox, a legacy Carbon framework for user interface elements.",
+    "impact": "Older applications that rely on Carbon for their UI may not function correctly.",
+  },
+  "com.apple.iokit.IOServiceAuthorizeAgent": {
+    "description": "An agent that handles authorization requests for I/O Kit services, allowing user-space applications to access hardware.",
+    "impact": "Applications may be unable to get the necessary permissions to interact with certain hardware.",
+  },
+  "com.apple.installandsetup.migrationhelper.user": {
+    "description": "A user-level helper for the Migration Assistant.",
+    "impact": "The Migration Assistant may fail to transfer user-specific data and settings correctly.",
+  },
+  "com.apple.mdworker.mail": {
+    "description": "A Spotlight metadata importer specifically for indexing email content for Mail searches.",
+    "impact": "The content of your emails will not be searchable via Spotlight.",
+  },
+  "com.apple.mdworker.shared": {
+    "description": "A shared Spotlight metadata importer used by various applications.",
+    "impact": "Spotlight indexing for multiple file types may be incomplete, leading to poor search results.",
+  },
+  "com.apple.mdworker.single": {
+    "description": "A generic Spotlight metadata importer that runs as a single-use process for specific file types.",
+    "impact": "Spotlight indexing will be impaired, affecting search capabilities.",
+  },
+  "com.apple.metadata.mdbulkimport": {
+    "description": "A Spotlight service for importing large amounts of metadata in bulk.",
+    "impact": "Initial Spotlight indexing and re-indexing of large volumes may be slow or fail.",
+  },
+  "com.apple.netauth.user.auth": {
+    "description": "A user-level authentication service for network accounts.",
+    "impact": "Logging in with network-based user accounts will likely fail.",
+  },
+  "com.apple.pluginkit.pkd": {
+    "description": "The 'pkd' (PluginKit Daemon) is responsible for managing app extensions and plugins.",
+    "impact": "App extensions (like Share menu items, Notification Center widgets, Finder extensions) will not work.",
+  },
+  "com.apple.speech.speechsynthesisd": {
+    "description": "The primary daemon for speech synthesis (text-to-speech).",
+    "impact": "All text-to-speech functionality, including VoiceOver and 'Speak Selection', will be broken.",
+  },
+  "com.apple.usermanagerhelper": {
+    "description": "A helper tool for managing user accounts.",
+    "impact": "May cause issues with creating, deleting, or modifying user accounts in System Settings.",
+  },
+  "com.apple.ViewBridgeAuxiliary": {
+    "description": "An auxiliary service for ViewBridge, which securely embeds views from one process into another (e.g., app extensions).",
+    "impact": "UI elements from app extensions or helper apps may not display correctly.",
+  },
+  "com.apple.WorkflowKit.ShortcutsViewService": {
+    "description": "A service for displaying and managing views related to the Shortcuts app.",
+    "impact": "The Shortcuts app and its integration with the system may be broken.",
+  },
+  "com.apple.duetexpertd": {
+    "description": "The 'Duet Expert' daemon is part of the Duet Activity Scheduler, providing intelligence for proactive features.",
+    "impact": "Proactive suggestions, like predicting your next app launch, may not work. Could affect battery life.",
+  },
+  "com.apple.familynotificationd": {
+    "description": "Handles the delivery of notifications related to Family Sharing.",
+    "impact": "You will not receive notifications for Family Sharing events like purchase requests.",
+  },
+  "com.apple.generativeexperiencesd": {
+    "description": "A daemon for generative experiences, likely related to new on-device AI and ML features.",
+    "impact": "Emerging generative AI features within macOS will not be available.",
+  },
+  "com.apple.helpd": {
+    "description": "The daemon that powers the macOS Help Viewer.",
+    "impact": "You will not be able to access the built-in help manuals for macOS or its applications.",
+  },
+  "com.apple.icloud.fmfd": {
+    "description": "The 'Find My Friends' daemon, a legacy service for the Find My network.",
+    "impact": "Location sharing with friends and family via Find My may not function.",
+  },
+  "com.apple.icloud.searchpartyuseragent": {
+    "description": "A user agent for the 'Search Party' (Find My network), helping to locate offline devices.",
+    "impact": "The ability to find your Mac when it's offline will be disabled.",
+  },
+  "com.apple.icloudmailagent": {
+    "description": "An agent responsible for syncing Mail.app with iCloud.",
+    "impact": "iCloud email will not sync.",
+  },
+  "com.apple.imautomatichistorydeletionagent": {
+    "description": "An agent that automatically deletes old iMessage history based on user settings.",
+    "impact": "Your iMessage history may not be automatically pruned, potentially using more disk space.",
+  },
+  "com.apple.inputanalyticsd": {
+    "description": "A daemon that collects analytics about your use of keyboards and input methods.",
+    "impact": "No input device usage data will be sent to Apple. May be desirable for privacy.",
+  },
+  "com.apple.intelligencecontextd": {
+    "description": "A daemon that provides context to the on-device intelligence platform.",
+    "impact": "Many intelligent and proactive features will be less effective.",
+  },
+  "com.apple.intelligenceflowd": {
+    "description": "A daemon that manages the flow of data for the on-device intelligence platform.",
+    "impact": "Intelligent features may fail to process information correctly.",
+  },
+  "com.apple.knowledgeconstructiond": {
+    "description": "Constructs and maintains the on-device knowledge graph used by Siri and Spotlight.",
+    "impact": "Siri and Spotlight will have a reduced understanding of your personal data and context.",
+  },
+  "com.apple.navd": {
+    "description": "Navigation Daemon. Provides routing and navigation services, primarily for Apple Maps.",
+    "impact": "Turn-by-turn directions and route planning in Maps will fail.",
+  },
+  "com.apple.progressd": {
+    "description": "A system-wide daemon for tracking and displaying progress for tasks like file copies or downloads.",
+    "impact": "Progress indicators in Finder and other apps may not appear or may be inaccurate.",
+  },
+  "com.apple.replicatord": {
+    "description": "A file replication service, likely used for syncing data between devices or with iCloud.",
+    "impact": "The exact impact is unclear, but it could affect data syncing reliability.",
+  },
+  "com.apple.security.cloudkeychainproxy3": {
+    "description": "A proxy service for iCloud Keychain, facilitating communication for keychain syncing.",
+    "impact": "iCloud Keychain syncing may become unreliable or fail completely.",
+  },
+  "com.apple.sidecar-hid-relay": {
+    "description": "A relay service for Human Interface Devices (keyboard, mouse, trackpad) used with Sidecar.",
+    "impact": "You will not be able to use your Mac's keyboard and mouse to interact with the iPad in a Sidecar session.",
+  },
+  "com.apple.siriactionsd": {
+    "description": "The daemon that manages and executes Siri Actions and Shortcuts.",
+    "impact": "The Shortcuts app and any Siri-integrated shortcuts will not function.",
+  },
+  "com.apple.SiriTTSTrainingAgent": {
+    "description": "An agent that may be used for training or optimizing Siri's Text-to-Speech (TTS) capabilities.",
+    "impact": "No immediate user-facing impact, but may prevent improvements to Siri's voice.",
+  },
+  "com.apple.tipsd": {
+    "description": "The daemon for the Tips app, which provides suggestions on how to use macOS.",
+    "impact": "The Tips app and its related notifications will not work.",
+  },
+  "com.apple.UsageTrackingAgent": {
+    "description": "An agent that tracks application and system usage for Screen Time.",
+    "impact": "Screen Time data will be inaccurate or not collected at all.",
+  },
+  "com.apple.videosubscriptionsd": {
+    "description": "A daemon for managing video channel subscriptions within the TV app.",
+    "impact": "Subscriptions to Apple TV Channels may not work correctly.",
+  },
+  "com.apple.assistant_service": {
+    "description": "A core service for Siri (Assistant).",
+    "impact": "Siri will be completely non-functional.",
+  },
+  "com.apple.ContextStoreAgent": {
+    "description": "An agent that manages the storage of contextual data for proactive features.",
+    "impact": "Proactive suggestions and other intelligent features will be less effective.",
+  },
+  "com.apple.maps.destinationd": {
+    "description": "A daemon that likely manages recent and suggested destinations in Apple Maps.",
+    "impact": "Maps may not be able to provide suggestions for destinations.",
+  },
+  "com.apple.geoanalyticsd": {
+    "description": "A daemon that collects and processes analytics related to geolocation and Maps usage.",
+    "impact": "No location-based analytics will be sent to Apple.",
+  },
+  "com.apple.sirittsd": {
+    "description": "Siri Text-to-Speech daemon. Responsible for generating Siri's voice.",
+    "impact": "Siri will be unable to speak.",
+  },
+  "com.apple.cvmsCompAgent": {
+    "description": "A compute agent for the Core Video and Metal frameworks, managing GPU tasks.",
+    "impact": "Graphics-intensive applications and games may fail or perform poorly.",
+  },
+  "com.apple.metadata.mdflagwriter": {
+    "description": "A Spotlight helper that writes flags to metadata.",
+    "impact": "Spotlight indexing may not function correctly.",
+  },
+  "com.apple.screencaptureui": {
+    "description": "Handles the user interface for taking screenshots and screen recordings.",
+    "impact": "The built-in screenshot and screen recording tools (Cmd+Shift+5) will not work.",
+  },
+  "com.apple.CoreRoutine.helperservice": {
+    "description": "A helper service for the 'routined' daemon, which learns your frequently visited locations to provide proactive suggestions.",
+    "impact": "Disabling this may impair the functionality of location-based suggestions and the Significant Locations feature.",
+  },
+  "com.apple.DistributionKit.DistributionHelper": {
+    "description": "A helper tool for the DistributionKit framework, which is used by the macOS Installer for package distribution.",
+    "impact": "Installation of some software, particularly from `.pkg` files, may fail.",
+  },
+  "com.apple.DictionaryServiceHelper": {
+    "description": "A helper service for the built-in Dictionary application.",
+    "impact": "The Dictionary app and the 'Look Up' feature may not function correctly.",
+  },
+  # --- Third-Party Services Added Below ---
+  "com.google.keystone.user.agent": {
+    "description": "Google Keystone Agent. Part of Google Updater, it keeps Google applications (like Chrome) up-to-date.",
+    "impact": "Disabling will prevent automatic updates for Google software, which is a potential security risk.",
+  },
+  "com.google.keystone.user.xpcservice": {
+    "description": "Google Keystone XPC Service. Works with the main agent to handle update tasks.",
+    "impact": "Disabling will prevent automatic updates for Google software.",
+  },
+  "com.docker.helper": {
+    "description": "Docker Desktop Helper. A privileged helper tool that manages networking, filesystems, and other system-level resources for Docker Desktop.",
+    "impact": "CRITICAL: Docker Desktop will not be able to function without this helper.",
+  },
+  "com.adobe.GC.AGM": {
+    "description": "Adobe Genuine Service (AGM). Periodically validates your Adobe software licenses.",
+    "impact": "Adobe applications may complain about being non-genuine or may fail to launch.",
+  },
+  "com.adobe.GC.Scheduler-1.0": {
+    "description": "Adobe Genuine Copy Scheduler. Schedules tasks for the Adobe Genuine Service.",
+    "impact": "Adobe applications may complain about being non-genuine or may fail to launch.",
+  },
+  "com.microsoft.update.agent": {
+    "description": "Microsoft AutoUpdate Agent. Manages and applies updates for Microsoft Office applications.",
+    "impact": "Microsoft Office apps will not receive automatic updates, which is a potential security risk.",
+  },
+  "com.microsoft.autoupdate.helper": {
+    "description": "Microsoft AutoUpdate Helper. A privileged helper for installing updates for Microsoft products.",
+    "impact": "Microsoft Office apps will not be able to install updates.",
+  },
+  "2BUA8C4S2C.com.agilebits.onepassword7-helper": {
+    "description": "A helper agent for 1Password 7.",
+    "impact": "1Password 7 browser integration and other features may not work correctly.",
+  },
+  "com.1password.1password-launcher": {
+    "description": "The main launcher for the 1Password 8+ application helper.",
+    "impact": "1Password browser integration and other features may not work correctly.",
+  },
 }
 
 CATEGORIZATION_MAP = {
@@ -3014,7 +3013,7 @@ CATEGORIZATION_MAP = {
     "com.apple.fairplayd",
     "com.apple.fairplaydeviceidentityd",
     "com.apple.storereceiptinstaller",
-            "com.apple.videosubscriptionsd",
+    "com.apple.videosubscriptionsd",
   ],
   "💾 Backup & Time Machine": [
     "com.apple.backupd",
@@ -3065,7 +3064,8 @@ CATEGORIZATION_MAP = {
     "com.apple.BluetoothUIService",
     "com.apple.ecosystemd",
     "com.apple.remoted",
-            "com.apple.imautomatichistorydeletionagent", "com.apple.sidecar-hid-relay",
+    "com.apple.imautomatichistorydeletionagent", 
+    "com.apple.sidecar-hid-relay",
   ],
   "🕵️  Diagnostics & Logging": [
     "com.apple.logd",
@@ -3120,7 +3120,8 @@ CATEGORIZATION_MAP = {
     "com.apple.parentalcontrols.check",
     "com.apple.FamilyControlsAgent",
     "com.apple.familycontrols",
-            "com.apple.familynotificationd", "com.apple.UsageTrackingAgent",
+    "com.apple.familynotificationd", 
+    "com.apple.UsageTrackingAgent",
   ],
   "💽 Filesystem & Storage": [
     "com.apple.fseventsd",
@@ -3246,11 +3247,13 @@ CATEGORIZATION_MAP = {
     "com.apple.usbsmartcardreaderd",
     "com.apple.wifiFirmwareLoader",
     "org.cups.cupsd",
-            "com.apple.iokit.IOServiceAuthorizeAgent", "com.apple.cvmsCompAgent",
+    "com.apple.iokit.IOServiceAuthorizeAgent",
+    "com.apple.cvmsCompAgent",
   ],
   "🏠 HomeKit": [
     "com.apple.homed",
-    "com.apple.homeenergyd",],
+    "com.apple.homeenergyd",
+  ],
   "☁️  iCloud & CloudKit": [
     "com.apple.cloudd",
     "com.apple.bird",
@@ -3274,7 +3277,9 @@ CATEGORIZATION_MAP = {
     "com.apple.appleaccountd",
     "com.apple.findmy.findmybeaconingd",
     "com.apple.findmymacd",
-            "com.apple.icloud.searchpartyuseragent", "com.apple.icloud.fmfd", "com.apple.icloudmailagent",
+    "com.apple.icloud.searchpartyuseragent",
+    "com.apple.icloud.fmfd",
+    "com.apple.icloudmailagent",
   ],
   "📦 Installation & Updates": [
     "com.apple.installd",
@@ -3432,9 +3437,13 @@ CATEGORIZATION_MAP = {
     "com.apple.uarpassetmanagerd",
     "com.apple.uarpd",
     "com.apple.uarphidd",
-        "com.apple.duetexpertd", "com.apple.generativeexperiencesd", "com.apple.intelligenceflowd",
-        "com.apple.knowledgeconstructiond", "com.apple.ContextStoreAgent", "com.apple.intelligencecontextd",
-        "com.apple.biomesyncd",
+    "com.apple.duetexpertd",
+    "com.apple.generativeexperiencesd",
+    "com.apple.intelligenceflowd",
+    "com.apple.knowledgeconstructiond",
+    "com.apple.ContextStoreAgent",
+    "com.apple.intelligencecontextd",
+    "com.apple.biomesyncd",
   ],
   "🌐 Safari & WebKit": [
     "com.apple.SafariHistoryServiceAgent",
@@ -3526,7 +3535,7 @@ CATEGORIZATION_MAP = {
     "com.apple.trustd",
     "com.apple.trustdFileHelper",
     "com.apple.xpc.roleaccountd",
-            "com.apple.security.cloudkeychainproxy3",
+    "com.apple.security.cloudkeychainproxy3",
   ],
   "🗣️  Siri & Dictation": [
     "com.apple.assistantd",
@@ -3540,9 +3549,13 @@ CATEGORIZATION_MAP = {
     "com.apple.DictationIM",
     "com.apple.corespeechd_system",
     "com.apple.siri.acousticsignature",
-       "com.apple.assistant_service", "com.apple.siriactionsd", "com.apple.SiriTTSTrainingAgent",
-        "com.apple.sirittsd", "com.apple.siri.context.service", "com.apple.speech.speechsynthesisd",
-        "com.apple.SpeechRecognitionCore.brokerd",
+    "com.apple.assistant_service",
+    "com.apple.siriactionsd",
+    "com.apple.SiriTTSTrainingAgent",
+    "com.apple.sirittsd",
+    "com.apple.siri.context.service",
+    "com.apple.speech.speechsynthesisd",
+    "com.apple.SpeechRecognitionCore.brokerd",
   ],
   "⚙️  System Core": [
     "com.apple.coreservicesd",
@@ -3618,10 +3631,17 @@ CATEGORIZATION_MAP = {
     "com.apple.warmd",
     "com.apple.watchdogd",
     "com.vix.cron",
-      "com.apple.helpd", "com.apple.hiservices-xpcservice", "com.apple.mdworker.mail",
-        "com.apple.mdworker.shared", "com.apple.mdworker.single", "com.apple.metadata.mdbulkimport",
-        "com.apple.pluginkit.pkd", "com.apple.usermanagerhelper", "com.apple.WorkflowKit.ShortcutsViewService",
-        "com.apple.FolderActionsDispatcher", "com.apple.metadata.mdflagwriter"
+    "com.apple.helpd",
+    "com.apple.hiservices-xpcservice",
+    "com.apple.mdworker.mail",
+    "com.apple.mdworker.shared",
+    "com.apple.mdworker.single",
+    "com.apple.metadata.mdbulkimport",
+    "com.apple.pluginkit.pkd",
+    "com.apple.usermanagerhelper",
+    "com.apple.WorkflowKit.ShortcutsViewService",
+    "com.apple.FolderActionsDispatcher",
+    "com.apple.metadata.mdflagwriter"
   ],
   "✍️  Text & Input": [
     "com.apple.naturallanguaged",
@@ -3691,20 +3711,34 @@ CATEGORIZATION_MAP = {
     "com.apple.mobile.notification_proxy",
     "com.apple.noticeboard.state",
     "com.apple.wallpaper.export",
-     "com.apple.progressd", "com.apple.tipsd", "com.apple.MessageUIMacHelperService",
-        "com.apple.ViewBridgeAuxiliary", "com.apple.screencaptureui"
+    "com.apple.progressd",
+    "com.apple.tipsd",
+    "com.apple.MessageUIMacHelperService",
+    "com.apple.ViewBridgeAuxiliary",
+    "com.apple.screencaptureui"
   ],
   "☀️ Weather": [
     "com.apple.weatherd",
     "com.apple.weather.menu",
   ],
   "❓ Undocumented": [
-     "com.apple.IFCStart", "com.apple.corercd", "com.apple.filesystems.doubleagentd",
-        "com.apple.griddatad", "com.apple.internal.aupbregistrarservice", "com.apple.lskdd",
-        "com.apple.multiversed", "com.apple.pfd", "com.apple.powerd.swd",
-        "com.apple.relatived", "com.apple.systemstatusd", "com.apple.tracd",
-        "com.apple.ucupdate.plist", "com.apple.xartstorageremoted", "com.apple.xpc.uscwoap",
-        "com.apple.mobile.NRDUpdated", "com.apple.replicatord",
+     "com.apple.IFCStart", 
+     "com.apple.corercd", 
+     "com.apple.filesystems.doubleagentd",
+     "com.apple.griddatad",
+     "com.apple.internal.aupbregistrarservice",
+     "com.apple.lskdd",
+     "com.apple.multiversed",
+     "com.apple.pfd",
+     "com.apple.powerd.swd",
+     "com.apple.relatived",
+     "com.apple.systemstatusd",
+     "com.apple.tracd",
+     "com.apple.ucupdate.plist",
+     "com.apple.xartstorageremoted",
+     "com.apple.xpc.uscwoap",
+     "com.apple.mobile.NRDUpdated",
+     "com.apple.replicatord",
   ]
 }
 
