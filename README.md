@@ -1,8 +1,10 @@
 # macos-service-manager
 
-![Service categories](./assets/service-categories.png)
+Service Management Screenshots
 ![Enabled services](./assets/enabled-services.png)
+
 ![Running services](./assets/running-services.png)
+
 ![Critical service](./assets/critical-service.png)
 
 ## Description
