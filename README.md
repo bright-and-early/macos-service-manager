@@ -1,5 +1,10 @@
 # macos-service-manager
 
+![Service categories](./assets/service-categories.png)
+![Enabled services](./assets/enabled-services.png)
+![Running services](./assets/running-services.png)
+![Critical service](./assets/critical-service.png)
+
 ## Description
 
 This is a simple service manager for macOS that allows you to start, stop, and restart services. It is designed to be easy to use and provides a straightforward way to manage services on your macOS system.
