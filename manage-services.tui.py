@@ -3711,7 +3711,10 @@ CATEGORIZATION_MAP = {
 # --- Live Data Functions ---
 
 def get_uid() -> int:
-    """Gets the UID of the current user."""
+    """Gets the UID of the current user, accounting for sudo."""
+    # When running with sudo, we want the original user's UID, not root's
+    if 'SUDO_UID' in os.environ:
+        return int(os.environ['SUDO_UID'])
     return os.getuid()
 
 def parse_launchctl_print_output(output: str) -> Tuple[set, Dict[str, str]]:
@@ -3736,16 +3739,19 @@ def parse_launchctl_print_output(output: str) -> Tuple[set, Dict[str, str]]:
 
 def get_service_details(service_name: str, service_type: str, statuses: Dict[str, str], pids: Dict[str, str]) -> Optional[Dict]:
     """Gets live status and combines it with stored metadata from the database."""
-    status = "unknown"
-
-    # Determine the 3-tier status: Running > Enabled > Disabled
+    
+    # Determine the status: Running > Enabled > Disabled
     if service_name in pids:
-        status = "Running"
-    elif statuses.get(service_name) == 'disabled':
-        status = "Disabled"
+        status = "running"  # Running services should be marked as "running"
+    elif service_name in statuses:
+        # Use the actual status from launchctl print (enabled/disabled)
+        if statuses[service_name] == "disabled":
+            status = "disabled"
+        else:
+            status = "enabled"
     else:
-        # Covers both explicitly enabled and default-enabled services
-        status = "Enabled"
+        # Default to enabled if not explicitly disabled
+        status = "enabled"
 
     stored_info = SERVICE_DATABASE.get(
         service_name,
@@ -3828,20 +3834,62 @@ def get_live_services(console: Console) -> Dict[str, Dict[str, Dict]]:
         except Exception: pass
         progress.update(task, advance=1, description="[cyan]Analyzed user overrides...")
 
+    # Add services from SERVICE_DATABASE that might not be discovered by launchctl
+    all_database_services = set(SERVICE_DATABASE.keys())
+    all_discovered_services = all_daemon_names.union(all_agent_names)
+    missing_services = all_database_services - all_discovered_services
+    
+    # For missing services, try to determine if they're daemons or agents
+    for service in missing_services:
+        # Try to get details for both daemon and agent to see which exists
+        daemon_details = get_service_details(service, "daemon", disabled_daemons, daemon_pids)
+        agent_details = get_service_details(service, "agent", disabled_agents, agent_pids)
+        
+        if daemon_details:
+            all_daemon_names.add(service)
+        elif agent_details:
+            all_agent_names.add(service)
+
     all_services = sorted(list(all_daemon_names.union(all_agent_names)))
     
     with Progress(console=console, transient=True) as progress:
         fetch_task = progress.add_task("[green]Categorizing services...", total=len(all_services))
         for name in all_services:
-            is_daemon = name in all_daemon_names
-            service_type = "daemon" if is_daemon else "agent"
-            details = get_service_details(
-                name,
-                service_type,
-                disabled_daemons if is_daemon else disabled_agents,
-                daemon_pids if is_daemon else agent_pids
-            )
+            # Determine the best service type by checking which has more definitive status info
+            daemon_details = None
+            agent_details = None
+            
+            if name in all_daemon_names:
+                daemon_details = get_service_details(name, "daemon", disabled_daemons, daemon_pids)
+            if name in all_agent_names:
+                agent_details = get_service_details(name, "agent", disabled_agents, agent_pids)
+            
+            # Choose the details with the most specific status info
+            # Priority: running > explicit disabled > explicit enabled > default enabled
+            details = None
+            service_type = None
+            
+            if daemon_details and agent_details:
+                # Both exist, choose the one with more specific status
+                # Priority: running (0) > disabled (1) > enabled (2)
+                daemon_priority = 0 if daemon_details['status'] == 'running' else (1 if daemon_details['status'] == 'disabled' else 2)
+                agent_priority = 0 if agent_details['status'] == 'running' else (1 if agent_details['status'] == 'disabled' else 2)
+                
+                if agent_priority <= daemon_priority:  # Prefer agent if equal priority
+                    details = agent_details
+                    service_type = "agent"
+                else:
+                    details = daemon_details
+                    service_type = "daemon"
+            elif agent_details:
+                details = agent_details
+                service_type = "agent"
+            elif daemon_details:
+                details = daemon_details
+                service_type = "daemon"
+            
             if details:
+                details['type'] = service_type
                 category = categorize_service(name)
                 categorized_services[category][name] = details
             progress.update(fetch_task, advance=1)
@@ -3872,7 +3920,7 @@ class ServiceManagerTUI:
         self.service_scroll_offset = 0
         self.uid = get_uid()
         # Define the sort order for statuses
-        self.status_sort_order = {"Running": 0, "Enabled": 1, "Disabled": 2}
+        self.status_sort_order = {"running": 0, "enabled": 1, "disabled": 2}
 
     @property
     def viewport_height(self) -> int:
@@ -3957,7 +4005,7 @@ class ServiceManagerTUI:
                     info = self.services_data[category_name][service_name]
                     # Toggle logic remains simple: if it's disabled, set pending to enabled, otherwise set to disabled.
                     current_status = info.get("pending_status", info["status"])
-                    info["pending_status"] = "Enabled" if current_status == "Disabled" else "Disabled"
+                    info["pending_status"] = "enabled" if current_status == "disabled" else "disabled"
             elif key == "enter": return "apply"
             self._adjust_viewport('service')
 
@@ -4011,11 +4059,11 @@ class ServiceManagerTUI:
             
             if "pending_status" in info and info["pending_status"] != info["status"]:
                 status_icon, status_style = "🔄", "yellow"
-            elif display_status == "Running":
+            elif display_status == "running":
                 status_icon, status_style = "🟢", "green"
-            elif display_status == "Enabled":
+            elif display_status == "enabled":
                 status_icon, status_style = "🟡", "green"
-            else:  # Disabled
+            else:  # disabled
                 status_icon, status_style = "🔴", "red"
 
             style = "black on yellow" if i == self.active_service_index else ""
@@ -4043,14 +4091,14 @@ class ServiceManagerTUI:
 
         # Display current status
         live_status = info['status']
-        status_styles = {"Running": "green", "Enabled": "green", "Disabled": "red"}
-        details_text.append("Status: ", style="bold yellow").append(f"{live_status}\n", style=status_styles.get(live_status, "default"))
+        status_styles = {"running": "green", "enabled": "green", "disabled": "red"}
+        details_text.append("Status: ", style="bold yellow").append(f"{live_status.capitalize()}\n", style=status_styles.get(live_status, "default"))
         
         # Display pending status change
         pending_status = info.get('pending_status')
         if pending_status and pending_status != live_status:
-            pending_color = "green" if pending_status == "Enabled" else "red"
-            details_text.append("Pending: ", style="bold yellow").append(f"{pending_status} (press Enter to apply)\n", style=pending_color)
+            pending_color = "green" if pending_status == "enabled" else "red"
+            details_text.append("Pending: ", style="bold yellow").append(f"{pending_status.capitalize()} (press Enter to apply)\n", style=pending_color)
 
         details_text.append("\nDescription:\n", style="bold yellow").append(f"{info['description']}\n\n")
         impact_text = info["impact"]
@@ -4075,8 +4123,8 @@ class ServiceManagerTUI:
             with Progress(console=self.console, transient=False) as progress:
                 task = progress.add_task("[cyan]Applying changes...", total=len(changes))
                 for service, info in changes:
-                    action_str = info["pending_status"] # Will be "Enabled" or "Disabled"
-                    command_action = "enable" if action_str == "Enabled" else "disable"
+                    action_str = info["pending_status"] # Will be "enabled" or "disabled"
+                    command_action = "enable" if action_str == "enabled" else "disable"
                     
                     target_domain = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
                     command = (["sudo", "launchctl", command_action, target_domain] if info["type"] == "daemon" else ["launchctl", command_action, target_domain])
@@ -4084,8 +4132,8 @@ class ServiceManagerTUI:
                     subprocess.run(command, capture_output=True, text=True, check=False)
 
                     # Update the base status after applying
-                    # A service might not become "Running" immediately after being enabled, so we set it to "Enabled".
-                    info["status"] = "Enabled" if command_action == "enable" else "Disabled"
+                    # A service might not become "running" immediately after being enabled, so we set it to "enabled".
+                    info["status"] = "enabled" if command_action == "enable" else "disabled"
                     del info["pending_status"]
                     progress.update(task, advance=1, description=f"[cyan]{command_action.capitalize()}d {service}")
 
@@ -4104,7 +4152,7 @@ class ServiceManagerTUI:
         table.add_column("Action", style="cyan", justify="right")
         table.add_column("Service Target", style="magenta")
         for service, info in changes:
-            action = "disable" if info["pending_status"] == "Disabled" else "enable"
+            action = "disable" if info["pending_status"] == "disabled" else "enable"
             target = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
             cmd_prefix = "sudo " if info["type"] == "daemon" else ""
             table.add_row(f"{cmd_prefix}launchctl {action}", target)
