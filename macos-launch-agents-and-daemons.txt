@@ -1,0 +1,397 @@
+macOS Launch Agents and Launch Daemons
+
+###########
+
+Do NOT disable
+/System/Library/LaunchAgents/com.apple.contactsd.plist
+contactsd – contactsd daemon
+- reason: App Store freeze
+
+/System/Library/LaunchDaemons/com.apple.AirPlayXPCHelper.plist
+/usr/libexec/AirPlayXPCHelper
+- reason: media playback error  (YouTube) in Safari & WebKit browsers
+
+/System/Library/LaunchAgents/com.apple.donotdisturbd.plist
+donotdisturbd – do dot disturb daemon
+donotdisturbd manages the system do not disturb mode and configuration
+- reason: Notification Center stops working
+
+###########
+
+Launch Agents
+/System/Library/LaunchAgents/com.apple.inputanalyticsd.plist
+inputanalyticsd – User Input Diagnostics and Usage
+inputanalyticsd is a daemon that collects diagnostics and usage data on user input locally for users that have opted in.
+
+/System/Library/LaunchAgents/com.apple.geoanalyticsd.plist
+GeoAnalytics framework
+
+/System/Library/LaunchAgents/com.apple.accessibility.MotionTrackingAgent.plist
+MotionTrackingAgent – Motion Tracking Launch Agent
+
+/System/Library/LaunchAgents/com.apple.accessibility.axassetsd.plist
+AXAssetLoader.framework com.apple.accessibility.axassetsd
+
+/System/Library/LaunchAgents/com.apple.AMPArtworkAgent.plist
+AMPArtworkAgent – The artwork agent for Music.app, TV.app, and iOS/iPod device syncing
+
+/System/Library/LaunchAgents/com.apple.AMPLibraryAgent.plist
+ AMPLibraryAgent – The media library agent for Music.app and TV.app.
+
+/System/Library/LaunchAgents/com.apple.assistant_cdmd.plist
+assistant_cdmd, CDM/NLX Daemon – daemon handles Natural Langauge Understanding tasks for Siri and other internal Apple teams.
+
+/System/Library/LaunchAgents/com.apple.ap.adprivacyd.plist
+adprivacyd – advertising privacy services daemon
+
+/System/Library/LaunchAgents/com.apple.ap.promotedcontentd.plist
+com.apple.ap.adservicesd.statusconditionservice
+com.apple.ap.promotedcontent.metrics
+
+/System/Library/LaunchAgents/com.apple.assistant_service.plist
+com.apple.siri.execution_service
+
+/System/Library/LaunchAgents/com.apple.assistantd.plist
+assistantd – Siri Daemon
+
+/System/Library/LaunchAgents/com.apple.avconferenced.plist
+/usr/libexec/avconferenced com.apple.videoconference.camera
+
+/System/Library/LaunchAgents/com.apple.BiomeAgent.plist
+BiomeAgent – Biome operation graph execution launch agent
+
+/System/Library/LaunchAgents/com.apple.biomesyncd.plist
+biomesyncd – data synchronization daemon
+
+/System/Library/LaunchAgents/com.apple.calaccessd.plist
+CalendarDaemon.framework
+
+/System/Library/LaunchAgents/com.apple.CallHistoryPluginHelper.plist
+CallHistory.framework
+
+/System/Library/LaunchAgents/com.apple.chronod.plist
+ChronoCore.framework
+com.apple.chrono.widgetcenterconnection
+
+/System/Library/LaunchAgents/com.apple.cloudd.plist
+cloudd is the system daemon backing the CloudKit feature
+
+/System/Library/LaunchAgents/com.apple.cloudpaird.plist
+cloudpaird – cloudpaird daemon
+
+/System/Library/LaunchAgents/com.apple.cloudphotod.plist
+cloudphotod is the iCloud Photos agent.  It is responsible for all iCloud Photos activity.
+
+/System/Library/LaunchAgents/com.apple.CloudSettingsSyncAgent.plist
+Cloud Settings Sync Agent
+
+/System/Library/LaunchAgents/com.apple.CommCenter-osx.plist
+CoreTelephony.framework
+
+/System/Library/LaunchAgents/com.apple.CoreLocationAgent.plist
+CoreLocationAgent – manages location authorization prompts
+
+/System/Library/LaunchAgents/com.apple.corespeechd.plist
+CoreSpeech.framework
+
+/System/Library/LaunchAgents/com.apple.dataaccess.dataaccessd.plist
+dataaccessd is the calendar sync process. It is used by the system to sync calendar data with calendar servers.
+
+/System/Library/LaunchAgents/com.apple.duetexpertd.plist
+ duetexpertd powers personalized system experiences.
+
+/System/Library/LaunchAgents/com.apple.familycircled.plist
+FamilyCircle.framework
+
+/System/Library/LaunchAgents/com.apple.familycontrols.useragent.plist
+/System/Library/LaunchAgents/com.apple.FamilyControlsAgent.plist
+/System/Library/LaunchDaemons/com.apple.familycontrols.plist
+FamilyControlsAgent handles and persists family controls authorization requests for Screen Time API
+
+/System/Library/LaunchAgents/com.apple.familynotificationd.plist
+FamilyNotification.framework
+
+/System/Library/LaunchAgents/com.apple.financed.plist
+financed – Apple Pay & Wallet daemon
+
+/System/Library/LaunchAgents/com.apple.followupd.plis
+CoreFollowUp.framework
+Notification = "com.apple.mobile.keybagd.lock_status"
+
+/System/Library/LaunchAgents/com.apple.gamed.plist
+GameCenterFoundation.framework
+
+/System/Library/LaunchAgents/com.apple.generativeexperiencesd.plist
+generativeexperiencesd – A daemon that powers generative experience.
+
+/System/Library/LaunchAgents/com.apple.geodMachServiceBridge.plist
+GeoServices.framework
+
+/System/Library/LaunchAgents/com.apple.helpd.plist
+helpd – Help Daemon
+helpd is a macOS agent that manages software documentation.
+
+/System/Library/LaunchAgents/com.apple.homed.plist
+ homed is a daemon that manages home state and controls HomeKit accessories.
+
+/System/Library/LaunchAgents/com.apple.icloud.fmfd.plist
+fmfd is the daemon for Find My Friends
+
+/System/Library/LaunchAgents/com.apple.iCloudNotificationAgent.plist
+iCloudNotification.framework
+
+/System/Library/LaunchAgents/com.apple.iCloudUserNotifications.plist
+AOSAccounts.framework iCloudUserNotificationsd.app
+
+/System/Library/LaunchAgents/com.apple.icloud.searchpartyuseragent.plist
+searchpartyuseragent – icloud searchparty user agent
+
+/System/Library/LaunchAgents/com.apple.imagent.plist
+IMCore.framework iChat / iMessage
+
+/System/Library/LaunchAgents/com.apple.imautomatichistorydeletionagent.plist
+IMDPersistence.framework IMAutomaticHistoryDeletionAgent.app
+
+/System/Library/LaunchAgents/com.apple.imtransferagent.plist
+IMTransferServices.framework IMTransferAgent.app
+
+/System/Library/LaunchAgents/com.apple.intelligenceflowd.plist
+intelligenceflowd – A daemon that manages sessions for intelligence services.
+
+/System/Library/LaunchAgents/com.apple.intelligenceplatformd.plist
+intelligenceplatformd – A daemon that analyzes content on the device to build and query a general purpose knowledge graph.
+
+/System/Library/LaunchAgents/com.apple.intelligencecontextd.plist
+intelligencecontextd – This is a daemon that retrieves contextual information from various sources.
+
+/System/Library/LaunchAgents/com.apple.intelligenceplatformd.plist
+ intelligenceplatformd – A daemon that analyzes content on the device to build and query a general purpose knowledge graph.
+
+/System/Library/LaunchAgents/com.apple.itunescloudd.plist
+music-subscription-status-service playactivity
+
+/System/Library/LaunchAgents/com.apple.knowledge-agent.plist
+siri suggestions
+
+/System/Library/LaunchAgents/com.apple.knowledgeconstructiond.plist
+knowledgeconstructiond – A daemon that analyzes content on the device to build a general purpose knowledge graph.
+
+/System/Library/LaunchAgents/com.apple.mediaanalysisd.plist
+MediaAnalysis.framework
+com.apple.mediaanalysisd.photos
+
+/System/Library/LaunchAgents/com.apple.naturallanguaged.plist
+naturallanguaged – System post editing daemon
+
+/System/Library/LaunchAgents/com.apple.ManagedClientAgent.enrollagent.plist
+The ManagedClientAgent -- Device enrollment and ManagedClient process notification daemon process handles
+ device enrollment and other ManagedClient related process notifications. 
+
+/System/Library/LaunchAgents/com.apple.Maps.pushdaemon.plist
+mapspushd - Maps application services daemon
+
+/System/Library/LaunchAgents/com.apple.mediastream.mstreamd.plist
+ mstreamd is the photo stream agent.  It is responsible for My Photo Stream and Shared Albums for Photos.
+
+/System/Library/LaunchAgents/com.apple.navd.plist
+ navd – Time to Leave Daemon
+navd uses your location, calendar event's location and traffic conditions to generate hypotheses about when you need to leave.
+
+/System/Library/LaunchAgents/com.apple.newsd.plist
+NewsDaemon.framework
+
+/System/Library/LaunchAgents/com.apple.parsec-fbf.plist
+ parsec-fbf is responsible for periodic flush and upload of Siri Search analytics data.
+
+/System/Library/LaunchAgents/com.apple.parsecd.plist
+parsecd – Support daemon for Siri Search
+
+/System/Library/LaunchAgents/com.apple.passd.plist
+passd – Apple Pay & Wallet daemon
+
+/System/Library/LaunchAgents/com.apple.photoanalysisd.plist
+photoanalysisd is the photo library analysis agent.  It handles background processing of photo librariesfor Memories, People and scene or object based search.
+
+/System/Library/LaunchAgents/com.apple.photolibraryd.plist
+photolibraryd – The macOS photo library agent.
+photolibraryd is the photo library agent.  It handles all photo library requests.
+
+/System/Library/LaunchAgents/com.apple.progressd.plist
+progressd is the ClassKit sync agent. It handles syncing classes, class members, student handouts and progress data between student and teacher managed Apple Accounts.
+
+/System/Library/LaunchAgents/com.apple.protectedcloudstorage.protectedcloudkeysyncing.plist
+ProtectedCloudKeySyncing manages backup and syncing of encrypted PCS keys to CloudKit.
+
+/System/Library/LaunchAgents/com.apple.quicklook.ui.helper.plist
+/System/Library/LaunchAgents/com.apple.quicklook.plist
+/System/Library/LaunchAgents/com.apple.quicklook.ThumbnailsAgent.plist
+QuickLook
+
+/System/Library/LaunchAgents/com.apple.rapportd-user.plist
+rapportd – Daemon that enables Phone Call Handoff and other communication features between Apple devices.
+
+/System/Library/LaunchAgents/com.apple.remindd.plist
+com.apple.alarm com.apple.locationd-events
+
+/System/Library/LaunchAgents/com.apple.replicatord.plist
+replicatord – remote widget sync daemon
+launchctl bootout gui/501/com.apple.replicatord
+launchctl disable gui/501/com.apple.replicatord
+
+/System/Library/LaunchAgents/com.apple.routined.plist
+routined – A daemon that learns the historical location patterns of a user.
+routined is a per-user daemon that learns historical location patterns of a user and predicts future visits to locations.
+
+/System/Library/LaunchAgents/com.apple.screensharing.agent.plist
+/System/Library/LaunchAgents/com.apple.screensharing.menuextra.plist
+/System/Library/LaunchAgents/com.apple.screensharing.MessagesAgent.plist
+ScreensharingAgent – communicates with screensharingd to provide access to a user session.
+
+/System/Library/LaunchAgents/com.apple.ScreenTimeAgent.plist
+ ScreenTimeAgent supports the Screen Time feature.
+
+/System/Library/LaunchAgents/com.apple.security.cloudkeychainproxy3.plist
+ CloudKeychainProxy part of iCloud keychain syncing
+
+/System/Library/LaunchAgents/com.apple.sharingd.plist
+sharingd – Sharing Daemon that enables AirDrop, Handoff, Instant Hotspot, Shared Computers, and Remote Disc in the Finder.
+
+/System/Library/LaunchAgents/com.apple.sidecar-hid-relay.plist
+/System/Library/LaunchAgents/com.apple.sidecar-relay.plist
+SidecarDisplayAgent – Sidecar Virtual Display Service
+SidecarDisplayAgent provides virtual display service.
+
+/System/Library/LaunchAgents/com.apple.Siri.agent.plist
+Siri com.apple.siri.activation com.apple.siri.invoke
+
+/System/Library/LaunchAgents/com.apple.macos.studentd.plist
+studentd – Classroom's student control agent.
+
+/System/Library/LaunchAgents/com.apple.siriknowledged.plist
+com.apple.siri.conversation_context_module com.apple.siriknowledged.vocabulary.admin
+
+/System/Library/LaunchAgents/com.apple.siriinferenced.plist
+SiriInference.framework com.apple.sirisuggestions
+
+/System/Library/LaunchAgents/com.apple.sirittsd.plist
+SiriTTSService.framework
+
+/System/Library/LaunchAgents/com.apple.SiriTTSTrainingAgent.plist
+SiriTTSTraining.framework
+
+/System/Library/LaunchAgents/com.apple.siriactionsd.plist
+The siriactionsd daemon coordinates running and syncing of shortcuts created in the Shortcuts application, among other Shortcuts-related auxiliary tasks.
+
+/System/Library/LaunchAgents/com.apple.suggestd.plist
+ suggestd – daemon that processes user content in order to detect contacts, events, named entities, etc.
+
+/System/Library/LaunchAgents/com.apple.tipsd.plist
+com.apple.language.changed com.apple.mobile.keybagd.first_unlock
+
+/System/Library/LaunchAgents/com.apple.telephonyutilities.callservicesd.plist
+callservicesd is the system daemon responsible for maintaining call state.
+
+/System/Library/LaunchAgents/com.apple.TMHelperAgent.plist
+TimeMachine
+
+/System/Library/LaunchAgents/com.apple.triald.plist
+
+/System/Library/LaunchAgents/com.apple.universalaccessd.plist
+universalaccessd provides universal access services.
+
+/System/Library/LaunchAgents/com.apple.UsageTrackingAgent.plist
+  UsageTrackingAgent monitors and reports limits set by Screen Time.
+
+/System/Library/LaunchAgents/com.apple.videosubscriptionsd.plist
+com.apple.VideoSubscriberAccount.AnalyticsService
+
+/System/Library/LaunchAgents/com.apple.voicebankingd.plist
+TextToSpeechVoiceBankingSupport.framework
+
+/System/Library/LaunchAgents/com.apple.watchlistd.plist
+watchlistd – Support daemon for Apple TV app
+
+/System/Library/LaunchAgents/com.apple.weatherd.plist
+WeatherDaemon.framework
+
+###########
+
+Launch Daemons
+/System/Library/LaunchDaemons/com.apple.analyticsd.plist
+analyticsd – Diagnostics and Usage
+analyticsd is a system daemon that collects diagnostics and usage data locally for users that have opted in.
+
+/System/Library/LaunchDaemons/com.apple.audioanalyticsd.plist
+audioanalyticsd – Audio Diagnostics and Usage Reporting
+audioanalyticsd is a launch agent that aggregates and analyzes audio usage data for users that have opted in for reporting.
+
+/System/Library/LaunchDaemons/com.apple.ecosystemanalyticsd.plist
+ecosystemanalyticsd – Analyzes which frameworks and APIs are used by 3rd party applications
+ecosystemanalyticsd analyzes 3rd party applications to determine API usage.  The reports are used by Apple to improve its products.  
+
+/System/Library/LaunchDaemons/com.apple.backupd.plist
+/System/Library/LaunchDaemons/com.apple.backupd-helper.plist
+ backupd – Time Machine backup daemon
+
+/System/Library/LaunchDaemons/com.apple.biomed.plist
+biomed – Biome operation graph execution daemon
+biomed accepts downstream subscriptions for real time event processing.
+
+/System/Library/LaunchDaemons/com.apple.biometrickitd.plist
+biometrickitd provides support for biometric operations.
+
+/System/Library/LaunchDaemons/com.apple.cloudd.plist
+cloudd is the system daemon backing the CloudKit feature
+
+/System/Library/LaunchDaemons/com.apple.coreduetd.plist
+com.apple.coreduetd.knowledge com.apple.coreduetd.people com.apple.proactive.SuggestionRequest
+
+/System/Library/LaunchDaemons/com.apple.dhcp6d.plist
+ dhcp6d is a stateless DHCPv6 server used by the InternetSharing(8) service.
+
+/System/Library/LaunchDaemons/com.apple.familycontrols.plist
+FamilyControlsAgent handles and persists family controls authorization requests for Screen Time API
+
+/System/Library/LaunchDaemons/com.apple.findmymacmessenger.plist
+/System/Library/LaunchDaemons/com.apple.findmymac.plist
+FindMyMac.framework
+
+/System/Library/LaunchDaemons/com.apple.findmy.findmybeaconingd.plist
+ FindMyBeaconDaemon – Daemon to manage local Mac FindMy beaconing.
+
+/System/Library/LaunchDaemons/com.apple.ftp-proxy.plist
+ ftp-proxy – Internet File Transfer Protocol proxy server
+
+/System/Library/LaunchDaemons/com.apple.GameController.gamecontrollerd.plist
+ gamecontrollerd arbitrates access to hardware game controllers amongst apps using the GameController framework.
+
+/System/Library/LaunchDaemons/com.apple.icloud.findmydeviced.plist
+/System/Library/LaunchDaemons/com.apple.icloud.searchpartyd.plist
+ findmydeviced is the daemon for Find My Mac.
+
+/System/Library/LaunchDaemons/com.apple.locationd.plist
+locationd obtains geographic location and manages the authorization for apps, daemons and widgets that request location updates.
+
+/System/Library/LaunchDaemons/com.apple.ManagedClient.cloudconfigurationd.plist
+cloudconfigurationd assists in helping install client Device Enrollment profiles.
+  
+/System/Library/LaunchDaemons/com.apple.modelmanagerd.plist
+modelmanagerd is a daemon that manages ML models and requests for execution of those models.
+
+/System/Library/LaunchDaemons/com.apple.modelcatalogd.plist
+modelcatalogd provides a catalog of models, adapters, and tokenizers for use by the system
+
+/System/Library/LaunchDaemons/com.apple.netbiosd.plist
+netbiosd is responsible for interacting with NetBIOS networks.  netbiosd registers and defends one or more NetBIOS name, depending on the set of configured services. It also browses and scavenges names from the NetBIOS network, making them available to the system through mDNSResponder.
+
+/System/Library/LaunchDaemons/com.apple.rapportd.plist
+rapportd – Daemon that enables Phone Call Handoff and other communication features between Apple devices.
+
+/System/Library/LaunchDaemons/com.apple.screensharing.plist
+ScreensharingAgent – communicates with screensharingd to provide access to a user session.
+
+/System/Library/LaunchDaemons/com.apple.triald.system.plist
+/usr/libexec/triald_system
+
+/System/Library/LaunchDaemons/com.apple.wifianalyticsd.plist
+com.apple.wifianalyticsd
