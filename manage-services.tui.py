@@ -10,6 +10,7 @@ import time
 import tty
 from collections import OrderedDict
 from typing import Dict, List, Optional, Tuple
+import threading
 
 from rich.console import Console
 from rich.layout import Layout
@@ -3717,7 +3718,7 @@ CATEGORIZATION_MAP = {
     "com.apple.ViewBridgeAuxiliary",
     "com.apple.screencaptureui"
   ],
-  "☀️ Weather": [
+  "☀️  Weather": [
     "com.apple.weatherd",
     "com.apple.weather.menu",
   ],
@@ -3939,6 +3940,58 @@ def categorize_service(service_name: str) -> str:
         return "🧩 Third-Party"
     return "❓ Undocumented"
 
+def bootout_and_disable(service, uid):
+    """Boots out and disables a user agent, returns (success, error_message)"""
+    bootout_cmd = ["launchctl", "bootout", f"gui/{uid}/{service}"]
+    disable_cmd = ["launchctl", "disable", f"gui/{uid}/{service}"]
+    bootout_result = subprocess.run(bootout_cmd, capture_output=True, text=True)
+    disable_result = subprocess.run(disable_cmd, capture_output=True, text=True)
+    # Check if disabled
+    check_disabled = subprocess.run(["launchctl", "print-disabled", f"gui/{uid}"], capture_output=True, text=True)
+    is_disabled = f'"{service}" => disabled' in check_disabled.stdout
+    # Check if running
+    check_running = subprocess.run(["launchctl", "list"], capture_output=True, text=True)
+    is_running = any(service in line and not line.strip().startswith('-') for line in check_running.stdout.splitlines())
+    if is_disabled and not is_running:
+        return True, ""
+    else:
+        msg = []
+        if not is_disabled:
+            msg.append("Service is not marked as disabled.")
+        if is_running:
+            msg.append("Service is still running.")
+        if bootout_result.returncode != 0:
+            msg.append(f"bootout error: {bootout_result.stderr.strip()}")
+        if disable_result.returncode != 0:
+            msg.append(f"disable error: {disable_result.stderr.strip()}")
+        return False, " ".join(msg)
+
+def bootout_and_disable_system_daemon(service):
+    """Boots out and disables a system daemon, returns (success, error_message)"""
+    bootout_cmd = ["sudo", "launchctl", "bootout", f"system/{service}"]
+    disable_cmd = ["sudo", "launchctl", "disable", f"system/{service}"]
+    bootout_result = subprocess.run(bootout_cmd, capture_output=True, text=True)
+    disable_result = subprocess.run(disable_cmd, capture_output=True, text=True)
+    # Check if disabled
+    check_disabled = subprocess.run(["sudo", "launchctl", "print-disabled", "system"], capture_output=True, text=True)
+    is_disabled = f'"{service}" => disabled' in check_disabled.stdout
+    # Check if running
+    check_running = subprocess.run(["sudo", "launchctl", "list"], capture_output=True, text=True)
+    is_running = any(service in line and not line.strip().startswith('-') for line in check_running.stdout.splitlines())
+    if is_disabled and not is_running:
+        return True, ""
+    else:
+        msg = []
+        if not is_disabled:
+            msg.append("Service is not marked as disabled.")
+        if is_running:
+            msg.append("Service is still running.")
+        if bootout_result.returncode != 0:
+            msg.append(f"bootout error: {bootout_result.stderr.strip()}")
+        if disable_result.returncode != 0:
+            msg.append(f"disable error: {disable_result.stderr.strip()}")
+        return False, " ".join(msg)
+
 class ServiceManagerTUI:
     """A terminal UI application for managing macOS services."""
 
@@ -4153,27 +4206,43 @@ class ServiceManagerTUI:
         self.console.print(Panel(Text("Press 'y' to apply, any other key to cancel.", justify="center")))
         key = self.read_key()
 
+        warnings = []
         if key.lower() == "y":
             with Progress(console=self.console, transient=False) as progress:
                 task = progress.add_task("[cyan]Applying changes...", total=len(changes))
                 for service, info in changes:
                     action_str = info["pending_status"] # Will be "enabled" or "disabled"
                     command_action = "enable" if action_str == "enabled" else "disable"
-                    
                     target_domain = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
-                    command = (["sudo", "launchctl", command_action, target_domain] if info["type"] == "daemon" else ["launchctl", command_action, target_domain])
-                    
-                    subprocess.run(command, capture_output=True, text=True, check=False)
-
-                    # Update the base status after applying
-                    # A service might not become "running" immediately after being enabled, so we set it to "enabled".
+                    if info["type"] == "daemon":
+                        if command_action == "disable":
+                            # For system daemons, bootout then disable, then check
+                            success, error = bootout_and_disable_system_daemon(service)
+                            if not success:
+                                warnings.append(f"[Daemon] {service}: {error}")
+                        else:
+                            # Just enable
+                            command = ["sudo", "launchctl", command_action, target_domain]
+                            subprocess.run(command, capture_output=True, text=True, check=False)
+                    else:
+                        if command_action == "disable":
+                            success, error = bootout_and_disable(service, self.uid)
+                            if not success:
+                                warnings.append(f"[Agent] {service}: {error}")
+                        else:
+                            command = ["launchctl", "enable", target_domain]
+                            subprocess.run(command, capture_output=True, text=True, check=False)
                     info["status"] = "enabled" if command_action == "enable" else "disabled"
                     del info["pending_status"]
                     progress.update(task, advance=1, description=f"[cyan]{command_action.capitalize()}d {service}")
 
-            live.update(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"))
-            time.sleep(2)
-            # Rescan to reflect accurate running state
+            if warnings:
+                warning_text = "\n".join(warnings)
+                live.update(Panel(Text(f"Some services may not have been fully disabled or stopped:\n\n{warning_text}", justify="left", style="yellow"), title="[bold red]Warning"))
+                time.sleep(4)
+            else:
+                live.update(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"))
+                time.sleep(2)
             self.services_data = get_live_services(self.console)
         else:
             for _, info in changes: del info["pending_status"]

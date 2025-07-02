@@ -1,160 +1,135 @@
 #!/bin/zsh
-# Taken from https://gist.github.com/b0gdanw/b349f5f72097955cf18d6e7d8035c665
-#
-# WARNING! The script is meant to show how and what can be disabled. Don’t use it as it is, adapt it to your needs.
-# Credit: Original idea and script disable.sh by pwnsdx https://gist.github.com/pwnsdx/d87b034c4c0210b988040ad2f85a68d3
-# Disabling unwanted services on macOS Big Sur (11), macOS Monterey (12), macOS Ventura (13), macOS Sonoma (14) and macOS Sequoia (15)
-# Disabling SIP is required  ("csrutil disable" from Terminal in Recovery)
-# Modifications are written in /private/var/db/com.apple.xpc.launchd/ disabled.plist, disabled.501.plist
-# To revert, delete /private/var/db/com.apple.xpc.launchd/ disabled.plist and disabled.501.plist and reboot; sudo rm -r /private/var/db/com.apple.xpc.launchd/*
 
+# =============================================================================
+# == User-Specific Services (GUI)
+# =============================================================================
 
-# user
-TODISABLE=()
+# 🧠 Siri & Intelligence
+TODISABLE_USER+=(
+	'com.apple.assistantd'                   # Breaks Siri and Dictation.
+	'com.apple.corespeechd'                  # Breaks "Hey Siri" and voice input.
+	'com.apple.siriactionsd'                 # Breaks Siri Shortcuts.
+	'com.apple.Siri.agent'                   # Breaks the Siri user interface.
+	'com.apple.sirittsd'                     # Breaks Siri's voice (Text-to-Speech).
+	'com.apple.suggestd'                     # Breaks Spotlight and Safari suggestions.
+	'com.apple.studentd'                     # Breaks Classroom student features.
+	'com.apple.parsecd'                      # Breaks core engine for Siri suggestions.
+	#'com.apple.intelligenceplatformd'        # Breaks many "proactive" OS features.
+	#'com.apple.routined'                     # Breaks significant location and routine-based suggestions.
+	'com.apple.generativeexperiencesd'       # Breaks future generative AI features in macOS.
+)
 
-TODISABLE+=('com.apple.accessibility.MotionTrackingAgent' \
-'com.apple.accessibility.axassetsd' \
-'com.apple.ap.adprivacyd' \
-'com.apple.ap.promotedcontentd' \
-'com.apple.assistant_service' \
-'com.apple.assistantd' \
-'com.apple.assistant_cdmd' \
-'com.apple.avconferenced' \
-'com.apple.BiomeAgent' \
-'com.apple.biomesyncd' \
-'com.apple.calaccessd' \
-'com.apple.CallHistoryPluginHelper' \
-'com.apple.chronod' \
-'com.apple.cloudd' \
-'com.apple.cloudpaird' \
-'com.apple.cloudphotod' \
-'com.apple.CloudSettingsSyncAgent' \
-'com.apple.CommCenter-osx' \
-'com.apple.ContextStoreAgent' \
-'com.apple.CoreLocationAgent' \
-'com.apple.corespeechd' \
-'com.apple.dataaccess.dataaccessd' \
-'com.apple.duetexpertd' \
-'com.apple.familycircled' \
-'com.apple.familycontrols.useragent' \
-'com.apple.familynotificationd' \
-'com.apple.financed' \
-'com.apple.findmy.findmylocateagent' \
-'com.apple.followupd' \
-'com.apple.gamed' \
-'com.apple.generativeexperiencesd' \
-'com.apple.geoanalyticsd' \
-'com.apple.geodMachServiceBridge' \
-'com.apple.helpd' \
-'com.apple.homed' \
-'com.apple.icloud.fmfd' \
-'com.apple.iCloudNotificationAgent' \
-'com.apple.icloudmailagent' \
-'com.apple.iCloudUserNotifications' \
-'com.apple.icloud.searchpartyuseragent' \
-'com.apple.imagent' \
-'com.apple.imautomatichistorydeletionagent' \
-'com.apple.imtransferagent' \
-'com.apple.inputanalyticsd' \
-'com.apple.intelligenceflowd' \
-'com.apple.intelligencecontextd' \
-'com.apple.intelligenceplatformd' \
-'com.apple.itunescloudd' \
-'com.apple.knowledge-agent' \
-'com.apple.knowledgeconstructiond' \
-'com.apple.ManagedClientAgent.enrollagent' \
-'com.apple.Maps.pushdaemon' \
-'com.apple.Maps.mapssyncd' \
-'com.apple.maps.destinationd' \
-'com.apple.mediaanalysisd' \
-'com.apple.mediastream.mstreamd' \
-'com.apple.naturallanguaged' \
-'com.apple.navd' \
-'com.apple.newsd' \
-'com.apple.parsec-fbf' \
-'com.apple.parsecd' \
-'com.apple.passd' \
-'com.apple.photoanalysisd' \
-'com.apple.photolibraryd' \
-'com.apple.progressd' \
-'com.apple.protectedcloudstorage.protectedcloudkeysyncing' \
-'com.apple.quicklook' \
-'com.apple.quicklook.ui.helper' \
-'com.apple.quicklook.ThumbnailsAgent' \
-'com.apple.rapportd' \
-'com.apple.rapportd-user' \
-'com.apple.remindd' \
-'com.apple.replicatord' \
-'com.apple.routined' \
-'com.apple.screensharing.agent' \
-'com.apple.screensharing.menuextra' \
-'com.apple.screensharing.MessagesAgent' \
-'com.apple.ScreenTimeAgent' \
-'com.apple.SSInvitationAgent' \
-'com.apple.security.cloudkeychainproxy3' \
-'com.apple.sharingd' \
-'com.apple.sidecar-hid-relay' \
-'com.apple.sidecar-relay' \
-'com.apple.siriactionsd' \
-'com.apple.Siri.agent' \
-'com.apple.siriinferenced' \
-'com.apple.sirittsd' \
-'com.apple.SiriTTSTrainingAgent' \
-'com.apple.macos.studentd' \
-'com.apple.siriknowledged' \
-'com.apple.suggestd' \
-'com.apple.tipsd' \
-'com.apple.telephonyutilities.callservicesd' \
-'com.apple.TMHelperAgent' \
-'com.apple.triald' \
-'com.apple.universalaccessd' \
-'com.apple.UsageTrackingAgent' \
-'com.apple.videosubscriptionsd' \
-'com.apple.voicebankingd' \
-'com.apple.watchlistd' \
-'com.apple.weatherd')
+# ☁️ iCloud & Cloud Services
+TODISABLE_USER+=(
+	'com.apple.cloudd'                       # Breaks iCloud Drive file syncing.
+	'com.apple.cloudphotod'                  # Breaks iCloud Photos syncing.
+	'com.apple.CloudSettingsSyncAgent'       # Breaks iCloud sync for system and app settings.
+	# 'com.apple.icloudmailagent'              # Breaks iCloud Mail.
+	'com.apple.itunescloudd'                 # Breaks Apple Music and iTunes Match library sync.
+	'com.apple.security.cloudkeychainproxy3' # Breaks iCloud Keychain password syncing.
+)
 
-for agent in "${TODISABLE[@]}"
+# 📍 Location & Find My Services
+TODISABLE_USER+=(
+	'com.apple.CoreLocationAgent'            # Breaks location services for all apps (Maps, Weather).
+	'com.apple.findmy.findmylocateagent'     # Breaks the "Find My" feature for this Mac.
+	'com.apple.icloud.searchpartyuseragent'  # Breaks offline finding via the crowdsourced Find My network.
+)
+
+# 👪 Family & Screen Time
+TODISABLE_USER+=(
+	#'com.apple.familycircled'                # Breaks all Family Sharing features.
+	'com.apple.familycontrols.useragent'     # Breaks Parental Controls.
+	'com.apple.ScreenTimeAgent'              # Breaks Screen Time tracking and limits.
+)
+
+# 📸 Media, Photos & Entertainment
+TODISABLE_USER+=(
+	'com.apple.photoanalysisd'               # Breaks Photos app's face/object recognition and search.
+	#'com.apple.photolibraryd'                # Breaks the Photos app library manager; can cause corruption.
+	'com.apple.gamed'                        # Breaks Game Center.
+	'com.apple.newsd'                        # Breaks the Apple News app and widget.
+	#'com.apple.avconferenced'                # Breaks FaceTime audio and video.
+)
+
+# 🤝 Sharing, Handoff & Connectivity
+TODISABLE_USER+=(
+	'com.apple.sharingd'                     # Breaks AirDrop, Handoff, and Universal Clipboard.
+	'com.apple.rapportd'                     # Breaks communication with other Apple devices (Sidecar, HomePod).
+	#'com.apple.sidecar-relay'                # Breaks using an iPad as a second display (Sidecar).
+)
+
+# 🖥️ Screen Sharing & QuickLook
+TODISABLE_USER+=(
+	'com.apple.quicklook.ThumbnailsAgent'    # Breaks file thumbnail generation in Finder.
+	'com.apple.quicklook'                    # Breaks the Quick Look feature (spacebar preview).
+	'com.apple.screensharing.agent'          # Breaks incoming screen sharing connections.
+)
+
+# 📢 Advertising & Analytics
+TODISABLE_USER+=(
+	#'com.apple.ap.promotedcontentd'          # Breaks ads in App Store and News.
+	#'com.apple.triald'                       # Opts you out of Apple's experimental feature trials.
+)
+
+# ♿ Accessibility
+TODISABLE_USER+=(
+	#'com.apple.universalaccessd'             # Breaks all Accessibility features (VoiceOver, Zoom, etc.).
+)
+
+# ⚙️ Miscellaneous System Agents
+TODISABLE_USER+=(
+	'com.apple.homed'                        # Breaks HomeKit for controlling smart home devices.
+	#'com.apple.imagent'                      # Breaks iMessage and FaceTime account sign-in.
+	#'com.apple.passd'                        # Breaks Wallet & Apple Pay.
+	'com.apple.remindd'                      # Breaks the Reminders app and its alerts.
+	'com.apple.TMHelperAgent'                # Breaks the Time Machine menu bar icon and helper functions.
+	#'com.apple.weatherd'                     # Breaks the Weather app and widget.
+)
+
+# Execute the disabling for User services
+for agent in "${TODISABLE_USER[@]}"
 do
-	launchctl bootout gui/501/${agent}
-	launchctl disable gui/501/${agent}
+  launchctl bootout gui/501/"${agent}"
+  launchctl disable gui/501/"${agent}"
 done
 
 
-# system
-TODISABLE=()
+# =============================================================================
+# == System-Wide Services
+# =============================================================================
 
-TODISABLE+=('com.apple.analyticsd' \
-'com.apple.audioanalyticsd' \
-'com.apple.backupd' \
-'com.apple.backupd-helper' \
-'com.apple.biomed' \
-'com.apple.cloudd' \
-'com.apple.coreduetd' \
-'com.apple.dhcp6d' \
-'com.apple.ecosystemanalyticsd' \
-'com.apple.familycontrols' \
-'com.apple.findmymac' \
-'com.apple.findmymacmessenger' \
-'com.apple.findmy.findmybeaconingd' \
-'com.apple.ftp-proxy' \
-'com.apple.GameController.gamecontrollerd' \
-'com.apple.icloud.findmydeviced' \
-'com.apple.icloud.searchpartyd' \
-'com.apple.locationd' \
-'com.apple.ManagedClient.cloudconfigurationd' \
-'com.apple.modelmanagerd' \
-'com.apple.netbiosd' \
-'com.apple.rapportd' \
-'com.apple.screensharing' \
-'com.apple.triald.system' \
-'com.apple.wifianalyticsd')
+# 📈 System Analytics & Diagnostics
+TODISABLE_SYSTEM+=(
+	'com.apple.analyticsd'                 # Stops sending system diagnostic data to Apple.
+	'com.apple.wifianalyticsd'               # Stops sending Wi-Fi diagnostic data to Apple.
+)
 
-for daemon in "${TODISABLE[@]}"
+# 💾 Time Machine Backup
+TODISABLE_SYSTEM+=(
+	'com.apple.backupd'                    # Breaks Time Machine backups entirely.
+	'com.apple.backupd-helper'               # Helper for Time Machine; disabling also breaks backups.
+)
+
+# 🔎 System-Level Find My & iCloud
+TODISABLE_SYSTEM+=(
+	#'com.apple.findmymac'                  # Breaks Find My Mac service.
+	#'com.apple.icloud.searchpartyd'          # Breaks offline finding capability (crucial for Find My).
+)
+
+# ⚙️ Miscellaneous System Services
+TODISABLE_SYSTEM+=(
+	'com.apple.GameController.gamecontrollerd' # Breaks support for game controllers/gamepads.
+	#'com.apple.locationd'                    # System-wide location daemon; breaks all location services.
+	#'com.apple.screensharing'                # Breaks screen sharing functionality at the system level.
+)
+
+
+# Execute the disabling for System services
+for agent in "${TODISABLE_SYSTEM[@]}"
 do
-	sudo launchctl bootout system/${daemon}
-	sudo launchctl disable system/${daemon}
+  launchctl bootout system/"${agent}"
+  launchctl disable system/"${agent}"
 done
 
-sudo launchctl bootout user/205/com.apple.geod
-sudo launchctl disable user/205/com.apple.geod
+echo "Done. A restart may be required for all changes to take effect."
