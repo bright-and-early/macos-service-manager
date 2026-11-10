@@ -41,14 +41,15 @@ git clone https://github.com/bright-and-early/macos-service-manager.git
 cd macos-service-manager
 ```
 
-4. Install the required dependencies:
+4. Create a virtual environment and install the required dependencies:
 
 ```bash
-pip install -r requirements.txt
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
 ```
 
-5. Run the service manager:
+5. Run the service manager (it needs root to manage system services, so point `sudo` at the virtual environment's interpreter):
 
 ```bash
-sudo python3 manage-services.tui.py
+sudo .venv/bin/python3 manage-services.tui.py
 ```
