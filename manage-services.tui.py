@@ -5272,6 +5272,7 @@ def get_service_details(service_name: str, service_type: str, statuses: Dict[str
 
     return {
         "status": status,
+        "enabled_status": statuses.get(service_name, "enabled"),
         "description": stored_info["description"],
         "impact": stored_info["impact"],
         "type": service_type,
@@ -5474,7 +5475,7 @@ class ServiceManagerTUI:
                     category_name = self.categories[self.active_category_index]
                     info = self.services_data[category_name][service_name]
                     # Toggle logic remains simple: if it's disabled, set pending to enabled, otherwise set to disabled.
-                    current_status = info.get("pending_status", info["status"])
+                    current_status = info.get("pending_status", info.get("enabled_status", info["status"]))
                     info["pending_status"] = "enabled" if current_status == "disabled" else "disabled"
             elif key == "enter": return "apply"
             self._adjust_viewport('service')
@@ -5527,7 +5528,7 @@ class ServiceManagerTUI:
             info = self.services_data[category_name][name]
             display_status = info.get("pending_status", info["status"])
             
-            if "pending_status" in info and info["pending_status"] != info["status"]:
+            if "pending_status" in info and info["pending_status"] != info.get("enabled_status", info["status"]):
                 status_icon, status_style = "🔄", "yellow"
             elif display_status == "running":
                 status_icon, status_style = "🟢", "green"
@@ -5564,9 +5565,12 @@ class ServiceManagerTUI:
         status_styles = {"running": "green", "enabled": "green", "disabled": "red"}
         details_text.append("Status: ", style="bold yellow").append(f"{live_status.capitalize()}\n", style=status_styles.get(live_status, "default"))
         
+        if live_status == "running" and info.get("enabled_status") == "disabled":
+            details_text.append("Launch override: Disabled (process still running)\n", style="yellow")
+
         # Display pending status change
         pending_status = info.get('pending_status')
-        if pending_status and pending_status != live_status:
+        if pending_status and pending_status != info.get("enabled_status", live_status):
             pending_color = "green" if pending_status == "enabled" else "red"
             details_text.append("Pending: ", style="bold yellow").append(f"{pending_status.capitalize()} (press Enter to apply)\n", style=pending_color)
 
@@ -5578,7 +5582,7 @@ class ServiceManagerTUI:
         return Panel(details_text, title="Details", border_style="green")
 
     def confirm_and_apply(self, live):
-        changes = [(s, i) for c in self.services_data.values() for s, i in c.items() if "pending_status" in i and i["pending_status"] != i["status"]]
+        changes = [(s, i) for c in self.services_data.values() for s, i in c.items() if "pending_status" in i and i["pending_status"] != i.get("enabled_status", i["status"])]
 
         if not changes:
             self.console.print(Panel(Text("No changes to apply.", justify="center")))
@@ -5600,6 +5604,7 @@ class ServiceManagerTUI:
                     success, error = set_service_enabled(info.get("label", service), domain, command_action == "enable")
                     if success:
                         info["status"] = info["pending_status"]
+                        info["enabled_status"] = info["pending_status"]
                         del info["pending_status"]
                     else:
                         warnings.append(f"{service} [{domain}]: {error}")

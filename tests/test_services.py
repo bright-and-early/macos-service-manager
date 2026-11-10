@@ -67,6 +67,13 @@ class LaunchctlTests(unittest.TestCase):
         self.assertFalse(success)
         self.assertIn('Operation not permitted', error)
 
+    def test_running_but_disabled_service_can_be_reenabled(self):
+        info = m.get_service_details('example.agent', 'agent', {'example.agent': 'disabled'}, {'example.agent': '123'})
+        app = m.ServiceManagerTUI({'Test': {'example.agent': info}})
+        app.view_mode = 'services'
+        app.handle_input(' ')
+        self.assertEqual(info['pending_status'], 'enabled')
+
     def test_apply_failure_keeps_observed_state_and_shows_error(self):
         info = {'type': 'agent', 'domain': 'user/502', 'label': 'example.background',
                 'status': 'running', 'pending_status': 'disabled'}
