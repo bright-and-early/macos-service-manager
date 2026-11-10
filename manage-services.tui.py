@@ -109,10 +109,6 @@ SERVICE_DATABASE = {
     "description": "Fetches and displays promoted content within Apple's applications like the App Store.",
     "impact": "Will likely prevent the display of promoted or featured content in various Apple apps.",
   },
-  "com.apple.adid": {
-    "description": "Manages the advertising identifier (IDFA) used for tracking in apps.",
-    "impact": "May affect ad tracking and personalization in apps.",
-  },
   "com.apple.parsec-fbf": {
     "description": "Responsible for periodic flushing and uploading of Siri Search analytics data.",
     "impact": "Disabling this will stop the system from sending Siri Search analytics to Apple.",
@@ -3216,6 +3212,10 @@ SERVICE_DATABASE = {
     "impact": "Video-conferencing apps may not be able to access the camera.",
   },
   # --- Security & Keychain ---
+  "com.apple.adid": {
+    "description": "CoreADI daemon that supplies device authentication data (anisette) to AuthKit for Apple Account sign-in.",
+    "impact": "CRITICAL: Disabling prevents AuthKit from obtaining device authentication data and can block Apple Account and iCloud sign-in with 'An unknown error occurred'. Keep enabled when using Apple Account services.",
+  },
   "com.apple.EscrowSecurityAlert": {
     "description": "The escrow security alert agent. It warns when the recovery key for FileVault/iCloud Keychain escrow is missing or invalid.",
     "impact": "You may not be warned about recovery-key escrow problems.",
@@ -4174,7 +4174,6 @@ CATEGORIZATION_MAP = {
   "📊 Advertising & Analytics": [
     "com.apple.ap.adprivacyd",
     "com.apple.ap.promotedcontentd",
-    "com.apple.adid",
     "com.apple.ecosystemagent",
     "com.apple.parsec-fbf",
     "com.apple.analyticsd",
@@ -4841,6 +4840,7 @@ CATEGORIZATION_MAP = {
     "com.apple.swcd",
   ],
   "🔒 Security & Keychain": [
+    "com.apple.adid",
     "com.apple.appleaccounttransparencyd",
     "com.apple.auditd",
     "com.apple.AuthenticationServicesCore.AuthenticationServicesAgent",
@@ -5224,6 +5224,7 @@ CATEGORIZATION_MAP = {
 # Sources checked against the installed macOS manuals/configuration on 2026-11-10.
 # Impact statements remain estimates unless the source explicitly documents them.
 METADATA_SOURCES = {
+    "com.apple.adid": "/System/Library/LaunchDaemons/com.apple.adid.plist (CoreADI executable); local AuthKit/launchd logs, 2026-11-10 02:19:43 (missing adid, ADI -45017, sign-in failure)",
     "com.apple.triald": "/System/Library/LaunchAgents/com.apple.triald.plist (Trial activities)",
     "com.apple.triald.system": "/System/Library/LaunchDaemons/com.apple.triald.system.plist (program identity)",
     "com.apple.DwellControl": "https://support.apple.com/guide/mac-help/mchl437b47b0/mac (Dwell feature)",
