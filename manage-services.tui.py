@@ -5309,8 +5309,9 @@ def get_service_details(service_name: str, service_type: str, statuses: Dict[str
         "policy_source": policy_source,
         "description": stored["description"] if stored else "No verified description is available for this service.",
         "impact": stored["impact"] if stored else "The effects of disabling this service have not been verified.",
-        "metadata_source": METADATA_SOURCES.get(service_name),
-        "metadata_verified": service_name in METADATA_SOURCES,
+        "metadata_source": METADATA_SOURCES.get(service_name) or (
+            "Historical local database; description and impact not independently verified" if stored else
+            "No checked source available"),
         "type": service_type,
     }
 
@@ -5574,7 +5575,7 @@ class ServiceManagerTUI:
         for i in range(start, end):
             name = services[i]
             info = self.services_data[category_name][name]
-            display_status = info.get("pending_status", info["status"])
+            display_status = info["status"]
             
             if "pending_status" in info and info["pending_status"] != info.get("enabled_status", info["status"]):
                 status_icon, status_style = "🔄", "yellow"

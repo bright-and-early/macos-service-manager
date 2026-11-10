@@ -92,6 +92,17 @@ class LaunchctlTests(unittest.TestCase):
 
 
 class AccuracyTests(unittest.TestCase):
+    def test_cancelled_toggle_retains_running_icon(self):
+        info = m.get_service_details('example.running', 'agent', {'example.running': 'enabled'}, {'example.running': '123'})
+        app = m.ServiceManagerTUI({'Test': {'example.running': info}})
+        app.view_mode = 'services'
+        app.handle_input(' ')
+        app.handle_input(' ')
+        output = io.StringIO()
+        Console(file=output, width=90).print(app.draw_service_list())
+        self.assertIn('🟢', output.getvalue())
+        self.assertNotIn('🟡', output.getvalue())
+
     def test_scrolled_selection_remains_visible_inside_panel_borders(self):
         entries = {f'example.{i:03}': {'status': 'loaded'} for i in range(80)}
         app = m.ServiceManagerTUI({'Test': entries})
