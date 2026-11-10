@@ -5581,11 +5581,11 @@ class ServiceManagerTUI:
         changes = [(s, i) for c in self.services_data.values() for s, i in c.items() if "pending_status" in i and i["pending_status"] != i["status"]]
 
         if not changes:
-            live.update(Panel(Text("No changes to apply.", justify="center")), refresh=True)
+            self.console.print(Panel(Text("No changes to apply.", justify="center")))
             time.sleep(1.5)
             return
 
-        live.update(Panel(self.generate_command_table(changes), title="[bold yellow]Confirm Changes"), refresh=True)
+        self.console.print(Panel(self.generate_command_table(changes), title="[bold yellow]Confirm Changes"))
         self.console.print(Panel(Text("Press 'y' to apply, any other key to cancel.", justify="center")))
         key = self.read_key()
 
@@ -5607,11 +5607,11 @@ class ServiceManagerTUI:
 
             if warnings:
                 warning_text = "\n".join(warnings)
-                live.update(Panel(Text(f"Some services may not have been fully disabled or stopped:\n\n{warning_text}", justify="left", style="yellow"), title="[bold red]Warning"), refresh=True)
+                self.console.print(Panel(Text(f"Some services may not have been fully disabled or stopped:\n\n{warning_text}", justify="left", style="yellow"), title="[bold red]Warning"))
                 self.console.print("Press any key to continue.")
                 self.read_key()
             else:
-                live.update(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"), refresh=True)
+                self.console.print(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"))
                 time.sleep(2)
             self.services_data = get_live_services(self.console)
             self.categories = list(self.services_data)
@@ -5622,7 +5622,7 @@ class ServiceManagerTUI:
                 self.exit_app = True
         else:
             for _, info in changes: del info["pending_status"]
-            live.update(Panel(Text("❌ Changes cancelled.", justify="center"), style="red"), refresh=True)
+            self.console.print(Panel(Text("❌ Changes cancelled.", justify="center"), style="red"))
             time.sleep(1.5)
 
     def generate_command_table(self, changes: List[Tuple[str, Dict]]) -> Table:
@@ -5656,6 +5656,8 @@ class ServiceManagerTUI:
                     if action == "apply":
                         live.stop()
                         self.confirm_and_apply(live) # This method now handles the rescan
+                        if self.exit_app:
+                            break
                         live.start(refresh=True)
                     
                     live.update(self.draw_layout(), refresh=True)

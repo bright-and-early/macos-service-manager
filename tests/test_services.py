@@ -78,11 +78,7 @@ class LaunchctlTests(unittest.TestCase):
              patch.object(m, 'get_live_services', return_value={'Test': {'example.background': {'status': 'running'}}}):
             app.confirm_and_apply(live)
         self.assertEqual(info['status'], 'running')
-        panels = [call.args[0] for call in live.update.call_args_list]
-        output = Console(file=io.StringIO(), record=True)
-        for panel in panels:
-            output.print(panel)
-        self.assertIn('Operation not permitted', output.export_text())
+        self.assertIn('Operation not permitted', app.console.file.getvalue())
         self.assertEqual(app.services_data['Test']['example.background']['status'], 'running')
 
 
