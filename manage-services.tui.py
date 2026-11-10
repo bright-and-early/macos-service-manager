@@ -2,6 +2,10 @@
 # pylint: disable=line-too-long
 
 import os
+import plistlib
+import pwd
+from pathlib import Path
+from xml.parsers.expat import ExpatError
 import re
 import subprocess
 import sys
@@ -21,7 +25,7 @@ from rich.table import Table
 from rich.text import Text
 
 # --- Service Details Database ---
-# This dictionary contains the detailed research on each service.
+# Historical descriptions are not independently verified unless a source is listed below.
 SERVICE_DATABASE = {
   # Accessibility
   "com.apple.accessibility.MotionTrackingAgent": {
@@ -73,8 +77,8 @@ SERVICE_DATABASE = {
     "impact": "The UI components of accessibility features like VoiceOver or Zoom may not display correctly.",
   },
   "com.apple.DwellControl": {
-    "description": "An accessibility feature allowing pointer control using head or eye tracking.",
-    "impact": "Dwell Control functionality will be disabled.",
+    "description": 'Supports Dwell actions, which perform a click or another action when the pointer stays still for a configured time.',
+    "impact": 'Disabling may prevent Dwell actions used with the Accessibility Keyboard.',
   },
   "com.apple.VoiceOver": {
     "description": "The core screen reader service for macOS.",
@@ -183,12 +187,12 @@ SERVICE_DATABASE = {
     "impact": "Apple Pay and Wallet functionality, including managing cards and passes, will not work.",
   },
   "com.apple.watchlistd": {
-    "description": "The watchlist daemon for the Apple TV app. It maintains the Up Next watchlist and syncs it across devices.",
-    "impact": "The 'Up Next' feature in the TV app may not sync or update correctly.",
+    "description": 'Provides support for the Apple TV app.',
+    "impact": 'Disabling may affect Apple TV app functionality. The manual does not specify all affected features.',
   },
   "com.apple.triald.system": {
-    "description": "Manages trial periods for applications from the Mac App Store.",
-    "impact": "App trials may not function correctly or their status may not be tracked.",
+    "description": 'System service for Apple’s Trial framework, launched as triald_system.',
+    "impact": 'Disabling may interfere with system Trial tasks. The installed launch configuration does not document the full effects.',
   },
   "com.apple.newsd": {
     "description": "Daemon for the Apple News service.",
@@ -1772,16 +1776,16 @@ SERVICE_DATABASE = {
     "impact": "The system may be less efficient at predicting user behavior to optimize performance."
   },
   "com.apple.uarpassetmanagerd": {
-    "description": "Manages firmware assets used by the UARP (Universal Accessory Restore Protocol) accessory update system. It downloads and caches firmware images for Apple accessories.",
-    "impact": "Firmware assets for Apple accessories cannot be downloaded or cached, so accessory updates may fail."
+    "description": 'UARP asset helper launched as /usr/libexec/uarpassetmanagerd. Its precise responsibilities are not documented in the installed launch configuration.',
+    "impact": 'The full effect of disabling this helper is not verified; accessory-related functionality may be affected.'
   },
   "com.apple.uarpd": {
-    "description": "The Universal Accessory Restore Protocol daemon. It handles firmware update and restore sessions for Apple accessories such as AirPods and Beats over USB or wireless transports.",
-    "impact": "Apple accessories will not receive firmware updates or restores."
+    "description": 'Manages UARP accessory devices.',
+    "impact": 'Disabling may interfere with accessory management or updates. The manual does not document the complete impact.'
   },
   "com.apple.uarphidd": {
-    "description": "The UARP (Universal Accessory Restore Protocol) bridge for HID accessories. It carries firmware-update traffic for input accessories that use the protocol.",
-    "impact": "Firmware updates for affected HID accessories will not work."
+    "description": 'UARP helper launched as /usr/libexec/uarphidd. Its precise responsibilities are not documented in the installed launch configuration.',
+    "impact": 'The full effect of disabling this helper is not verified; accessory-related functionality may be affected.'
   },
   # Security & Keychain
   "com.apple.securityd": {
@@ -2943,8 +2947,8 @@ SERVICE_DATABASE = {
     "impact": "Legacy App Store purchase/download flows may fail. Mostly relevant for older content.",
   },
   "com.apple.triald": {
-    "description": "The trial daemon for the App Store. It manages trial periods and trial eligibility for apps.",
-    "impact": "App trials may not start, be tracked, or convert correctly.",
+    "description": 'Supports Apple’s Trial framework. Its launch configuration schedules experiment fetching and maintenance.',
+    "impact": 'Disabling may prevent Trial experiment configuration and maintenance. Effects depend on the features using this framework.',
   },
   "com.apple.backgroundassets.user": {
     "description": "The user-level Background Assets agent. It downloads large app assets in the background on behalf of apps and games.",
@@ -4199,9 +4203,7 @@ CATEGORIZATION_MAP = {
     "com.apple.financed",
     "com.apple.storeassetd",
     "com.apple.storelegacy",
-    "com.apple.triald",
     "com.apple.watchlistd",
-    "com.apple.triald.system",
     "com.apple.newsd",
     "com.apple.appinstalld",
     "com.apple.assetsubscriptiond",
@@ -4430,6 +4432,9 @@ CATEGORIZATION_MAP = {
     "com.apple.gamepolicyd",
   ],
   "🔌 Hardware & Drivers": [
+    "com.apple.uarpassetmanagerd",
+    "com.apple.uarphidd",
+    "com.apple.uarpd",
     "com.apple.accessorysensormgrd",
     "com.apple.airportd",
     "com.apple.appleh13camerad",
@@ -4776,6 +4781,8 @@ CATEGORIZATION_MAP = {
     "com.apple.voicememod",
   ],
   "🧠 Proactive & Intelligence": [
+    "com.apple.triald.system",
+    "com.apple.triald",
     "com.apple.ciphermld",
     "com.apple.contacts.donation-agent",
     "com.apple.corespotlightd",
@@ -4812,9 +4819,6 @@ CATEGORIZATION_MAP = {
     "com.apple.modelcatalogd",
     "com.apple.modelmanagerd",
     "com.apple.ospredictiond",
-    "com.apple.uarpassetmanagerd",
-    "com.apple.uarpd",
-    "com.apple.uarphidd",
     "com.apple.duetexpertd",
     "com.apple.generativeexperiencesd",
     "com.apple.intelligenceflowd",
@@ -5217,6 +5221,18 @@ CATEGORIZATION_MAP = {
   ]
 }
 
+# Sources checked against the installed macOS manuals/configuration on 2026-11-10.
+# Impact statements remain estimates unless the source explicitly documents them.
+METADATA_SOURCES = {
+    "com.apple.triald": "/System/Library/LaunchAgents/com.apple.triald.plist (Trial activities)",
+    "com.apple.triald.system": "/System/Library/LaunchDaemons/com.apple.triald.system.plist (program identity)",
+    "com.apple.DwellControl": "https://support.apple.com/guide/mac-help/mchl437b47b0/mac (Dwell feature)",
+    "com.apple.watchlistd": "man 8 watchlistd",
+    "com.apple.uarpd": "man 8 uarpd",
+    "com.apple.uarphidd": "/System/Library/LaunchDaemons/com.apple.uarphidd.plist (program identity)",
+    "com.apple.uarpassetmanagerd": "/System/Library/LaunchDaemons/com.apple.uarpassetmanagerd.plist (program identity)",
+}
+
 # --- Live Data Functions ---
 
 def get_uid() -> int:
@@ -5226,55 +5242,75 @@ def get_uid() -> int:
         return int(os.environ['SUDO_UID'])
     return os.getuid()
 
+def service_rows(output: str) -> Dict[str, str]:
+    """Read only the launchctl services table, never endpoints or other tables."""
+    match = re.search(r"^\s*services = \{\s*$(.*?)^\s*\}", output, re.MULTILINE | re.DOTALL)
+    if not match:
+        return {}
+    return {row.group(2): row.group(1) for row in re.finditer(
+        r"^\s*(\d+|-)\s+[-\d]+\s+(\S+)\s*$", match.group(1), re.MULTILINE)}
+
+
 def parse_launchctl_print_output(output: str) -> Tuple[set, Dict[str, str]]:
-    """Parses the output of `launchctl print` to get service names and disabled statuses."""
-    service_names = set()
-    disabled_status = {}
+    """Read loaded labels and persistent overrides, including override-only labels."""
+    names = set(service_rows(output))
+    states = {}
+    block = re.search(r"disabled services = \{([^}]*)\}", output, re.DOTALL)
+    if block:
+        for name, status in re.findall(r'"([^"\n]+)"\s*=>\s*(enabled|disabled|true|false)', block.group(1)):
+            states[name] = "disabled" if status in ("disabled", "true") else "enabled"
+    return names | set(states), states
 
-    service_pattern = re.compile(r"^\s*[\d-]+\s+[\d-]+\s+([a-zA-Z0-9\._-]+)\s*$", re.MULTILINE)
-    for match in service_pattern.finditer(output):
-        service_names.add(match.group(1))
 
-    disabled_section_match = re.search(r"disabled services = {([^}]+)}", output, re.DOTALL)
-    if disabled_section_match:
-        disabled_block = disabled_section_match.group(1)
-        disabled_pattern = re.compile(r'"([^"]+)"\s*=>\s*(enabled|disabled|true|false)')
-        for match in disabled_pattern.finditer(disabled_block):
-            service_name, status = match.groups()
-            disabled_status[service_name] = "disabled" if status in ("disabled", "true") else "enabled"
-            service_names.add(service_name)
+def read_service_definitions(directories) -> Dict[str, Dict]:
+    """Read configuration evidence; a plist alone does not prove a loaded job."""
+    definitions = {}
+    for directory in directories:
+        try:
+            paths = sorted(Path(directory).glob("*.plist"))
+        except OSError:
+            continue
+        for path in paths:
+            try:
+                data = plistlib.loads(path.read_bytes())
+                if not isinstance(data, dict) or not isinstance(data.get("Label"), str):
+                    continue
+                args = data.get("ProgramArguments")
+                program = data.get("Program") or (args[0] if isinstance(args, list) and args else "")
+                definitions[data["Label"]] = {
+                    "plist_path": str(path), "program": str(program),
+                    "default_disabled": data.get("Disabled", False) if isinstance(data.get("Disabled", False), bool) else None,
+                }
+            except (OSError, ValueError, TypeError, plistlib.InvalidFileException, ExpatError):
+                continue
+    return definitions
 
-    return service_names, disabled_status
 
-def get_service_details(service_name: str, service_type: str, statuses: Dict[str, str], pids: Dict[str, str]) -> Optional[Dict]:
-    """Gets live status and combines it with stored metadata from the database."""
-    
-    # Determine the status: Running > Enabled > Disabled
-    if service_name in pids:
-        status = "running"  # Running services should be marked as "running"
-    elif service_name in statuses:
-        # Use the actual status from launchctl print (enabled/disabled)
-        if statuses[service_name] == "disabled":
-            status = "disabled"
-        else:
-            status = "enabled"
+def get_service_details(service_name: str, service_type: str, statuses: Dict[str, str],
+                        pids: Dict[str, str], *, loaded=True, default_disabled=None,
+                        overrides_known=True) -> Dict:
+    """Keep runtime state, launch policy, and metadata confidence separate."""
+    if service_name in statuses:
+        enabled_status = statuses[service_name]
+        policy_source = "Saved launchctl override"
+    elif not overrides_known or default_disabled is None:
+        enabled_status = "unknown"
+        policy_source = "No verified launch policy"
     else:
-        # Default to enabled if not explicitly disabled
-        status = "enabled"
-
-    stored_info = SERVICE_DATABASE.get(
-        service_name,
-        {
-            "description": "No detailed information in the local database for this service.",
-            "impact": "The impact of disabling this service is unknown. Proceed with caution.",
-        },
-    )
-
+        enabled_status = "disabled" if default_disabled else "enabled"
+        policy_source = "Plist default (no saved override)"
+    status = ("running" if service_name in pids else
+              "disabled" if enabled_status == "disabled" else
+              "loaded" if loaded else "not loaded")
+    stored = SERVICE_DATABASE.get(service_name)
     return {
-        "status": status,
-        "enabled_status": statuses.get(service_name, "enabled"),
-        "description": stored_info["description"],
-        "impact": stored_info["impact"],
+        "status": status, "enabled_status": enabled_status,
+        "loaded": loaded, "pid": pids.get(service_name),
+        "policy_source": policy_source,
+        "description": stored["description"] if stored else "No verified description is available for this service.",
+        "impact": stored["impact"] if stored else "The effects of disabling this service have not been verified.",
+        "metadata_source": METADATA_SOURCES.get(service_name),
+        "metadata_verified": service_name in METADATA_SOURCES,
         "type": service_type,
     }
 
@@ -5288,8 +5324,17 @@ def get_live_services(console: Console) -> Dict[str, Dict[str, Dict]]:
 
     uid = get_uid()
     discovered = {}
+    try:
+        home = Path(pwd.getpwuid(uid).pw_dir)
+    except KeyError:
+        home = None
+    daemon_definitions = read_service_definitions([
+        "/System/Library/LaunchDaemons", "/Library/LaunchDaemons"])
+    agent_definitions = read_service_definitions([
+        "/System/Library/LaunchAgents", "/Library/LaunchAgents",
+        *([home / "Library/LaunchAgents"] if home else [])])
     for domain in ("system", f"gui/{uid}", f"user/{uid}"):
-        prefix = ["sudo", "-n"] if domain == "system" and os.geteuid() != 0 else []
+        prefix = []  # Reading launchd domains does not require sudo.
         try:
             result = subprocess.run(prefix + ["launchctl", "print", domain],
                                     capture_output=True, text=True)
@@ -5297,10 +5342,8 @@ def get_live_services(console: Console) -> Dict[str, Dict[str, Dict]]:
                 console.print(Text(f"Could not read {domain}: {result.stderr.strip()}", style="yellow"))
                 continue
             names, statuses = parse_launchctl_print_output(result.stdout)
-            pids = {}
-            for match in re.finditer(r"^\s*(\d+)\s+[\d-]+\s+(\S+)\s*$", result.stdout, re.MULTILINE):
-                if int(match.group(1)) > 0:
-                    pids[match.group(2)] = match.group(1)
+            rows = service_rows(result.stdout)
+            pids = {name: pid for name, pid in rows.items() if pid.isdigit() and int(pid) > 0}
             overrides = subprocess.run(prefix + ["launchctl", "print-disabled", domain],
                                        capture_output=True, text=True)
             if overrides.returncode:
@@ -5310,8 +5353,13 @@ def get_live_services(console: Console) -> Dict[str, Dict[str, Dict]]:
                 names.update(override_names)
                 statuses.update(states)
             for name in sorted(names):
-                details = get_service_details(name, "daemon" if domain == "system" else "agent", statuses, pids)
-                details.update(domain=domain, label=name)
+                definitions = daemon_definitions if domain == "system" else agent_definitions if domain.startswith("gui/") else {}
+                definition = definitions.get(name, {})
+                details = get_service_details(
+                    name, "daemon" if domain == "system" else "agent", statuses, pids,
+                    loaded=name in rows, default_disabled=definition.get("default_disabled"),
+                    overrides_known=overrides.returncode == 0)
+                details.update(domain=domain, label=name, **definition)
                 discovered.setdefault(name, []).append(details)
         except OSError as error:
             console.print(Text(f"Could not read {domain}: {error}", style="yellow"))
@@ -5327,7 +5375,7 @@ def categorize_service(service_name: str) -> str:
     for category, service_list in CATEGORIZATION_MAP.items():
         if service_name in service_list:
             return category
-    if "com.apple" not in service_name:
+    if not service_name.startswith(("com.apple.", "application.com.apple.")):
         return "🧩 Third-Party"
     return "❓ Undocumented"
 
@@ -5391,12 +5439,12 @@ class ServiceManagerTUI:
         self.service_scroll_offset = 0
         self.uid = get_uid()
         # Define the sort order for statuses
-        self.status_sort_order = {"running": 0, "enabled": 1, "disabled": 2}
+        self.status_sort_order = {"running": 0, "loaded": 1, "enabled": 1, "not loaded": 2, "disabled": 3}
 
     @property
     def viewport_height(self) -> int:
         try:
-            return self.console.height - 8
+            return max(1, self.console.height - 10)
         except Exception:
             return 15
 
@@ -5532,10 +5580,12 @@ class ServiceManagerTUI:
                 status_icon, status_style = "🔄", "yellow"
             elif display_status == "running":
                 status_icon, status_style = "🟢", "green"
-            elif display_status == "enabled":
+            elif display_status in ("enabled", "loaded"):
                 status_icon, status_style = "🟡", "green"
-            else:  # disabled
+            elif display_status == "disabled":
                 status_icon, status_style = "🔴", "red"
+            else:
+                status_icon, status_style = "⚪", "dim"
 
             style = "black on yellow" if i == self.active_service_index else ""
             table.add_row(Text(f" {status_icon}", style=status_style), Text(f" {name}", style=style))
@@ -5560,12 +5610,29 @@ class ServiceManagerTUI:
         details_text.append("Service:\n", style="bold yellow").append(f"{service_name}\n\n")
         details_text.append("Type: ", style="bold yellow").append(f"{info['type'].capitalize()}\n\n")
 
+        if info.get("domain"):
+            details_text.append("Domain: ", style="bold yellow").append(f"{info['domain']}\n")
+        if "loaded" in info:
+            evidence = ("Loaded in launchd" if info["loaded"] else
+                        "Saved override; not loaded" if info.get("plist_path") else
+                        "Override only; installation not confirmed")
+            details_text.append("Discovery: ", style="bold yellow").append(f"{evidence}\n")
+        if info.get("plist_path"):
+            details_text.append("Configuration: ", style="bold yellow").append(f"{info['plist_path']}\n")
+        if info.get("program"):
+            details_text.append("Program: ", style="bold yellow").append(f"{info['program']}\n")
+        if info.get("pid"):
+            details_text.append("PID: ", style="bold yellow").append(f"{info['pid']}\n")
+
         # Display current status
         live_status = info['status']
-        status_styles = {"running": "green", "enabled": "green", "disabled": "red"}
+        status_styles = {"running": "green", "loaded": "green", "enabled": "green", "disabled": "red"}
         details_text.append("Status: ", style="bold yellow").append(f"{live_status.capitalize()}\n", style=status_styles.get(live_status, "default"))
         
-        if live_status == "running" and info.get("enabled_status") == "disabled":
+        if "policy_source" in info:
+            policy = info.get("enabled_status", "unknown").capitalize()
+            details_text.append("Launch policy: ", style="bold yellow").append(f"{policy} — {info['policy_source']}\n")
+        elif live_status == "running" and info.get("enabled_status") == "disabled":
             details_text.append("Launch override: Disabled (process still running)\n", style="yellow")
 
         # Display pending status change
@@ -5575,9 +5642,11 @@ class ServiceManagerTUI:
             details_text.append("Pending: ", style="bold yellow").append(f"{pending_status.capitalize()} (press Enter to apply)\n", style=pending_color)
 
         details_text.append("\nDescription:\n", style="bold yellow").append(f"{info['description']}\n\n")
+        source = info.get("metadata_source") or "Historical local database; description and impact not independently verified"
+        details_text.append("Source: ", style="bold yellow").append(f"{source}\n\n", style="dim")
         impact_text = info["impact"]
         impact_style = "bold red" if "CRITICAL" in impact_text.upper() else "default"
-        details_text.append("Impact of Disabling:\n", style="bold yellow").append(impact_text, style=impact_style)
+        details_text.append("Impact of Disabling (estimate):\n", style="bold yellow").append(impact_text, style=impact_style)
 
         return Panel(details_text, title="Details", border_style="green")
 

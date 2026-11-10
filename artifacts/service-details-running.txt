@@ -1,0 +1,54 @@
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ │
+│ │                                                                  macOS Service Manager                                                                   │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭──────────────── Services in 🖥️  User Interface & Windowing ────────────────╮╭───────────────────────────────── Details ──────────────────────────────────╮ │
+│ │  🟢 com.apple.AirPlayUIAgent                                               ││ Service:                                                                   │ │
+│ │  🟢 com.apple.AirPlayXPCHelper                                             ││ com.apple.Finder                                                           │ │
+│ │  🟢 com.apple.Dock.agent                                                   ││                                                                            │ │
+│ │  🟢 com.apple.Finder                                                       ││ Type: Agent                                                                │ │
+│ │  🟢 com.apple.SystemUIServer.agent                                         ││                                                                            │ │
+│ │  🟢 com.apple.TextInputUI.xpc.CursorUIViewService                          ││ Domain: gui/502                                                            │ │
+│ │  🟢 com.apple.ViewBridgeAuxiliary                                          ││ Discovery: Loaded in launchd                                               │ │
+│ │  🟢 com.apple.WindowManager.agent                                          ││ Configuration: /System/Library/LaunchAgents/com.apple.Finder.plist         │ │
+│ │  🟢 com.apple.WindowServer                                                 ││ Program: /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder     │ │
+│ │  🟢 com.apple.carboncore.csnameddata (user/502)                            ││ PID: 429                                                                   │ │
+│ │  🟢 com.apple.controlcenter                                                ││ Status: Running                                                            │ │
+│ │  🟢 com.apple.donotdisturbd                                                ││ Launch policy: Enabled — Plist default (no saved override)                 │ │
+│ │  🟢 com.apple.iconservices.iconservicesagent (gui/502)                     ││                                                                            │ │
+│ │  🟢 com.apple.iconservices.iconservicesagent (system)                      ││ Description:                                                               │ │
+│ │  🟢 com.apple.iconservices.iconservicesd                                   ││ The core application that manages the user's files, folders, and desktop.  │ │
+│ │  🟢 com.apple.liveactivitiesd                                              ││                                                                            │ │
+│ │  🟢 com.apple.mediaremoted                                                 ││ Source: Historical local database; description and impact not              │ │
+│ │  🟢 com.apple.notificationcenterui.agent                                   ││ independently verified                                                     │ │
+│ │  🟢 com.apple.pbs                                                          ││                                                                            │ │
+│ │  🟢 com.apple.progressd                                                    ││ Impact of Disabling (estimate):                                            │ │
+│ │  🟢 com.apple.quicklook.ThumbnailsAgent                                    ││ CRITICAL: The desktop, file windows, and overall graphical file management │ │
+│ │  🟢 com.apple.talagent                                                     ││ will be disabled.                                                          │ │
+│ │  🟢 com.apple.wallpaper.agent                                              ││                                                                            │ │
+│ │  🟢 com.apple.wallpaper.export                                             ││                                                                            │ │
+│ │  🟡 com.apple.AquaAppearanceHelper                                         ││                                                                            │ │
+│ │  🟡 com.apple.DesktopServicesHelper                                        ││                                                                            │ │
+│ │  🟡 com.apple.FollowUpUI                                                   ││                                                                            │ │
+│ │  🟡 com.apple.LinkedNotesUIService                                         ││                                                                            │ │
+│ │  🟡 com.apple.MENotificationService                                        ││                                                                            │ │
+│ │  🟡 com.apple.MessageUIMacHelperService                                    ││                                                                            │ │
+│ │  🟡 com.apple.OSDUIHelper                                                  ││                                                                            │ │
+│ │  🟡 com.apple.PIPAgent                                                     ││                                                                            │ │
+│ │  🟡 com.apple.PosterBoard                                                  ││                                                                            │ │
+│ │  🟡 com.apple.ServicesUIAgent                                              ││                                                                            │ │
+│ │  🟡 com.apple.SpacesTouchBarAgent.app                                      ││                                                                            │ │
+│ │  🟡 com.apple.UserNotificationCenter                                       ││                                                                            │ │
+│ │  🟡 com.apple.UserNotificationCenterAgent                                  ││                                                                            │ │
+│ │  🟡 com.apple.UserPictureSyncAgent                                         ││                                                                            │ │
+│ │  🟡 com.apple.appkit.xpc.ColorSampler                                      ││                                                                            │ │
+│ │  🟡 com.apple.mediaremoteagent                                             ││                                                                            │ │
+│ │  🟡 com.apple.menuextra.battery.helper                                     ││                                                                            │ │
+│ │  🟡 com.apple.mobile.notification_proxy                                    ││                                                                            │ │
+│ │                                                                            ││                                                                            │ │
+│ │                                                                            ││                                                                            │ │
+│ ╰────────────────────────────────────────────────────────────────────────────╯╰────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭──────────────────────────────────────────────────────────────────────── Controls ────────────────────────────────────────────────────────────────────────╮ │
+│ │                                             ↑/↓: Navigate | Space: Toggle | Enter: Apply Changes | ←/B: Back                                             │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

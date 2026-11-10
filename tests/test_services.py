@@ -1,5 +1,7 @@
 import importlib.util
 import io
+import plistlib
+import tempfile
 import subprocess
 import unittest
 from pathlib import Path
@@ -87,6 +89,84 @@ class LaunchctlTests(unittest.TestCase):
         self.assertEqual(info['status'], 'running')
         self.assertIn('Operation not permitted', app.console.file.getvalue())
         self.assertEqual(app.services_data['Test']['example.background']['status'], 'running')
+
+
+class AccuracyTests(unittest.TestCase):
+    def test_scrolled_selection_remains_visible_inside_panel_borders(self):
+        entries = {f'example.{i:03}': {'status': 'loaded'} for i in range(80)}
+        app = m.ServiceManagerTUI({'Test': entries})
+        output = io.StringIO()
+        app.console = Console(file=output, width=110, height=30)
+        app.view_mode = 'services'
+        app.active_service_index = 79
+        app._adjust_viewport('service')
+        # Render only the list at the height available after outer/header/footer.
+        app.console.print(app.draw_service_list(), height=22)
+        self.assertIn('example.079', output.getvalue())
+
+    def test_parser_ignores_non_service_tables_and_preserves_full_labels(self):
+        output = """gui/502 = {
+ services = {
+  123 - application.org.example.Editor.42
+  0 0 example:worker
+ }
+ endpoints = {
+  555 0 fake.endpoint
+ }
+ disabled services = {
+  "example.off" => true
+ }
+}"""
+        names, states = m.parse_launchctl_print_output(output)
+        self.assertEqual(names, {'application.org.example.Editor.42', 'example:worker', 'example.off'})
+        self.assertEqual(states, {'example.off': 'disabled'})
+
+    def test_idle_loaded_job_is_not_reported_as_running_or_enabled(self):
+        info = m.get_service_details('example.idle', 'agent', {}, {}, loaded=True)
+        self.assertEqual(info['status'], 'loaded')
+
+    def test_definition_disabled_default_and_override_precedence(self):
+        info = m.get_service_details('example.job', 'agent', {}, {}, default_disabled=True)
+        self.assertEqual(info['enabled_status'], 'disabled')
+        info = m.get_service_details('example.job', 'agent', {'example.job': 'enabled'}, {}, default_disabled=True)
+        self.assertEqual(info['enabled_status'], 'enabled')
+
+    def test_unreadable_overrides_do_not_invent_enabled_state(self):
+        info = m.get_service_details('example.job', 'agent', {}, {}, overrides_known=False)
+        self.assertEqual(info['enabled_status'], 'unknown')
+
+    def test_override_without_loaded_job_is_identified(self):
+        info = m.get_service_details('example.old', 'agent', {'example.old': 'enabled'}, {}, loaded=False)
+        self.assertEqual(info['status'], 'not loaded')
+        self.assertFalse(info['loaded'])
+
+    def test_application_job_is_not_assigned_to_apple_from_embedded_substring(self):
+        self.assertEqual(m.categorize_service('org.example.com.apple.helper'), '🧩 Third-Party')
+        self.assertEqual(m.categorize_service('application.com.apple.Unknown.42'), '❓ Undocumented')
+
+    def test_definitions_use_label_not_filename_and_reject_invalid_plists(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'arbitrary.plist').write_bytes(plistlib.dumps({'Label': 'example.real', 'Disabled': True, 'Program': '/bin/true'}))
+            (root / 'bad.plist').write_text('broken')
+            (root / 'malformed.plist').write_text('<?xml version=broken?><plist>')
+            definitions = m.read_service_definitions([root])
+        self.assertEqual(set(definitions), {'example.real'})
+        self.assertTrue(definitions['example.real']['default_disabled'])
+        self.assertEqual(definitions['example.real']['program'], '/bin/true')
+
+    def test_details_explain_override_only_and_unverified_metadata(self):
+        info = m.get_service_details('com.apple.triald', 'agent', {'com.apple.triald': 'disabled'}, {}, loaded=False)
+        info.update(domain='gui/502', label='com.apple.triald')
+        app = m.ServiceManagerTUI({'Test': {'com.apple.triald': info}})
+        app.view_mode = 'services'
+        output = io.StringIO()
+        Console(file=output, width=110).print(app.draw_details_view())
+        rendered = output.getvalue()
+        self.assertIn('gui/502', rendered)
+        self.assertIn('Override only', rendered)
+        self.assertIn('Source:', rendered)
+        self.assertNotIn('trial periods', rendered)
 
 
 if __name__ == '__main__':
