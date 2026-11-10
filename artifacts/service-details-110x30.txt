@@ -1,0 +1,32 @@
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ ╭────────────────────────────────────────────────────────────────────────────────────────────────────────╮ │
+│ │                                         macOS Service Manager                                          │ │
+│ ╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭───── Services in 🧠 Proactive & Intelligence ─────╮╭─────────────── Details (PgUp/PgDn) ───────────────╮ │
+│ │  🔴 com.apple.managedcorespotlightd (user/502)    ││ /System/Library/LaunchAgents/com.apple.triald.pli │ │
+│ │  🔴 com.apple.mdworker.application (gui/502)      ││ st                                                │ │
+│ │  🔴 com.apple.mdworker.application (user/502)     ││ Program: /usr/libexec/triald                      │ │
+│ │  🔴 com.apple.mdworker.single.arm64 (gui/502)     ││ Status: Disabled                                  │ │
+│ │  🔴 com.apple.mdworker.single.arm64 (user/502)    ││ Launch policy: Disabled — Saved launchctl         │ │
+│ │  🔴 com.apple.mdworker.single.x86_64 (gui/502)    ││ override                                          │ │
+│ │  🔴 com.apple.mdworker.single.x86_64 (user/502)   ││                                                   │ │
+│ │  🔴 com.apple.mdworker.sizing (gui/502)           ││ Description:                                      │ │
+│ │  🔴 com.apple.mdworker.sizing (user/502)          ││ Supports Apple’s Trial framework. Its launch      │ │
+│ │  🔴 com.apple.parsecd (gui/502)                   ││ configuration schedules experiment fetching and   │ │
+│ │  🔴 com.apple.parsecd (user/502)                  ││ maintenance.                                      │ │
+│ │  🔴 com.apple.siriinferenced (gui/502)            ││                                                   │ │
+│ │  🔴 com.apple.siriinferenced (user/502)           ││ Source:                                           │ │
+│ │  🔴 com.apple.spotlightknowledged (gui/502)       ││ /System/Library/LaunchAgents/com.apple.triald.pli │ │
+│ │  🔴 com.apple.spotlightknowledged (user/502)      ││ st (Trial activities)                             │ │
+│ │  🔴 com.apple.spotlightknowledged.importer (gui/… ││                                                   │ │
+│ │  🔴 com.apple.spotlightknowledged.importer (user… ││ Impact of Disabling (estimate):                   │ │
+│ │  🔴 com.apple.spotlightknowledged.updater (gui/5… ││ Disabling may prevent Trial experiment            │ │
+│ │  🔴 com.apple.spotlightknowledged.updater (user/… ││ configuration and maintenance. Effects depend on  │ │
+│ │  🔴 com.apple.triald (gui/502)                    ││ the features using this framework.                │ │
+│ │                                                   ││                                                   │ │
+│ │                                                   ││                                                   │ │
+│ ╰───────────────────────────────────────────────────╯╰───────────────────────────────────────────────────╯ │
+│ ╭─────────────────────────────────────────────── Controls ───────────────────────────────────────────────╮ │
+│ │                 ↑/↓: Move | Space: Toggle | Enter: Apply | PgUp/Dn: Details | B: Back                  │ │
+│ ╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

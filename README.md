@@ -18,8 +18,8 @@ This is a simple service manager for macOS that allows you to start, stop, and r
 ## Features
 
 - Start, stop, and restart services
-- List all available services
-- Check the status of services
+- List loaded launchd jobs and saved launch overrides in system, GUI, and user domains
+- Distinguish running processes, loaded idle jobs, and saved launch policy
 - User-friendly TUI (Text User Interface)
 
 ## Requirements
@@ -28,7 +28,7 @@ This is a simple service manager for macOS that allows you to start, stop, and r
 
 ## Installation
 
-1. Disable **SIP (System Integrity Protection)** on your macOS system. This is necessary to allow the script to manage system services. You can find instructions on how to disable SIP [here](https://support.apple.com/en-us/HT201560).
+1. Leave **SIP (System Integrity Protection)** enabled. Browsing and managing unprotected services does not require disabling SIP; macOS can reject changes to protected jobs.
 2. Clone the repository:
 
 ```bash
@@ -68,6 +68,31 @@ normal launch mechanism.
 The list contains services and overrides discovered on this Mac. The description
 database supplies metadata and does not prove that a service is installed.
 Services sharing a label across domains appear separately with their domains.
+
+The list shows **running** when launchd reports a positive PID, **loaded** for
+an idle loaded job, **disabled** for a disabled launch policy without a running
+process, and **not loaded** for an enabled or unknown-policy override without a
+loaded job. Launch policy is shown separately: saved overrides take precedence
+over a matching plist's `Disabled` default. When the override query or matching
+configuration is unavailable, policy remains **unknown** instead of assuming
+enabled. A saved override can outlive an uninstalled app; the Details panel
+identifies override-only entries and does not claim they are installed.
+
+Use **Page Up/Page Down** to scroll long Details panels; selecting a different
+service returns Details to the top.
+
+Details include the domain, PID, and matching configuration/program when available.
+Configuration lookup uses the plist's `Label`, not its filename. Plists are
+supporting evidence, not extra list entries, and unrecognized or unreadable
+configuration files are skipped. User-domain jobs without a matching verified
+configuration retain unknown default policy.
+
+Descriptions with checked sources show the source in Details. Other descriptions
+are explicitly marked as historical local metadata that has not been independently
+verified. All disabling impacts are estimates, not guarantees. The checked
+corrections include Trial framework services, Dwell, Apple TV support, and UARP
+helpers. Categories are a local organizational aid, not an Apple classification.
+This is not an exhaustive inventory of every executable or bundled XPC service.
 macOS can reject changes to protected services; the manager displays that error.
 
 Run regression tests with:
@@ -85,3 +110,5 @@ enabled override for the test label remains):
 ```
 
 Recorded live verification: [launchctl smoke check](artifacts/launchctl-smoke-check.svg).
+
+Read-only inventory and rendered TUI evidence: [inventory check](artifacts/service-inventory-check.txt), [Trial details](artifacts/service-details-trial.svg), [running service details](artifacts/service-details-running.svg).

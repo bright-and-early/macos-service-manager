@@ -1,0 +1,54 @@
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ │
+│ │                                                                  macOS Service Manager                                                                   │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭───────────────── Services in 🧠 Proactive & Intelligence ──────────────────╮╭───────────────────────────────── Details ──────────────────────────────────╮ │
+│ │  🟡 com.apple.ciphermld                                                    ││ Service:                                                                   │ │
+│ │  🟡 com.apple.contacts.donation-agent                                      ││ com.apple.triald (gui/502)                                                 │ │
+│ │  🟡 com.apple.intelligenceflowd                                            ││                                                                            │ │
+│ │  🟡 com.apple.intelligencetasksd                                           ││ Type: Agent                                                                │ │
+│ │  🟡 com.apple.knowledgeconstructiond                                       ││                                                                            │ │
+│ │  🟡 com.apple.mlruntimed                                                   ││ Domain: gui/502                                                            │ │
+│ │  🟡 com.apple.modelmanagerd                                                ││ Discovery: Saved override; not loaded                                      │ │
+│ │  🟡 com.apple.proactiveeventtrackerd                                       ││ Configuration: /System/Library/LaunchAgents/com.apple.triald.plist         │ │
+│ │  🟡 com.apple.reversetemplated                                             ││ Program: /usr/libexec/triald                                               │ │
+│ │  🟡 com.apple.searchtoold                                                  ││ Status: Disabled                                                           │ │
+│ │  ⚪ com.apple.duetexpertd (user/502)                                       ││ Launch policy: Disabled — Saved launchctl override                         │ │
+│ │  ⚪ com.apple.milod (user/502)                                             ││                                                                            │ │
+│ │  ⚪ com.apple.suggestd (user/502)                                          ││ Description:                                                               │ │
+│ │  🔴 com.apple.corespotlightd (gui/502)                                     ││ Supports Apple’s Trial framework. Its launch configuration schedules       │ │
+│ │  🔴 com.apple.corespotlightd (user/502)                                    ││ experiment fetching and maintenance.                                       │ │
+│ │  🔴 com.apple.corespotlightservice (gui/502)                               ││                                                                            │ │
+│ │  🔴 com.apple.corespotlightservice (user/502)                              ││ Source: /System/Library/LaunchAgents/com.apple.triald.plist (Trial         │ │
+│ │  🔴 com.apple.generativeexperiencesd (gui/502)                             ││ activities)                                                                │ │
+│ │  🔴 com.apple.generativeexperiencesd (user/502)                            ││                                                                            │ │
+│ │  🔴 com.apple.knowledge-agent (gui/502)                                    ││ Impact of Disabling (estimate):                                            │ │
+│ │  🔴 com.apple.knowledge-agent (user/502)                                   ││ Disabling may prevent Trial experiment configuration and maintenance.      │ │
+│ │  🔴 com.apple.managedcorespotlightd (gui/502)                              ││ Effects depend on the features using this framework.                       │ │
+│ │  🔴 com.apple.managedcorespotlightd (user/502)                             ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.application (gui/502)                               ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.application (user/502)                              ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.single.arm64 (gui/502)                              ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.single.arm64 (user/502)                             ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.single.x86_64 (gui/502)                             ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.single.x86_64 (user/502)                            ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.sizing (gui/502)                                    ││                                                                            │ │
+│ │  🔴 com.apple.mdworker.sizing (user/502)                                   ││                                                                            │ │
+│ │  🔴 com.apple.parsecd (gui/502)                                            ││                                                                            │ │
+│ │  🔴 com.apple.parsecd (user/502)                                           ││                                                                            │ │
+│ │  🔴 com.apple.siriinferenced (gui/502)                                     ││                                                                            │ │
+│ │  🔴 com.apple.siriinferenced (user/502)                                    ││                                                                            │ │
+│ │  🔴 com.apple.spotlightknowledged (gui/502)                                ││                                                                            │ │
+│ │  🔴 com.apple.spotlightknowledged (user/502)                               ││                                                                            │ │
+│ │  🔴 com.apple.spotlightknowledged.importer (gui/502)                       ││                                                                            │ │
+│ │  🔴 com.apple.spotlightknowledged.importer (user/502)                      ││                                                                            │ │
+│ │  🔴 com.apple.spotlightknowledged.updater (gui/502)                        ││                                                                            │ │
+│ │  🔴 com.apple.spotlightknowledged.updater (user/502)                       ││                                                                            │ │
+│ │  🔴 com.apple.triald (gui/502)                                             ││                                                                            │ │
+│ │                                                                            ││                                                                            │ │
+│ │                                                                            ││                                                                            │ │
+│ ╰────────────────────────────────────────────────────────────────────────────╯╰────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭──────────────────────────────────────────────────────────────────────── Controls ────────────────────────────────────────────────────────────────────────╮ │
+│ │                                          ↑/↓: Move | Space: Toggle | Enter: Apply | PgUp/Dn: Details | B: Back                                           │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
