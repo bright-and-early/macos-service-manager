@@ -1,0 +1,62 @@
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ │
+│ │                                                                  macOS Service Manager                                                                   │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭──────────────────── Services in 🔒 Security & Keychain ────────────────────╮╭───────────────────────────────── Details ──────────────────────────────────╮ │
+│ │  🟢 com.apple.AppSSODaemon                                                 ││ Service:                                                                   │ │
+│ │  🟢 com.apple.AppleCredentialManagerDaemon                                 ││ com.apple.adid (system)                                                    │ │
+│ │  🟢 com.apple.AuthenticationServicesCore.AuthenticationServicesAgent       ││                                                                            │ │
+│ │  🟢 com.apple.CodeSigningHelper                                            ││ Type: Daemon                                                               │ │
+│ │  🟢 com.apple.CoreAuthentication.agent                                     ││                                                                            │ │
+│ │  🟢 com.apple.CoreAuthentication.daemon                                    ││ Domain: system                                                             │ │
+│ │  🟢 com.apple.CryptoTokenKit.ahp                                           ││ Discovery: Loaded in launchd                                               │ │
+│ │  🟢 com.apple.CryptoTokenKit.ahp.agent                                     ││ Configuration: /System/Library/LaunchDaemons/com.apple.adid.plist          │ │
+│ │  🟢 com.apple.MobileFileIntegrity                                          ││ Program: /System/Library/PrivateFrameworks/CoreADI.framework/adid          │ │
+│ │  🟢 com.apple.SecureBackupDaemon                                           ││ PID: 517                                                                   │ │
+│ │  🟢 com.apple.TrustedPeersHelper                                           ││ Status: Running                                                            │ │
+│ │  🟢 com.apple.XProtect.daemon.scan                                         ││ Launch policy: Enabled — Saved launchctl override                          │ │
+│ │  🟢 com.apple.XprotectFramework.PluginService (gui/502)                    ││                                                                            │ │
+│ │  🟢 com.apple.XprotectFramework.PluginService (system)                     ││ Description:                                                               │ │
+│ │  🟢 com.apple.adid (system)                                                ││ CoreADI daemon that supplies device authentication data (anisette) to      │ │
+│ │  🟢 com.apple.akd (gui/502)                                                ││ AuthKit for Apple Account sign-in.                                         │ │
+│ │  🟢 com.apple.akd (system)                                                 ││                                                                            │ │
+│ │  🟢 com.apple.alf                                                          ││ Source: /System/Library/LaunchDaemons/com.apple.adid.plist (CoreADI        │ │
+│ │  🟢 com.apple.applekeystored                                               ││ executable); local AuthKit/launchd logs, 2026-11-10 02:19:43 (missing      │ │
+│ │  🟢 com.apple.authd                                                        ││ adid, ADI -45017, sign-in failure)                                         │ │
+│ │  🟢 com.apple.biomed                                                       ││                                                                            │ │
+│ │  🟢 com.apple.communicationtrustd                                          ││ Impact of Disabling (estimate):                                            │ │
+│ │  🟢 com.apple.endpointsecurity.endpointsecurityd                           ││ CRITICAL: Disabling prevents AuthKit from obtaining device authentication  │ │
+│ │  🟢 com.apple.frauddefensed                                                ││ data and can block Apple Account and iCloud sign-in with 'An unknown error │ │
+│ │  🟢 com.apple.keychainsharingmessagingd                                    ││ occurred'. Keep enabled when using Apple Account services.                 │ │
+│ │  🟢 com.apple.lockdownmoded                                                ││                                                                            │ │
+│ │  🟢 com.apple.mobile.keybagd                                               ││                                                                            │ │
+│ │  🟢 com.apple.online-auth-agent.xpc                                        ││                                                                            │ │
+│ │  🟢 com.apple.scopedbookmarksagent.xpc                                     ││                                                                            │ │
+│ │  🟢 com.apple.secd                                                         ││                                                                            │ │
+│ │  🟢 com.apple.secinitd                                                     ││                                                                            │ │
+│ │  🟢 com.apple.security.syspolicy                                           ││                                                                            │ │
+│ │  🟢 com.apple.security.xprotectd                                           ││                                                                            │ │
+│ │  🟢 com.apple.securityd                                                    ││                                                                            │ │
+│ │  🟢 com.apple.securityd.system                                             ││                                                                            │ │
+│ │  🟢 com.apple.taskgated                                                    ││                                                                            │ │
+│ │  🟢 com.apple.tccd                                                         ││                                                                            │ │
+│ │  🟢 com.apple.tccd.system                                                  ││                                                                            │ │
+│ │  🟢 com.apple.transparencyd                                                ││                                                                            │ │
+│ │  🟢 com.apple.trustd                                                       ││                                                                            │ │
+│ │  🟢 com.apple.trustd.agent                                                 ││                                                                            │ │
+│ │  🟡 com.apple.AppSSOAgent                                                  ││                                                                            │ │
+│ │  🟡 com.apple.AppSSOAgent.login                                            ││                                                                            │ │
+│ │  🟡 com.apple.AutoFillPanel                                                ││                                                                            │ │
+│ │  🟡 com.apple.EscrowSecurityAlert                                          ││                                                                            │ │
+│ │  🟡 com.apple.Kerberos.digest-service                                      ││                                                                            │ │
+│ │  🟡 com.apple.Kerberos.kadmind                                             ││                                                                            │ │
+│ │  🟡 com.apple.Kerberos.kcm                                                 ││                                                                            │ │
+│ │  🟡 com.apple.Kerberos.kdc                                                 ││                                                                            │ │
+│ │  🟡 com.apple.Kerberos.kpasswdd                                            ││                                                                            │ │
+│ │                                                                            ││                                                                            │ │
+│ │                                                                            ││                                                                            │ │
+│ ╰────────────────────────────────────────────────────────────────────────────╯╰────────────────────────────────────────────────────────────────────────────╯ │
+│ ╭──────────────────────────────────────────────────────────────────────── Controls ────────────────────────────────────────────────────────────────────────╮ │
+│ │                                          ↑/↓: Move | Space: Toggle | Enter: Apply | PgUp/Dn: Details | B: Back                                           │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
