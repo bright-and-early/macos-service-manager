@@ -152,6 +152,7 @@ class AccuracyTests(unittest.TestCase):
         app.console.print(app.draw_layout())
         left_column = '\n'.join(line[:38] for line in output.getvalue().splitlines())
         self.assertIn('079.example.', left_column)
+        self.assertIn('🟡', left_column)
 
     def test_parser_ignores_non_service_tables_and_preserves_full_labels(self):
         output = """gui/502 = {

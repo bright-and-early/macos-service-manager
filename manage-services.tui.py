@@ -5575,7 +5575,7 @@ class ServiceManagerTUI:
         services = self.get_current_services()
         category_name = self.categories[self.active_category_index]
         table = Table(show_header=False, box=None, padding=(0, 0), show_edge=False)
-        table.add_column(width=3)  # For icon
+        table.add_column(width=3, min_width=3, max_width=3, no_wrap=True)  # Preserve status icon
         table.add_column(no_wrap=True, overflow="ellipsis")  # Full label remains in Details
 
         available_height = self.viewport_height

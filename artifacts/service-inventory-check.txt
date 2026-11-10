@@ -1,4 +1,4 @@
-Read-only inventory verification — 2026-11-10T10:37:27.386984+00:00
+Read-only inventory verification — 2026-11-10T10:38:17.113880+00:00
 macOS 26.7.2
 No enable, disable, bootstrap, bootout, or kickstart commands executed.
 system: 402 loaded jobs match launchd count; 21 overrides match; 15 override-only entries.
