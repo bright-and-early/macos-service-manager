@@ -3,20 +3,20 @@
 │ │                          macOS Service Manager                           │ │
 │ ╰──────────────────────────────────────────────────────────────────────────╯ │
 │ ╭─ Services in 🧠 Proactive & Intell─╮╭─────── Details (PgUp/PgDn) ────────╮ │
-│ │ … com.apple.mdworker.single.x86_6… ││ Its launch configuration schedules │ │
-│ │ … com.apple.mdworker.sizing (gui/… ││ experiment fetching and            │ │
-│ │ … com.apple.mdworker.sizing (user… ││ maintenance.                       │ │
-│ │ … com.apple.parsecd (gui/502)      ││                                    │ │
-│ │ … com.apple.parsecd (user/502)     ││ Source:                            │ │
-│ │ … com.apple.siriinferenced (gui/5… ││ /System/Library/LaunchAgents/com.a │ │
-│ │ … com.apple.siriinferenced (user/… ││ pple.triald.plist (Trial           │ │
-│ │ … com.apple.spotlightknowledged (… ││ activities)                        │ │
-│ │ … com.apple.spotlightknowledged (… ││                                    │ │
-│ │ … com.apple.spotlightknowledged.i… ││ Impact of Disabling (estimate):    │ │
-│ │ … com.apple.spotlightknowledged.i… ││ Disabling may prevent Trial        │ │
-│ │ … com.apple.spotlightknowledged.u… ││ experiment configuration and       │ │
-│ │ … com.apple.spotlightknowledged.u… ││ maintenance. Effects depend on the │ │
-│ │ … com.apple.triald (gui/502)       ││ features using this framework.     │ │
+│ │  🔴 com.apple.mdworker.single.x86… ││ Its launch configuration schedules │ │
+│ │  🔴 com.apple.mdworker.sizing (gu… ││ experiment fetching and            │ │
+│ │  🔴 com.apple.mdworker.sizing (us… ││ maintenance.                       │ │
+│ │  🔴 com.apple.parsecd (gui/502)    ││                                    │ │
+│ │  🔴 com.apple.parsecd (user/502)   ││ Source:                            │ │
+│ │  🔴 com.apple.siriinferenced (gui… ││ /System/Library/LaunchAgents/com.a │ │
+│ │  🔴 com.apple.siriinferenced (use… ││ pple.triald.plist (Trial           │ │
+│ │  🔴 com.apple.spotlightknowledged… ││ activities)                        │ │
+│ │  🔴 com.apple.spotlightknowledged… ││                                    │ │
+│ │  🔴 com.apple.spotlightknowledged… ││ Impact of Disabling (estimate):    │ │
+│ │  🔴 com.apple.spotlightknowledged… ││ Disabling may prevent Trial        │ │
+│ │  🔴 com.apple.spotlightknowledged… ││ experiment configuration and       │ │
+│ │  🔴 com.apple.spotlightknowledged… ││ maintenance. Effects depend on the │ │
+│ │  🔴 com.apple.triald (gui/502)     ││ features using this framework.     │ │
 │ │                                    ││                                    │ │
 │ │                                    ││                                    │ │
 │ ╰────────────────────────────────────╯╰────────────────────────────────────╯ │
