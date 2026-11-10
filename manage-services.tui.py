@@ -5238,10 +5238,10 @@ def parse_launchctl_print_output(output: str) -> Tuple[set, Dict[str, str]]:
     disabled_section_match = re.search(r"disabled services = {([^}]+)}", output, re.DOTALL)
     if disabled_section_match:
         disabled_block = disabled_section_match.group(1)
-        disabled_pattern = re.compile(r'"([^"]+)"\s*=>\s*(enabled|disabled)')
+        disabled_pattern = re.compile(r'"([^"]+)"\s*=>\s*(enabled|disabled|true|false)')
         for match in disabled_pattern.finditer(disabled_block):
             service_name, status = match.groups()
-            disabled_status[service_name] = status
+            disabled_status[service_name] = "disabled" if status in ("disabled", "true") else "enabled"
             service_names.add(service_name)
 
     return service_names, disabled_status
@@ -5286,124 +5286,40 @@ def get_live_services(console: Console) -> Dict[str, Dict[str, Dict]]:
     categorized_services["❓ Undocumented"] = {}
 
     uid = get_uid()
-
-    all_daemon_names = set()
-    all_agent_names = set()
-    daemon_pids = {}
-    agent_pids = {}
-    disabled_daemons = {}
-    disabled_agents = {}
-
-    with Progress(console=console, transient=True) as progress:
-        task = progress.add_task("[cyan]Discovering system services...", total=4)
-
+    discovered = {}
+    for domain in ("system", f"gui/{uid}", f"user/{uid}"):
+        prefix = ["sudo", "-n"] if domain == "system" and os.geteuid() != 0 else []
         try:
-            daemons_raw = subprocess.run(
-                ["sudo", "launchctl", "list"], capture_output=True, text=True, check=True
-            ).stdout
-            for line in daemons_raw.strip().split("\n")[1:]:
-                parts = line.split()
-                if len(parts) >= 3:
-                    all_daemon_names.add(parts[2])
-                    if parts[0] != "-":
-                        daemon_pids[parts[2]] = parts[0]
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Parsed system daemons...")
-
-        try:
-            print_system_raw = subprocess.run(
-                ["sudo", "launchctl", "print", "system/"], capture_output=True, text=True, check=True
-            ).stdout
-            names, statuses = parse_launchctl_print_output(print_system_raw)
-            all_daemon_names.update(names)
-            disabled_daemons.update(statuses)
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Analyzed system overrides...")
-
-        try:
-            agents_raw = subprocess.run(
-                ["launchctl", "list"], capture_output=True, text=True, check=True
-            ).stdout
-            for line in agents_raw.strip().split("\n")[1:]:
-                parts = line.split()
-                if len(parts) >= 3:
-                    all_agent_names.add(parts[2])
-                    if parts[0] != "-":
-                        agent_pids[parts[2]] = parts[0]
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Parsed user agents...")
-
-        try:
-            print_user_raw = subprocess.run(
-                ["launchctl", "print", f"user/{uid}"], capture_output=True, text=True, check=True
-            ).stdout
-            names, statuses = parse_launchctl_print_output(print_user_raw)
-            all_agent_names.update(names)
-            disabled_agents.update(statuses)
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Analyzed user overrides...")
-
-    # Add services from SERVICE_DATABASE that might not be discovered by launchctl
-    all_database_services = set(SERVICE_DATABASE.keys())
-    all_discovered_services = all_daemon_names.union(all_agent_names)
-    missing_services = all_database_services - all_discovered_services
-    
-    # For missing services, try to determine if they're daemons or agents
-    for service in missing_services:
-        # Try to get details for both daemon and agent to see which exists
-        daemon_details = get_service_details(service, "daemon", disabled_daemons, daemon_pids)
-        agent_details = get_service_details(service, "agent", disabled_agents, agent_pids)
-        
-        if daemon_details:
-            all_daemon_names.add(service)
-        elif agent_details:
-            all_agent_names.add(service)
-
-    all_services = sorted(list(all_daemon_names.union(all_agent_names)))
-    
-    with Progress(console=console, transient=True) as progress:
-        fetch_task = progress.add_task("[green]Categorizing services...", total=len(all_services))
-        for name in all_services:
-            # Determine the best service type by checking which has more definitive status info
-            daemon_details = None
-            agent_details = None
-            
-            if name in all_daemon_names:
-                daemon_details = get_service_details(name, "daemon", disabled_daemons, daemon_pids)
-            if name in all_agent_names:
-                agent_details = get_service_details(name, "agent", disabled_agents, agent_pids)
-            
-            # Choose the details with the most specific status info
-            # Priority: running > explicit disabled > explicit enabled > default enabled
-            details = None
-            service_type = None
-            
-            if daemon_details and agent_details:
-                # Both exist, choose the one with more specific status
-                # Priority: running (0) > disabled (1) > enabled (2)
-                daemon_priority = 0 if daemon_details['status'] == 'running' else (1 if daemon_details['status'] == 'disabled' else 2)
-                agent_priority = 0 if agent_details['status'] == 'running' else (1 if agent_details['status'] == 'disabled' else 2)
-                
-                if agent_priority <= daemon_priority:  # Prefer agent if equal priority
-                    details = agent_details
-                    service_type = "agent"
-                else:
-                    details = daemon_details
-                    service_type = "daemon"
-            elif agent_details:
-                details = agent_details
-                service_type = "agent"
-            elif daemon_details:
-                details = daemon_details
-                service_type = "daemon"
-            
-            if details:
-                details['type'] = service_type
-                category = categorize_service(name)
-                categorized_services[category][name] = details
-            progress.update(fetch_task, advance=1)
-
-    return OrderedDict([(cat, servs) for cat, servs in categorized_services.items() if servs])
+            result = subprocess.run(prefix + ["launchctl", "print", domain],
+                                    capture_output=True, text=True)
+            if result.returncode:
+                console.print(Text(f"Could not read {domain}: {result.stderr.strip()}", style="yellow"))
+                continue
+            names, statuses = parse_launchctl_print_output(result.stdout)
+            pids = {}
+            for match in re.finditer(r"^\s*(\d+)\s+[\d-]+\s+(\S+)\s*$", result.stdout, re.MULTILINE):
+                if int(match.group(1)) > 0:
+                    pids[match.group(2)] = match.group(1)
+            overrides = subprocess.run(prefix + ["launchctl", "print-disabled", domain],
+                                       capture_output=True, text=True)
+            if overrides.returncode:
+                console.print(Text(f"Could not read overrides for {domain}: {overrides.stderr.strip()}", style="yellow"))
+            else:
+                override_names, states = parse_launchctl_print_output(overrides.stdout)
+                names.update(override_names)
+                statuses.update(states)
+            for name in sorted(names):
+                details = get_service_details(name, "daemon" if domain == "system" else "agent", statuses, pids)
+                details.update(domain=domain, label=name)
+                discovered.setdefault(name, []).append(details)
+        except OSError as error:
+            console.print(Text(f"Could not read {domain}: {error}", style="yellow"))
+    for name, instances in sorted(discovered.items()):
+        for details in instances:
+            # Keep identical labels in separate domains independently actionable.
+            key = name if len(instances) == 1 else f"{name} ({details['domain']})"
+            categorized_services[categorize_service(name)][key] = details
+    return OrderedDict((cat, services) for cat, services in categorized_services.items() if services)
 
 def categorize_service(service_name: str) -> str:
     """Categorizes a service based on the CATEGORIZATION_MAP."""
@@ -5414,57 +5330,50 @@ def categorize_service(service_name: str) -> str:
         return "🧩 Third-Party"
     return "❓ Undocumented"
 
-def bootout_and_disable(service, uid):
-    """Boots out and disables a user agent, returns (success, error_message)"""
-    bootout_cmd = ["launchctl", "bootout", f"gui/{uid}/{service}"]
-    disable_cmd = ["launchctl", "disable", f"gui/{uid}/{service}"]
-    bootout_result = subprocess.run(bootout_cmd, capture_output=True, text=True)
-    disable_result = subprocess.run(disable_cmd, capture_output=True, text=True)
-    # Check if disabled
-    check_disabled = subprocess.run(["launchctl", "print-disabled", f"gui/{uid}"], capture_output=True, text=True)
-    is_disabled = f'"{service}" => disabled' in check_disabled.stdout
-    # Check if running
-    check_running = subprocess.run(["launchctl", "list"], capture_output=True, text=True)
-    is_running = any(service in line and not line.strip().startswith('-') for line in check_running.stdout.splitlines())
-    if is_disabled and not is_running:
+def set_service_enabled(service, domain, enabled):
+    """Apply an override in the discovered domain and verify the actual result."""
+    prefix = ["sudo", "-n"] if domain == "system" and os.geteuid() != 0 else []
+    target = f"{domain}/{service}"
+
+    def run(action, argument):
+        return subprocess.run(prefix + ["launchctl", action, argument], capture_output=True, text=True)
+
+    try:
+        # Prevent demand/KeepAlive relaunch before removing the loaded job.
+        action = "enable" if enabled else "disable"
+        result = run(action, target)
+        if result.returncode:
+            return False, f"{action} {target}: {result.stderr.strip() or result.stdout.strip()} (exit {result.returncode})"
+        bootout = None if enabled else run("bootout", target)
+        overrides = run("print-disabled", domain)
+        if overrides.returncode:
+            return False, f"Cannot verify override: {overrides.stderr.strip()}"
+        _, states = parse_launchctl_print_output("disabled services = {" + overrides.stdout + "}")
+        expected = "enabled" if enabled else "disabled"
+        if states.get(service) != expected:
+            return False, f"{target} is not verified as {expected}."
+        if not enabled:
+            loaded = run("print", target)
+            # ESRCH (113) and launchctl's exact missing-service diagnostic distinguish
+            # an unloaded job from a permission or domain lookup failure.
+            missing = loaded.returncode == 113 and "Could not find service" in loaded.stderr
+            if not missing:
+                detail = "Service is still loaded." if loaded.returncode == 0 else loaded.stderr.strip()
+                if bootout.returncode:
+                    detail += f" bootout: {bootout.stderr.strip()} (exit {bootout.returncode})"
+                return False, detail
         return True, ""
-    else:
-        msg = []
-        if not is_disabled:
-            msg.append("Service is not marked as disabled.")
-        if is_running:
-            msg.append("Service is still running.")
-        if bootout_result.returncode != 0:
-            msg.append(f"bootout error: {bootout_result.stderr.strip()}")
-        if disable_result.returncode != 0:
-            msg.append(f"disable error: {disable_result.stderr.strip()}")
-        return False, " ".join(msg)
+    except OSError as error:
+        return False, str(error)
+
+
+def bootout_and_disable(service, uid):
+    return set_service_enabled(service, f"gui/{uid}", False)
+
 
 def bootout_and_disable_system_daemon(service):
-    """Boots out and disables a system daemon, returns (success, error_message)"""
-    bootout_cmd = ["sudo", "launchctl", "bootout", f"system/{service}"]
-    disable_cmd = ["sudo", "launchctl", "disable", f"system/{service}"]
-    bootout_result = subprocess.run(bootout_cmd, capture_output=True, text=True)
-    disable_result = subprocess.run(disable_cmd, capture_output=True, text=True)
-    # Check if disabled
-    check_disabled = subprocess.run(["sudo", "launchctl", "print-disabled", "system"], capture_output=True, text=True)
-    is_disabled = f'"{service}" => disabled' in check_disabled.stdout
-    # Check if running
-    check_running = subprocess.run(["sudo", "launchctl", "list"], capture_output=True, text=True)
-    is_running = any(service in line and not line.strip().startswith('-') for line in check_running.stdout.splitlines())
-    if is_disabled and not is_running:
-        return True, ""
-    else:
-        msg = []
-        if not is_disabled:
-            msg.append("Service is not marked as disabled.")
-        if is_running:
-            msg.append("Service is still running.")
-        if bootout_result.returncode != 0:
-            msg.append(f"bootout error: {bootout_result.stderr.strip()}")
-        if disable_result.returncode != 0:
-            msg.append(f"disable error: {disable_result.stderr.strip()}")
-        return False, " ".join(msg)
+    return set_service_enabled(service, "system", False)
+
 
 class ServiceManagerTUI:
     """A terminal UI application for managing macOS services."""
@@ -5687,37 +5596,30 @@ class ServiceManagerTUI:
                 for service, info in changes:
                     action_str = info["pending_status"] # Will be "enabled" or "disabled"
                     command_action = "enable" if action_str == "enabled" else "disable"
-                    target_domain = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
-                    if info["type"] == "daemon":
-                        if command_action == "disable":
-                            # For system daemons, bootout then disable, then check
-                            success, error = bootout_and_disable_system_daemon(service)
-                            if not success:
-                                warnings.append(f"[Daemon] {service}: {error}")
-                        else:
-                            # Just enable
-                            command = ["sudo", "launchctl", command_action, target_domain]
-                            subprocess.run(command, capture_output=True, text=True, check=False)
+                    domain = info.get("domain", "system" if info["type"] == "daemon" else f"gui/{self.uid}")
+                    success, error = set_service_enabled(info.get("label", service), domain, command_action == "enable")
+                    if success:
+                        info["status"] = info["pending_status"]
+                        del info["pending_status"]
                     else:
-                        if command_action == "disable":
-                            success, error = bootout_and_disable(service, self.uid)
-                            if not success:
-                                warnings.append(f"[Agent] {service}: {error}")
-                        else:
-                            command = ["launchctl", "enable", target_domain]
-                            subprocess.run(command, capture_output=True, text=True, check=False)
-                    info["status"] = "enabled" if command_action == "enable" else "disabled"
-                    del info["pending_status"]
-                    progress.update(task, advance=1, description=f"[cyan]{command_action.capitalize()}d {service}")
+                        warnings.append(f"{service} [{domain}]: {error}")
+                    progress.update(task, advance=1, description=f"[cyan]{'Verified' if success else 'Failed'} {service}")
 
             if warnings:
                 warning_text = "\n".join(warnings)
                 live.update(Panel(Text(f"Some services may not have been fully disabled or stopped:\n\n{warning_text}", justify="left", style="yellow"), title="[bold red]Warning"), refresh=True)
-                time.sleep(4)
+                self.console.print("Press any key to continue.")
+                self.read_key()
             else:
                 live.update(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"), refresh=True)
                 time.sleep(2)
             self.services_data = get_live_services(self.console)
+            self.categories = list(self.services_data)
+            self.active_category_index = min(self.active_category_index, max(0, len(self.categories) - 1))
+            self.active_service_index = 0
+            self.service_scroll_offset = 0
+            if not self.categories:
+                self.exit_app = True
         else:
             for _, info in changes: del info["pending_status"]
             live.update(Panel(Text("❌ Changes cancelled.", justify="center"), style="red"), refresh=True)
@@ -5730,9 +5632,12 @@ class ServiceManagerTUI:
         table.add_column("Service Target", style="magenta")
         for service, info in changes:
             action = "disable" if info["pending_status"] == "disabled" else "enable"
-            target = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
+            domain = info.get("domain", "system" if info["type"] == "daemon" else f"gui/{self.uid}")
+            target = f"{domain}/{info.get('label', service)}"
             cmd_prefix = "sudo " if info["type"] == "daemon" else ""
             table.add_row(f"{cmd_prefix}launchctl {action}", target)
+            if action == "disable":
+                table.add_row(f"{cmd_prefix}launchctl bootout", target)
         return table
 
     def run(self):
@@ -5774,7 +5679,7 @@ if __name__ == "__main__":
     if os.geteuid() != 0:
         console = Console()
         console.print("[bold red]Error:[/] This script must be run with 'sudo' to manage system services.")
-        console.print("Please run as: sudo python3 your_script_name.py")
+        console.print("Please run as: sudo .venv/bin/python3 manage-services.tui.py")
         sys.exit(1)
 
     console = Console()

@@ -1,0 +1,10 @@
+                          Actual macOS launchctl smoke check                          
+┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Step             ┃ Observed result                                                 ┃
+┡━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Before           │ Disposable agent loaded in gui/502                              │
+│ Disable and stop │ Verified disabled override; exact target absent (exit 113)      │
+│ Enable           │ Verified enabled override                                       │
+│ Reload           │ Agent can be loaded again after enabling                        │
+│ Cleanup          │ Temporary job unloaded and plist removed; override left enabled │
+└──────────────────┴─────────────────────────────────────────────────────────────────┘
