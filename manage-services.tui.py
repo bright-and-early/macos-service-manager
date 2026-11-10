@@ -118,7 +118,7 @@ SERVICE_DATABASE = {
     "impact": "No diagnostic or usage data will be sent to Apple. This may be desirable for privacy.",
   },
   "com.apple.osanalytics.osanalyticshelper": {
-    "description": "A helper process for the analytics daemon, likely involved in gathering system-level logs.",
+    "description": "A helper for the OS analytics daemon (analyticsd). It gathers system logs and diagnostics that feed Apple's analytics reporting.",
     "impact": "May prevent certain system-level diagnostic data from being collected.",
   },
   "com.apple.symptomsd": {
@@ -183,7 +183,7 @@ SERVICE_DATABASE = {
     "impact": "Apple Pay and Wallet functionality, including managing cards and passes, will not work.",
   },
   "com.apple.watchlistd": {
-    "description": "A support daemon for the Apple TV app, likely managing the 'Up Next' watchlist.",
+    "description": "The watchlist daemon for the Apple TV app. It maintains the Up Next watchlist and syncs it across devices.",
     "impact": "The 'Up Next' feature in the TV app may not sync or update correctly.",
   },
   "com.apple.triald.system": {
@@ -219,15 +219,15 @@ SERVICE_DATABASE = {
     "impact": "App downloads and updates may fail.",
   },
   "com.apple.appsleep": {
-    "description": "Potentially related to managing the 'sleep' or suspended state of applications.",
-    "impact": "Unknown, but could affect app lifecycle management.",
+    "description": "Part of the system's app lifecycle and power management. It tracks app sleep state so inactive apps can be suspended efficiently (related to App Nap).",
+    "impact": "Inactive apps may not be suspended as efficiently, which can increase power usage.",
   },
   "com.apple.storekitagent": {
     "description": "Agent for StoreKit, handling in-app purchases and interactions with the App Store.",
     "impact": "In-app purchases will not work.",
   },
   "com.apple.appplaceholdersyncd": {
-    "description": "Syncs app placeholders, likely for restoring apps on a new device.",
+    "description": "Syncs app placeholder records so apps can be restored or re-downloaded on a new device or after a reinstall.",
     "impact": "Setting up a new Mac from a backup might not correctly show all installing apps.",
   },
   "com.apple.askpermissiond": {
@@ -280,7 +280,7 @@ SERVICE_DATABASE = {
     "impact": "Disabling this may cause Time Machine backups to fail or not complete successfully. It is a required component for Time Machine to function.",
   },
   "com.apple.TMHelperAgent": {
-    "description": "A helper agent for Time Machine that assists with backup scheduling and management, possibly showing menu bar status.",
+    "description": "A menu-bar helper for Time Machine. It shows backup status and lets you start or stop backups.",
     "impact": "Time Machine backups may not run automatically or may encounter errors. Status updates may not be shown.",
   },
   "com.apple.mbsystemadministration": {
@@ -288,7 +288,7 @@ SERVICE_DATABASE = {
     "impact": "Disabling this could interfere with Time Machine's ability to properly manage backup sets.",
   },
   "com.apple.mbfloagent": {
-    "description": "A flow agent for Mobile Backup (Time Machine), possibly managing data transfer.",
+    "description": "A Mobile Backup flow agent. It coordinates backup data transfer between this Mac and connected iOS devices.",
     "impact": "Time Machine backups may fail or become corrupted.",
   },
   "com.apple.mbbackgrounduseragent": {
@@ -300,11 +300,11 @@ SERVICE_DATABASE = {
     "impact": "Time Machine may not function correctly, especially manual backups.",
   },
   "com.apple.vsdbutil": {
-    "description": "A tool for managing the 'Volume Shadow' database, used for Time Machine local snapshots.",
-    "impact": "Time Machine's local snapshots may not function correctly."
+    "description": "The Volume Status Database utility. It maintains /var/db/volinfo.database, which records per-volume ownership and mount behavior (for example ignoring ownership on external disks).",
+    "impact": "Changes to volume ownership/permission handling may not persist. It is safe to leave enabled."
   },
   "com.apple.mbusertrampoline": {
-    "description": "A 'trampoline' service for Mobile Backup (Time Machine), likely for launching processes with the correct permissions.",
+    "description": "The Mobile Backup user trampoline. It launches the per-user backup agent with the correct identity and environment.",
     "impact": "Time Machine backups may fail."
   },
   # Calendar & Reminders
@@ -446,8 +446,8 @@ SERVICE_DATABASE = {
     "impact": "May cause issues with continuity features and interactions between your Apple devices."
   },
   "com.apple.remoted": {
-    "description": "The daemon for remote control services, including the legacy iTunes Remote.",
-    "impact": "You will not be able to control this Mac with remote control applications."
+    "description": "The Remote Service Discovery daemon. It discovers and advertises Apple devices connected over USB or the local network, and is used by Xcode, Apple Configurator, Finder device sync, and developer tools.",
+    "impact": "Tools like Xcode and Apple Configurator will not be able to discover, pair with, or debug connected Apple devices."
   },
   # Diagnostics & Logging
   "com.apple.logd": {
@@ -535,12 +535,12 @@ SERVICE_DATABASE = {
     "impact": "Some legacy applications may not be able to log messages correctly."
   },
   "com.apple.bosreporter": {
-    "description": "Likely a 'Boot OS' reporter for diagnostics.",
-    "impact": "The system will not be able to report on issues that occur early in the boot process."
+    "description": "The BridgeOS install reporter. It reports the status of BridgeOS firmware installs and updates to the update system and to Apple.",
+    "impact": "BridgeOS firmware update progress and failures may not be reported, making update troubleshooting harder."
   },
   "com.apple.boswatcher": {
-    "description": "Likely a 'Boot OS' watcher for diagnostics.",
-    "impact": "Similar to `bosreporter`, this is likely for monitoring the early boot process."
+    "description": "The BridgeOS install watcher. It monitors BridgeOS firmware installation progress and helps coordinate the update state.",
+    "impact": "BridgeOS firmware updates may stall or fail to complete cleanly."
   },
   "com.apple.corecaptured": {
     "description": "A daemon for capturing core dumps for diagnostic purposes.",
@@ -591,8 +591,8 @@ SERVICE_DATABASE = {
     "impact": "The system will not be able to report on the status of its real-time clock."
   },
   "com.apple.seld": {
-    "description": "'Security Event Logging Daemon,' likely.",
-    "impact": "The system may not be able to log security-related events."
+    "description": "The Secure Element daemon. It manages the Secure Element/NFC hardware and handles NFC reader-mode sessions and security evaluations used by Apple Pay and related features.",
+    "impact": "NFC and Secure Element features may stop working; reader-mode NFC sessions and some Apple Pay/SE operations will fail."
   },
   "com.apple.signpost.signpost_reporter": {
     "description": "A service that reports on 'signpost' diagnostic data from applications.",
@@ -749,8 +749,8 @@ SERVICE_DATABASE = {
     "impact": "Creating or using RAM disks will not work."
   },
   "com.apple.diskimagesiod.spb": {
-    "description": "A version of `diskimagesiod` with an unclear purpose ('spb').",
-    "impact": "May affect the functionality of disk images."
+    "description": "A variant of the Disk Images IO daemon (diskimagesiod). It handles I/O for disk images, including encrypted images and shadow files.",
+    "impact": "Mounting or reading disk images may fail."
   },
   "com.apple.diskmanagementstartup": {
     "description": "A service that runs at startup to perform disk management tasks.",
@@ -802,7 +802,7 @@ SERVICE_DATABASE = {
     "impact": "Game controllers may not be properly detected or configured.",
   },
   "com.apple.gamesaved": {
-    "description": "Daemon for saving game progress, likely with iCloud.",
+    "description": "The GameSave daemon (GameplayKit). It saves game progress locally and syncs game saves through iCloud.",
     "impact": "Game progress will not be saved or synced.",
   },
   "com.apple.GamePolicyAgent": {
@@ -814,28 +814,24 @@ SERVICE_DATABASE = {
     "impact": "Game controllers will not be recognized or function in games."
   },
   "com.apple.fpsd.arcadeservice": {
-    "description": "Likely related to Apple Arcade's 'Frames Per Second' (FPS) or game services.",
-    "impact": "May impact Apple Arcade game performance or features."
+    "description": "An Apple Arcade service hosted by fpsd, Apple's FairPlay Streaming daemon. It handles FairPlay-protected media for Arcade titles.",
+    "impact": "Apple Arcade games that rely on FairPlay Streaming may fail to play."
   },
   "com.apple.gamepolicyd": {
     "description": "A daemon that enforces policies related to games.",
     "impact": "May affect game performance or features."
   },
   # Hardware & Drivers
-  "com.apple.IOUserDockChannelSerial-0x10000...": {
-    "description": "A user-space driver (DriverKit) that manages serial communication channels for accessories connected via a dock or other multifunction adapter.",
-    "impact": "Will break specific dock-connected accessories that rely on serial communication. Terminating this service has been reported to cause kernel panics and system instability.",
-  },
   "com.apple.airportd": {
     "description": "The core daemon that manages Wi-Fi hardware and connections.",
     "impact": "CRITICAL: Wi-Fi will be completely disabled and you will not be able to connect to any wireless networks.",
   },
   "com.apple.appleh13camerad": {
-    "description": "A low-level daemon that directly interfaces with the Image Signal Processor (ISP) and Apple Neural Engine (ANE) for the built-in camera on H13-generation hardware.",
+    "description": "A low-level camera daemon that interfaces with the Image Signal Processor (ISP) and Apple Neural Engine (ANE) for the built-in camera on Apple Silicon Macs that use the H13 camera hardware platform.",
     "impact": "The built-in FaceTime/iSight camera will not function. This is a hardware-specific driver.",
   },
   "com.apple.appleh16camerad": {
-    "description": "A low-level daemon that directly interfaces with the Image Signal Processor (ISP) and Apple Neural Engine (ANE) for the built-in camera on H16-generation hardware.",
+    "description": "A low-level camera daemon that interfaces with the Image Signal Processor (ISP) and Apple Neural Engine (ANE) for the built-in camera on Apple Silicon Macs that use the H16 camera hardware platform.",
     "impact": "The built-in FaceTime/iSight camera will not function. This is a hardware-specific driver.",
   },
   "com.apple.audio.AudioComponentRegistrar": {
@@ -859,20 +855,12 @@ SERVICE_DATABASE = {
     "impact": "All system UI sounds will be silenced. Main application audio (e.g., music, video) will not be affected.",
   },
   "com.apple.audiomxd": {
-    "description": "A core audio mixer/multiplexer daemon that appears to handle complex routing and combining of audio streams. It is prone to high memory usage when bugs are present.",
+    "description": "The Core Audio mixer daemon. It mixes and routes audio streams between apps, devices, and system services.",
     "impact": "Disabling this would likely cause severe audio malfunctions, possibly breaking all audio input or output. HIGH RISK.",
   },
   "com.apple.cameracaptured": {
     "description": "A high-level daemon that manages and arbitrates access to camera hardware, preventing conflicts between applications.",
     "impact": "Applications will be unable to access the camera, as the service for managing capture sessions will be unavailable.",
-  },
-  "com.apple.cmio.IOSScreenCaptureAssistant": {
-    "description": "A helper daemon that enables the feature to record or display an attached iPhone or iPad's screen on the Mac using applications like QuickTime Player.",
-    "impact": "You will not be able to record or view your iOS/iPadOS device's screen on your Mac.",
-  },
-  "com.apple.cmio.VCAssistant": {
-    "description": "A helper daemon for the Core Media I/O (CMIO) framework, likely assisting with video conferencing functionalities such as stream optimization.",
-    "impact": "Features within FaceTime and other video calling apps may be degraded or fail entirely.",
   },
   "com.apple.cmio.uvcassistantextension": {
     "description": "A system extension that acts as an assistant for generic USB Video Class (UVC) cameras, enabling plug-and-play functionality for most third-party webcams.",
@@ -895,16 +883,12 @@ SERVICE_DATABASE = {
     "impact": "Access to all hardware security tokens (including smart cards) will be broken. Essential for corporate/government environments using smart card authentication.",
   },
   "com.apple.deviceinterfaced": {
-    "description": "A generically named 'Device Interface Daemon'. Its specific function is not documented.",
+    "description": "The device interface daemon. It publishes user-space DriverKit device interfaces so apps can communicate with peripherals.",
     "impact": "Unknown. Disabling this service is not recommended as its function and dependencies are not clear, and it could affect hardware stability.",
   },
   "com.apple.displaypolicyd": {
     "description": "The Display Policy Daemon. Enforces high-level policies for displays and GPUs, most notably automatic graphics switching on dual-GPU Macs.",
     "impact": "On dual-GPU Macs, may break power-saving graphics switching. On all Macs, its failure during boot can prevent the system from starting up.",
-  },
-  "com.apple.driverkit.AppleUserHIDDrivers-0...": {
-    "description": "A core user-space driver (DriverKit) for Human Interface Devices (HID). This is the modern driver for many keyboards, mice, and trackpads.",
-    "impact": "CRITICAL: Some or all input devices will stop working, potentially rendering the system uncontrollable. Termination can lead to kernel panics.",
   },
   "com.apple.hidd": {
     "description": "Human Interface Device Daemon. It processes all input from keyboards, mice, trackpads, and other input devices.",
@@ -925,10 +909,6 @@ SERVICE_DATABASE = {
   "com.apple.kernelmanagerd": {
     "description": "The Kernel Manager Daemon. This highly privileged process is responsible for loading and unloading legacy Kernel Extensions (KEXTs).",
     "impact": "CRITICAL: Prevents the system from loading any kernel extensions, which will break many third-party drivers (for audio, networking, etc.) and may cause system instability or failure to boot.",
-  },
-  "com.apple.liquidddetectiond": {
-    "description": "The Liquid Damage Detection Daemon. A diagnostic service introduced in macOS Sonoma that monitors and logs liquid exposure events in the Mac's ports.",
-    "impact": "The OS will not record liquid damage events. This has no impact on functionality and may be desirable for privacy.",
   },
   "com.apple.nand.aspcarry": {
     "description": "A daemon to collect and log I/O patterns and diagnostics directly from the physical NAND flash storage (SSD). Related to 'Apple Storage Provider'.",
@@ -1039,7 +1019,7 @@ SERVICE_DATABASE = {
     "impact": "Professional audio and video equipment that uses the AVB networking standard will not work."
   },
   "com.apple.cmio.VDCAssistant": {
-    "description": "A helper for the Core Media I/O framework that assists with legacy VDC (Video Digitizer Component) cameras.",
+    "description": "The CoreMediaIO VDC (Video Digitizer Component) assistant. It provides access to built-in and USB cameras for apps such as FaceTime.",
     "impact": "Some older webcams may not function correctly."
   },
   "com.apple.cmio.iOSScreenCaptureAssistant": {
@@ -1047,8 +1027,8 @@ SERVICE_DATABASE = {
     "impact": "You will not be able to record the screen of a connected iPhone or iPad."
   },
   "com.apple.corekdld": {
-    "description": "Core Kernel Driver Loader daemon.",
-    "impact": "May cause issues with loading kernel drivers."
+    "description": "Downloads and manages the Kernel Debug Kit (KDL) from Apple, which supplies debug symbols and kernel development support for Xcode and kernel debugging.",
+    "impact": "Kernel debugging and symbolication of kernel core dumps will not work properly."
   },
   "com.apple.cvmsServ": {
     "description": "A server for OpenGL and Metal compute services.",
@@ -1063,7 +1043,7 @@ SERVICE_DATABASE = {
     "impact": "You will not be able to change the region of your DVD drive."
   },
   "com.apple.eoshostd": {
-    "description": "A host daemon for an 'EOS' service, which is likely related to a camera or imaging device.",
+    "description": "The EmbeddedOSSupport host daemon. It communicates with the embedded OS (eosd) on accessories and coprocessors and manages their connection watchdog.",
     "impact": "Certain camera or imaging functionalities may fail."
   },
   "com.apple.iokit.ioserviceauthorized": {
@@ -1083,7 +1063,7 @@ SERVICE_DATABASE = {
     "impact": "The system may have issues loading or unloading KEXTs."
   },
   "com.apple.liquiddetectiond": {
-    "description": "A daemon for detecting liquid in the ports of the Mac.",
+    "description": "The Liquid Damage Detection daemon. It monitors and logs liquid exposure events in the Mac's ports.",
     "impact": "The system will not be able to warn you about liquid in the ports, potentially preventing damage."
   },
   "com.apple.nfcd": {
@@ -1091,12 +1071,12 @@ SERVICE_DATABASE = {
     "impact": "If your Mac has an NFC reader, it will not function. Not relevant for most Macs."
   },
   "com.apple.oahd": {
-    "description": "'Over-the-Air Helper Daemon,' likely for wireless updates of accessories like AirPods.",
-    "impact": "Firmware updates for wireless accessories may fail."
+    "description": "The Rosetta 2 helper daemon. It installs and maintains the Rosetta translation environment on Apple Silicon so Intel-only apps can run.",
+    "impact": "Intel-only apps will not be able to install or use Rosetta; existing translated apps may fail to launch."
   },
   "com.apple.oahd-root-helper": {
-    "description": "A root helper for `oahd`.",
-    "impact": "Privileged operations for wireless accessory updates may fail."
+    "description": "The privileged helper used by Rosetta's oahd to install or update the Rosetta 2 environment.",
+    "impact": "Rosetta 2 cannot be installed or updated, so some Intel apps may stop working after an update."
   },
   "com.apple.printtool.daemon": {
     "description": "A daemon for the printing system.",
@@ -1181,8 +1161,8 @@ SERVICE_DATABASE = {
     "impact": "Remote lock and wipe commands sent via Find My may not be received.",
   },
   "com.apple.cmfsyncagent": {
-    "description": "Cloud Managed File Sync Agent, likely related to iCloud file syncing.",
-    "impact": "iCloud file syncing may be impaired.",
+    "description": "The CommunicationsFilter sync agent. It syncs call-filtering settings (such as Silence Unknown Callers and Live Voicemail) across devices.",
+    "impact": "Call-filtering settings may not sync between your devices.",
   },
   "com.apple.CloudPhotosConfiguration": {
     "description": "Manages the configuration for iCloud Photos.",
@@ -1205,7 +1185,7 @@ SERVICE_DATABASE = {
     "impact": "General iCloud reliability may be reduced.",
   },
   "com.apple.iCloudUserNotificationsd": {
-    "description": "Manages iCloud-related user notifications.",
+    "description": "The iCloud user notifications daemon. It displays alerts about iCloud account and storage events.",
     "impact": "You may not receive notifications related to iCloud services.",
   },
   "com.apple.privatecloudcomputed": {
@@ -1225,7 +1205,7 @@ SERVICE_DATABASE = {
     "impact": "Your device will not be findable by the 'Find My' network when it is offline."
   },
   "com.apple.findmymacd": {
-    "description": "The daemon for the 'Find My Mac' feature.",
+    "description": "The Find My Mac daemon. It receives Find My commands and manages the associated secure state so the Mac can be located, locked, or erased.",
     "impact": "'Find My Mac' will not be functional."
   },
   # Installation & Updates
@@ -1286,7 +1266,7 @@ SERVICE_DATABASE = {
     "impact": "The Content Caching service will be unavailable."
   },
   "com.apple.AssetCacheTetheratorService": {
-    "description": "Likely related to sharing the Content Caching service over a tethered connection (e.g., via USB to an iOS device).",
+    "description": "Lets iOS devices use this Mac's Content Caching service over a USB tether.",
     "impact": "Content Caching over tethered connections will not work."
   },
   "com.apple.InstallerDiagnostics.installerdiagd": {
@@ -1314,7 +1294,7 @@ SERVICE_DATABASE = {
     "impact": "The system may fail to clean up temporary files after an update, leading to wasted disk space."
   },
   "com.apple.MobileSoftwareUpdate.CryptegraftService": {
-    "description": "Likely related to handling encrypted components during a software update.",
+    "description": "Handles cryptographic sealing and 'cryptex grafting' of system components during a software update.",
     "impact": "Software updates may fail, especially if they involve encrypted system components."
   },
   "com.apple.UpdateSettings": {
@@ -1411,7 +1391,7 @@ SERVICE_DATABASE = {
     "impact": "The Mac cannot be enrolled in an MDM solution."
   },
   "com.apple.ManagedClient.mechanism": {
-    "description": "A mechanism for `ManagedClient` that likely handles specific management tasks.",
+    "description": "A ManagedClient mechanism that performs legacy managed-preferences tasks on managed devices.",
     "impact": "Certain MDM policies or commands may not be correctly applied."
   },
   "com.apple.RemoteDesktop.PrivilegeProxy": {
@@ -1423,7 +1403,7 @@ SERVICE_DATABASE = {
     "impact": "If this Mac is managed, it will not correctly process events from the MDM server."
   },
   "com.apple.devicemanagementclient.teslad": {
-    "description": "A daemon related to MDM, with an unclear specific purpose ('tesla').",
+    "description": "The device management enrollment daemon. It processes MDM enrollment, migration, and check-in requests.",
     "impact": "May cause issues with MDM functionality."
   },
   "com.apple.dt.RemotePairingDataVaultHelper": {
@@ -1488,7 +1468,7 @@ SERVICE_DATABASE = {
     "impact": "Background downloads and uploads for many applications will fail.",
   },
   "com.apple.networkserviceproxy": {
-    "description": "A proxy service for certain network connections.",
+    "description": "The network service proxy. It supports iCloud Private Relay and other proxied network services.",
     "impact": "May affect Private Relay and other network proxying features.",
   },
   "com.apple.neagent": {
@@ -1500,7 +1480,7 @@ SERVICE_DATABASE = {
     "impact": "You will not be able to log into captive Wi-Fi networks.",
   },
   "com.apple.intelligentroutingd": {
-    "description": "Manages network routing decisions, possibly for features like Wi-Fi Assist.",
+    "description": "The IntelligentRouting daemon. It makes automatic network-path decisions, such as choosing between Wi-Fi and cellular for better connectivity.",
     "impact": "The system may not intelligently switch between networks, potentially leading to connection issues.",
   },
   "com.apple.NetworkSharing": {
@@ -1524,19 +1504,19 @@ SERVICE_DATABASE = {
     "impact": "May cause a variety of networking issues for applications."
   },
   "com.apple.dpdkswitchd": {
-    "description": "Likely related to the Data Plane Development Kit (DPDK) for high-performance networking.",
-    "impact": "High-performance networking features may not work. Not relevant for most users."
+    "description": "A legacy, undocumented switching daemon. It is not present on current macOS releases and no public documentation describes its purpose.",
+    "impact": "Unknown; this service is not present on current macOS.",
   },
   "com.apple.eapolcfg_auth": {
     "description": "A tool for configuring EAP (Extensible Authentication Protocol) over LAN (EAPOL), used in 802.1X network authentication.",
     "impact": "You will not be able to configure 802.1X network settings."
   },
   "com.apple.mDNSResponder.reloaded": {
-    "description": "A signal to `mDNSResponder` that it has been reloaded.",
+    "description": "The mDNSResponder daemon (the label gains a '.reloaded' suffix on recent macOS). It provides Bonjour/mDNS and DNS Service Discovery for the system.",
     "impact": "Not a standalone service."
   },
   "com.apple.mDNSResponderHelper.reloaded": {
-    "description": "A signal to the `mDNSResponderHelper` that it has been reloaded.",
+    "description": "The helper for mDNSResponder (the label gains a '.reloaded' suffix on recent macOS). It performs privileged Bonjour/mDNS tasks that the main responder cannot do itself.",
     "impact": "Not a standalone service."
   },
   "com.apple.msrpc.lsarpc": {
@@ -1620,7 +1600,7 @@ SERVICE_DATABASE = {
     "impact": "AirDrop and other direct Wi-Fi connection features will not work."
   },
   "com.apple.wifivelocityd": {
-    "description": "A daemon for 'Wi-Fi Velocity,' which likely handles network roaming and handoff.",
+    "description": "The Wi-Fi analytics daemon. It collects Wi-Fi performance data and supports roaming and connection-quality analysis.",
     "impact": "Roaming between Wi-Fi access points may be less reliable."
   },
   # Safari & WebKit
@@ -1635,10 +1615,6 @@ SERVICE_DATABASE = {
   "com.apple.Safari.PasswordBreachAgent": {
     "description": "Agent that checks for compromised passwords saved in Safari.",
     "impact": "Safari's password breach detection feature will not work.",
-  },
-  "com.apple.Safari.SafeBrowse.Service": {
-    "description": "Service for Google Safe Browse to protect against malicious websites.",
-    "impact": "You will not be warned about fraudulent or malicious websites in Safari.",
   },
   "com.apple.SafariNotificationAgent": {
     "description": "Agent for handling web push notifications from Safari.",
@@ -1792,20 +1768,20 @@ SERVICE_DATABASE = {
     "impact": "Machine learning features may fail to load their required models."
   },
   "com.apple.ospredictiond": {
-    "description": "A daemon for OS-level predictions, likely for performance optimizations.",
+    "description": "The OSIntelligence prediction daemon. It predicts battery drain and inactivity to drive Low Power Mode and energy-saving decisions.",
     "impact": "The system may be less efficient at predicting user behavior to optimize performance."
   },
   "com.apple.uarpassetmanagerd": {
-    "description": "A daemon for managing assets for 'Universal Augmented Reality Platform' (UARP).",
-    "impact": "Augmented reality features may not work correctly."
+    "description": "Manages firmware assets used by the UARP (Universal Accessory Restore Protocol) accessory update system. It downloads and caches firmware images for Apple accessories.",
+    "impact": "Firmware assets for Apple accessories cannot be downloaded or cached, so accessory updates may fail."
   },
   "com.apple.uarpd": {
-    "description": "The daemon for 'Universal Augmented Reality Platform' (UARP).",
-    "impact": "Augmented reality features may not work correctly."
+    "description": "The Universal Accessory Restore Protocol daemon. It handles firmware update and restore sessions for Apple accessories such as AirPods and Beats over USB or wireless transports.",
+    "impact": "Apple accessories will not receive firmware updates or restores."
   },
   "com.apple.uarphidd": {
-    "description": "A daemon for HID (Human Interface Device) interactions with UARP.",
-    "impact": "Augmented reality features that require user input may not work."
+    "description": "The UARP (Universal Accessory Restore Protocol) bridge for HID accessories. It carries firmware-update traffic for input accessories that use the protocol.",
+    "impact": "Firmware updates for affected HID accessories will not work."
   },
   # Security & Keychain
   "com.apple.securityd": {
@@ -1823,10 +1799,6 @@ SERVICE_DATABASE = {
   "com.apple.authd": {
     "description": "The authorization services daemon. It handles requests for privileged operations (e.g., when you type your password to install software).",
     "impact": "CRITICAL: You will not be able to perform any action that requires administrator privileges.",
-  },
-  "com.apple.MRTD": {
-    "description": "MRT-d stands for Malware Removal Tool daemon. It is a background process that checks for and removes known malware.",
-    "impact": "Disabling this service will stop Apple's built-in anti-malware scanner from running, potentially leaving the system more vulnerable.",
   },
   "com.apple.cryptexd": {
     "description": "Manages cryptexes, which are cryptographically signed and sealed volumes containing system content. This is a core security feature that ensures the integrity of the operating system.",
@@ -1885,7 +1857,7 @@ SERVICE_DATABASE = {
     "impact": "The system's anti-malware scanning will be disabled.",
   },
   "com.apple.SecureBackupDaemon": {
-    "description": "Daemon for handling secure backups, likely of keychain data.",
+    "description": "The iCloud Keychain secure backup daemon. It encrypts and stores keychain backups in iCloud.",
     "impact": "Secure backups of sensitive data will not be performed.",
   },
   "com.apple.security.agent": {
@@ -1917,7 +1889,7 @@ SERVICE_DATABASE = {
     "impact": "You may not receive notifications about the status of iCloud Keychain.",
   },
   "com.apple.frauddefensed": {
-    "description": "Daemon for fraud detection, likely related to Apple Pay and Store transactions.",
+    "description": "The TrustKit fraud-defense daemon. It evaluates device and transaction signals for fraud protection in Apple services.",
     "impact": "The system's ability to detect and prevent fraudulent transactions will be reduced.",
   },
   "com.apple.AppSSOAgent.login": {
@@ -1941,7 +1913,7 @@ SERVICE_DATABASE = {
     "impact": "System-wide authentication services, including password and Touch ID prompts, may fail."
   },
   "com.apple.CryptoTokenKit.ahp": {
-    "description": "A helper process for the CryptoTokenKit framework, likely related to authentication with hardware tokens.",
+    "description": "The CryptoTokenKit Authentication Hints Provider. It supplies authentication hints (for example PIN prompts) for smart cards and hardware tokens.",
     "impact": "Authentication using smart cards or other hardware tokens may fail."
   },
   "com.apple.GSSCred": {
@@ -1993,7 +1965,7 @@ SERVICE_DATABASE = {
     "impact": "The macOS application firewall will not function."
   },
   "com.apple.alwaysonexclavesd": {
-    "description": "Likely related to 'Always On' features for secure enclaves.",
+    "description": "The AlwaysOnExclaves daemon. It manages always-on isolated (exclave) services on the Secure Enclave.",
     "impact": "'Always On' processor features that rely on the secure enclave may not work."
   },
   "com.apple.applekeystored": {
@@ -2200,7 +2172,7 @@ SERVICE_DATABASE = {
   },
   "com.apple.contactsd": {
     "description": "The background daemon that manages the central database for the Contacts app.",
-    "impact": "CRITICAL: Contacts will not sync or be available to other apps. Disabling is known to cause the App Store and other applications to freeze or crash.",
+    "impact": "Contacts will not sync or be available to other apps. Apps that read contacts may behave oddly or show no contact data.",
   },
   "com.apple.xpc.smd": {
     "description": "Service Management Daemon. One of the core processes of launchd, responsible for managing XPC services.",
@@ -2379,8 +2351,8 @@ SERVICE_DATABASE = {
     "impact": "You will not be able to get detailed diagnostics if Spotlight is hanging."
   },
   "com.apple.misagent": {
-    "description": "A legacy agent for MobileMe iDisk services.",
-    "impact": "Not relevant for modern macOS."
+    "description": "The Mobile Installation Services agent. It installs and tracks provisioning profiles and mobile-style configuration profiles (for example developer or beta profiles).",
+    "impact": "Provisioning and configuration profiles may fail to install or may not be tracked correctly."
   },
   "com.apple.mobile.storage_mounter": {
     "description": "A service for mounting storage, with a 'mobile' origin.",
@@ -2443,12 +2415,12 @@ SERVICE_DATABASE = {
     "impact": "The system's timezone may not be set correctly."
   },
   "com.apple.warmd": {
-    "description": "A daemon that 'warms up' applications by pre-loading them into memory.",
-    "impact": "Application launch times may be slower."
+    "description": "A background daemon that manages the boot/warm cache on APFS and reports boot telemetry. It keeps frequently used system data warm to speed up startup.",
+    "impact": "Startup may be slower and boot-related telemetry/diagnostics may be lost. It is not immediately harmful."
   },
   "com.apple.watchdogd": {
-    "description": "A watchdog daemon that monitors the system for hangs and forces a restart if necessary.",
-    "impact": "The system may hang indefinitely instead of automatically restarting, requiring a manual power cycle."
+    "description": "A watchdog daemon that monitors core volumes and critical services and can panic or restart the system if a component stops responding.",
+    "impact": "A hung system may not be restarted automatically, and you may have to power cycle it manually.",
   },
   "com.vix.cron": {
     "description": "The cron daemon, for scheduling tasks to run at specific times.",
@@ -2500,7 +2472,7 @@ SERVICE_DATABASE = {
     "impact": "Complex input methods (e.g., for Chinese, Japanese, Korean) will not work.",
   },
   "com.apple.textunderstandingd": {
-    "description": "Daemon for understanding text content, likely for data detection or suggestions.",
+    "description": "The text-understanding daemon. It extracts meaning from text for data detection, suggestions, and other system features.",
     "impact": "Features that detect data like dates or addresses in text may fail.",
   },
   "com.apple.DataDetectorsSourceAccess": {
@@ -2508,7 +2480,7 @@ SERVICE_DATABASE = {
     "impact": "Data detection features in applications like Mail and Messages will not work."
   },
   "com.apple.fontmover": {
-    "description": "A tool for moving fonts, likely for legacy compatibility.",
+    "description": "A utility that moves font files between system and user font locations during activation.",
     "impact": "May cause issues with font management in older applications."
   },
   "com.apple.handwritingd": {
@@ -2538,7 +2510,7 @@ SERVICE_DATABASE = {
   },
   "com.apple.donotdisturbd": {
     "description": "Manages the Do Not Disturb mode and Focus modes.",
-    "impact": "CRITICAL: Do Not Disturb and Focus modes will not work. Disabling is known to break Notification Center and system responsiveness.",
+    "impact": "Focus and Do Not Disturb modes will not work, so notifications will not be silenced by Focus.",
   },
   "com.apple.chronod": {
     "description": "The background agent for widgets, including those on the desktop and in Notification Center.",
@@ -2553,8 +2525,8 @@ SERVICE_DATABASE = {
     "impact": "Media control keys (play/pause, next/previous) may not work, and the Now Playing widget will be non-functional.",
   },
   "com.apple.MENotificationService": {
-    "description": "A notification service, possibly for 'Mobile Experience' or menu extras.",
-    "impact": "Certain system or app notifications may not be delivered.",
+    "description": "The notification service for the MediaExtension framework. It shows prompts and notifications for media extensions such as third-party camera, microphone, and system extensions.",
+    "impact": "Notifications and prompts for media extensions may not appear.",
   },
   "com.apple.Finder": {
     "description": "The core application that manages the user's files, folders, and desktop.",
@@ -2577,7 +2549,7 @@ SERVICE_DATABASE = {
     "impact": "Your user account picture will not sync across devices.",
   },
   "com.apple.WindowManager.agent": {
-    "description": "An agent that assists the WindowServer in managing windows.",
+    "description": "The WindowManager agent. It provides Stage Manager, window tiling, and related window-management features.",
     "impact": "Window management features, including Mission Control and window placement, may be buggy.",
   },
   "com.apple.noticeboard.agent": {
@@ -2629,7 +2601,7 @@ SERVICE_DATABASE = {
     "impact": "Icons may not display correctly throughout the system."
   },
   "com.apple.mobile.notification_proxy": {
-    "description": "A proxy for notifications, likely for compatibility with iOS-style notifications.",
+    "description": "A compatibility proxy that delivers iOS-style notifications to apps and services running on macOS.",
     "impact": "Some notifications may not be delivered correctly."
   },
   "com.apple.noticeboard.state": {
@@ -2651,67 +2623,67 @@ SERVICE_DATABASE = {
   },
   # Undocumented
   "com.apple.IFCStart": {
-    "description": "Related to Internet File Client (IFC) services, potentially for legacy internet file sharing protocols. Its specific role is not well-documented.",
-    "impact": "May affect legacy file sharing functionalities. The exact impact is unclear due to lack of documentation."
+    "description": "A legacy Carbon/CoreServices startup helper (label com.apple.IFCStart). Its exact purpose is undocumented and it has no user-facing configuration; it is likely an old compatibility shim kept for legacy boot tasks.",
+    "impact": "Unknown. It is not known to affect normal usage.",
   },
   "com.apple.corercd": {
-    "description": "The function of this service is not well-documented, but the name suggests a role in remote control or core services.",
-    "impact": "The precise impact of this service being missing is unknown. It could potentially affect remote control functionalities or other core system operations."
+    "description": "The CoreRC daemon. It implements HDMI-CEC and remote-control support so the Mac can control, or be controlled by, TVs and AV receivers.",
+    "impact": "HDMI-CEC and some remote-control features for connected displays and TVs will not work.",
   },
   "com.apple.filesystems.doubleagentd": {
-    "description": "A service with a non-obvious name, 'doubleagentd', related to file systems. Its exact purpose is not documented.",
+    "description": "The DoubleAgent file-system daemon. It handles kernel upcalls for extended-attribute (xattr) operations on behalf of user-space processes.",
     "impact": "The impact of this service's absence is unknown due to a lack of public information."
   },
   "com.apple.griddatad": {
-    "description": "The purpose of this service is not clearly documented, but the name suggests it might be related to data services for a grid-based system or UI element.",
-    "impact": "The impact of this service being missing is unknown."
+    "description": "The Grid Data daemon. It downloads and maintains the geographic grid/boundary data used by CoreLocation for reverse geocoding and region determination.",
+    "impact": "Reverse geocoding and region/boundary lookups may fail or use stale data."
   },
   "com.apple.internal.aupbregistrarservice": {
-    "description": "An internal service likely related to the registration of audio unit plugins. The 'aupb' part is not standard and its function is not publicly documented.",
+    "description": "An internal Audio Unit registrar service. It scans and registers Audio Unit plug-ins for the system.",
     "impact": "May cause issues with the registration or functioning of audio unit plugins, particularly non-standard ones."
   },
   "com.apple.lskdd": {
-    "description": "A daemon whose name suggests a connection to a 'Local Security' framework, but the 'kdd' part is not well-understood. Its function is not documented.",
+    "description": "The CoreLSKD daemon. It provides a local security/key-data service over XPC (com.apple.lskdd) to system components.",
     "impact": "The impact of this service's absence is unknown but could potentially relate to local security policies or key distribution."
   },
   "com.apple.multiversed": {
-    "description": "A daemon whose name suggests it is related to file versioning or alternative file systems, but its exact function is not publicly documented.",
-    "impact": "The impact is unclear, but it might affect features related to file versions or backups."
+    "description": "The Multiverse support daemon. It loads plug-ins that service Apple coprocessor I/O buffer copy engines (matched through IOKit) for low-level data paths.",
+    "impact": "Coprocessor data-path plug-ins will not load, which may affect hardware-specific features on some Macs.",
   },
   "com.apple.pfd": {
-    "description": "The name suggests a 'Policy File Daemon,' but its specific domain and function are not documented.",
-    "impact": "The impact of this service being missing is unknown."
+    "description": "The Packet Filter daemon. It provides a user-space XPC interface (com.apple.pf) used to manage pf firewall rules and state.",
+    "impact": "Tools and features that configure the pf packet filter may fail. The kernel firewall itself continues to run."
   },
   "com.apple.powerd.swd": {
-    "description": "A 'software' daemon related to power management. Its specific role in addition to the main `powerd` is not documented.",
+    "description": "The powerd software watchdog. It monitors sleep/wake transitions and captures stackshots and logs when a sleep/wake failure occurs.",
     "impact": "May impact specific software-related power management features. The exact impact is unknown."
   },
   "com.apple.relatived": {
-    "description": "A daemon whose name suggests a role in relative positioning or location, but its function is not documented.",
-    "impact": "The impact is unknown, but it could be related to location services or spatial awareness features."
+    "description": "The daemon behind Spatial Audio head tracking. It processes motion data from AirPods/Beats and other accessories to update the relative listener pose used by Spatial Audio.",
+    "impact": "Spatial Audio with dynamic head tracking will no longer follow your head movements."
   },
   "com.apple.systemstatusd": {
-    "description": "A daemon that appears to monitor various aspects of the system's status, but its specific responsibilities and consumers are not well-documented.",
+    "description": "The SystemStatus server. It publishes system status domains such as recording, screen capture, and telephony status to clients.",
     "impact": "The impact is unclear, but its absence could affect how the system or certain applications respond to changes in system state."
   },
   "com.apple.tracd": {
-    "description": "The name suggests a 'Trace Daemon' for diagnostic purposes, but its specific function is not documented.",
-    "impact": "The system may lose some of its diagnostic tracing capabilities."
+    "description": "The Trusted Accessory daemon. It authenticates and monitors trusted accessories (for example Apple-branded USB-C and MFi devices), including reading accessory firmware version information.",
+    "impact": "Some trusted/authenticated accessories may be rejected or stop reporting firmware and status information."
   },
   "com.apple.ucupdate.plist": {
-    "description": "An update service with the unknown 'UC' designation. Its purpose is not documented.",
-    "impact": "The impact of this service being missing is unknown, but it could relate to a specific component's update mechanism."
+    "description": "The CPU microcode update service. It applies Intel CPU microcode updates at boot to fix errata and security issues on Intel-based Macs.",
+    "impact": "Microcode fixes and security mitigations will not be applied on Intel Macs. It has no effect on Apple Silicon."
   },
   "com.apple.xartstorageremoted": {
-    "description": "A remote storage service for an unknown framework or component referred to as 'XArt.' Its function is not documented.",
-    "impact": "The impact is unknown."
+    "description": "Bridges access to xART (Secure Enclave-backed secure storage used for anti-replay and device secrets) between the startup volume and the SEP/BridgeOS, for example to read xART user data from the main volume.",
+    "impact": "Secure-enclave-backed storage operations used by some Apple Pay, FileVault, and bridgeOS functions may fail."
   },
   "com.apple.xpc.uscwoap": {
-    "description": "An XPC service with an un-decipherable name. Its purpose is not documented.",
-    "impact": "The impact of this service being missing is unknown."
+    "description": "An Apple-internal boot shell job that runs /bin/bash with a null bootstrap. It exists for low-level debugging and diagnostic access at boot and is not a user-facing service.",
+    "impact": "Apple's boot-time diagnostic shell will be unavailable. Normal usage is unaffected, so leave it alone unless you know you need it."
   },
   "com.apple.mobile.NRDUpdated": {
-    "description": "Likely related to 'Network Resource Discovery' updates.",
+    "description": "The NRD update daemon for MobileSoftwareUpdate. It downloads and applies the update 'brain' used to prepare and validate software updates.",
     "impact": "May affect the system's ability to discover network resources."
   },
   "com.apple.MessageUIMacHelperService": {
@@ -2783,7 +2755,7 @@ SERVICE_DATABASE = {
     "impact": "You will not receive notifications for Family Sharing events like purchase requests.",
   },
   "com.apple.generativeexperiencesd": {
-    "description": "A daemon for generative experiences, likely related to new on-device AI and ML features.",
+    "description": "The Generative Experiences daemon. It supports Apple Intelligence generative features such as Writing Tools and Image Playground.",
     "impact": "Emerging generative AI features within macOS will not be available.",
   },
   "com.apple.helpd": {
@@ -2831,7 +2803,7 @@ SERVICE_DATABASE = {
     "impact": "Progress indicators in Finder and other apps may not appear or may be inaccurate.",
   },
   "com.apple.replicatord": {
-    "description": "A file replication service, likely used for syncing data between devices or with iCloud.",
+    "description": "The ReplicatorCore daemon. It replicates state between processes and devices for continuity and data-consistency features.",
     "impact": "The exact impact is unclear, but it could affect data syncing reliability.",
   },
   "com.apple.security.cloudkeychainproxy3": {
@@ -2871,7 +2843,7 @@ SERVICE_DATABASE = {
     "impact": "Proactive suggestions and other intelligent features will be less effective.",
   },
   "com.apple.maps.destinationd": {
-    "description": "A daemon that likely manages recent and suggested destinations in Apple Maps.",
+    "description": "The Maps destination daemon. It learns frequent routes and provides destination suggestions to Maps and other apps.",
     "impact": "Maps may not be able to provide suggestions for destinations.",
   },
   "com.apple.geoanalyticsd": {
@@ -2943,12 +2915,1241 @@ SERVICE_DATABASE = {
     "description": "The main launcher for the 1Password 8+ application helper.",
     "impact": "1Password browser integration and other features may not work correctly.",
   },
+  # --- Accessibility ---
+  "com.apple.AccessibilityVisualsAgent": {
+    "description": "Apple's accessibility visuals agent. It draws accessibility-related visual overlays such as the pointer outline and other on-screen aids.",
+    "impact": "Visual accessibility aids may not appear.",
+  },
+  "com.apple.scrod": {
+    "description": "The Screen Reader Output daemon, the output layer for VoiceOver. It manages braille displays and other screen-reader output devices.",
+    "impact": "VoiceOver braille and other screen-reader output devices will not work.",
+  },
+  # --- Advertising & Analytics ---
+  "com.apple.ecosystemagent": {
+    "description": "A user agent from the Ecosystem framework that supports analytics and feature coordination across Apple devices.",
+    "impact": "Some cross-device ecosystem features or analytics may be less reliable.",
+  },
+  # --- App & Store Related ---
+  "com.apple.appstorecomponentsd": {
+    "description": "A daemon that renders App Store components (product pages, charts, and recommendations) for apps and the App Store UI.",
+    "impact": "Embedded App Store content and some App Store screens may fail to load.",
+  },
+  "com.apple.storeassetd": {
+    "description": "A CommerceKit daemon that downloads and manages App Store assets such as product metadata and artwork.",
+    "impact": "App Store product pages, screenshots, and metadata may not load correctly.",
+  },
+  "com.apple.storelegacy": {
+    "description": "A legacy CommerceKit store daemon that supports older App Store purchase and download flows.",
+    "impact": "Legacy App Store purchase/download flows may fail. Mostly relevant for older content.",
+  },
+  "com.apple.triald": {
+    "description": "The trial daemon for the App Store. It manages trial periods and trial eligibility for apps.",
+    "impact": "App trials may not start, be tracked, or convert correctly.",
+  },
+  "com.apple.backgroundassets.user": {
+    "description": "The user-level Background Assets agent. It downloads large app assets in the background on behalf of apps and games.",
+    "impact": "Apps that use Background Assets may not download their content, leaving them incomplete.",
+  },
+  "com.apple.ndoagent": {
+    "description": "The New Device Outreach agent. It handles Apple's promotional outreach about new devices and upgrade offers.",
+    "impact": "You may not see new-device or upgrade offers. Safe to disable if you do not want them.",
+  },
+  # --- Backup & Time Machine ---
+  "com.apple.mbproximityhelper": {
+    "description": "A Setup Assistant helper used when migrating data from a nearby Mac or device over a direct connection.",
+    "impact": "Nearby-device migration during Setup Assistant may fail.",
+  },
+  # --- Calendar & Reminders ---
+  "com.apple.calendar.CalendarAgentBookmarkMigrationService": {
+    "description": "A one-time migration service that converts legacy Calendar agent bookmarks into the modern format.",
+    "impact": "Calendar account bookmarks may not migrate correctly after an upgrade.",
+  },
+  # --- Device Communication ---
+  "com.apple.AMPDeviceDiscoveryAgent": {
+    "description": "An Apple Media Products agent that discovers connected iPhone, iPad, and iPod devices for Finder/Music device sync.",
+    "impact": "Connected iOS devices may not be discovered for syncing.",
+  },
+  "com.apple.AMPDevicesAgent": {
+    "description": "The Apple Media Products device agent. It manages the connection and content sync sessions with iOS devices.",
+    "impact": "Syncing media or data with a connected iPhone/iPad may fail.",
+  },
+  "com.apple.AMPSystemPlayerAgent": {
+    "description": "An agent from the iTunesLibrary framework that handles playback and transfer of media to connected iOS devices.",
+    "impact": "Media transfer to connected iOS devices may fail.",
+  },
+  "com.apple.bluetoothaudiod": {
+    "description": "The Bluetooth audio daemon. It manages audio routing and codec handling for Bluetooth headphones and speakers.",
+    "impact": "Bluetooth audio output may fail or fall back to lower-quality codecs.",
+  },
+  "com.apple.btsa": {
+    "description": "The Bluetooth Setup Assistant. It walks users through pairing new Bluetooth devices.",
+    "impact": "The Bluetooth setup assistant may not launch when pairing new devices.",
+  },
+  "com.apple.cloudpaird": {
+    "description": "A cloud pairing daemon for audio accessories. It helps AirPods/Beats pair across devices and support Find My.",
+    "impact": "Audio accessories may not pair automatically across your devices or appear in Find My.",
+  },
+  "com.apple.facetimemessagestored": {
+    "description": "The FaceTime message store daemon. It stores and syncs FaceTime call/message data.",
+    "impact": "FaceTime call history or related data may not be stored correctly.",
+  },
+  "com.apple.mediacontinuityd": {
+    "description": "The media continuity daemon. It supports handing off media playback between devices and related Continuity media features.",
+    "impact": "Handoff of media playback between devices may not work.",
+  },
+  "com.apple.rapportd-user": {
+    "description": "The per-user Rapport (Continuity) daemon. It maintains nearby-device communication for Handoff, AirDrop, and Universal Clipboard.",
+    "impact": "Continuity features such as Handoff and Universal Clipboard may fail.",
+  },
+  "com.apple.ensemble": {
+    "description": "The Universal Control agent (code-named Ensemble). It links the keyboard, mouse, and trackpad across nearby Macs and iPads.",
+    "impact": "Universal Control between devices will not work.",
+  },
+  "com.apple.idsremoteurlconnectionagent": {
+    "description": "An IDS (Identity Services) agent that performs remote URL connections on behalf of iMessage/FaceTime identity services.",
+    "impact": "Some iMessage/FaceTime network operations may fail.",
+  },
+  "com.apple.idsfoundation.IDSRemoteURLConnectionAgent": {
+    "description": "The IDS remote URL connection agent. It performs network requests on behalf of iMessage/FaceTime identity services.",
+    "impact": "Some iMessage/FaceTime network requests may fail.",
+  },
+  "com.apple.imdpersistence.IMDPersistenceAgent": {
+    "description": "The Messages persistence agent. It writes iMessage and SMS data to the message database.",
+    "impact": "Messages may not be saved or may disappear after restarts.",
+  },
+  "com.apple.mobiledeviceupdater": {
+    "description": "Updates firmware and software on connected iOS devices (iPhone, iPad, iPod).",
+    "impact": "You may not be able to update connected iOS devices from this Mac.",
+  },
+  "com.apple.ThreadCommissionerService": {
+    "description": "The Thread Commissioner service. It manages Thread network credentials and joins Thread devices for HomeKit.",
+    "impact": "Thread-based smart home accessories may not join or stay connected.",
+  },
+  # --- Diagnostics & Logging ---
+  "com.apple.DiagnosticsReporter": {
+    "description": "The Diagnostics Reporter app. It collects and displays diagnostics for Apple support and can upload reports.",
+    "impact": "Apple support diagnostics may not be collected or shown.",
+  },
+  "com.apple.DumpPanicRecoveryOS": {
+    "description": "Saves kernel panic information when the Mac is running in RecoveryOS.",
+    "impact": "Panic logs from RecoveryOS will not be saved, making boot failures harder to diagnose.",
+  },
+  "com.apple.ReportGPURestart": {
+    "description": "A diagnostic helper that logs information when the GPU restarts unexpectedly.",
+    "impact": "GPU restart diagnostics will not be collected.",
+  },
+  "com.apple.diagnosticspushd": {
+    "description": "A daemon that uploads diagnostic reports to Apple when diagnostics sharing is enabled.",
+    "impact": "Diagnostics will not be uploaded to Apple. May be desirable for privacy.",
+  },
+  "com.apple.sysdiagnose.darwinos": {
+    "description": "A sysdiagnose variant used for DarwinOS components. It gathers low-level system diagnostics.",
+    "impact": "DarwinOS-level diagnostics may not be captured when running sysdiagnose.",
+  },
+  "com.apple.thermaltrap": {
+    "description": "A diagnostic app that captures thermal and power state information when triggered.",
+    "impact": "Thermal diagnostic captures may not be available.",
+  },
+  "com.apple.appleseed.seedusaged.postinstall": {
+    "description": "A post-install helper for the AppleSeed beta program that reports beta usage statistics.",
+    "impact": "Beta usage data will not be reported after installing a seed build.",
+  },
+  "com.apple.kdumpd": {
+    "description": "The kernel dump daemon. It saves kernel memory dumps for debugging after a panic.",
+    "impact": "Kernel core dumps will not be saved.",
+  },
+  # --- iCloud & CloudKit ---
+  "com.apple.FeatureAccessAgent": {
+    "description": "An agent from CloudSubscriptionFeatures. It checks and caches feature eligibility (for example iCloud+ and subscription features).",
+    "impact": "Some subscription or feature eligibility checks may fail or be slow.",
+  },
+  "com.apple.iCloudNotificationAgent": {
+    "description": "The iCloud notification agent. It delivers iCloud-related notifications to the user.",
+    "impact": "You may miss iCloud notifications.",
+  },
+  "com.apple.icloudwebd": {
+    "description": "The iCloud web daemon. It supports iCloud data access from the web and related account features.",
+    "impact": "Some iCloud web/account features may not work.",
+  },
+  "com.apple.findmy.findmylocateagent": {
+    "description": "The Find My locate agent. It handles location requests for Find My and shares location with permitted devices.",
+    "impact": "Find My location reporting may fail.",
+  },
+  "com.apple.appleidsetupd": {
+    "description": "The Apple ID setup daemon. It assists with the first-run Apple ID sign-in and account setup flow.",
+    "impact": "Setting up or signing in with an Apple ID during setup may fail.",
+  },
+  # --- Family & ScreenTime ---
+  "com.apple.asktod": {
+    "description": "The Ask To daemon. It processes Ask to Buy purchase requests and approvals for Family Sharing.",
+    "impact": "Ask to Buy requests and approvals may not work.",
+  },
+  "com.apple.ScreenTimeSettingsAgent": {
+    "description": "The Settings agent for Screen Time. It applies Screen Time configuration changes made in System Settings.",
+    "impact": "Screen Time settings may not apply correctly.",
+  },
+  "com.apple.macos.studentd": {
+    "description": "The macOS student daemon for managed education environments. It supports classroom and Schoolwork features.",
+    "impact": "Managed education features may not work on this Mac.",
+  },
+  "com.apple.assessmentagent": {
+    "description": "An agent used in managed education contexts to run assessments and apply assessment restrictions.",
+    "impact": "Managed assessment features may not work.",
+  },
+  # --- Filesystem & Storage ---
+  "com.apple.diskspaced": {
+    "description": "The disk space daemon. It monitors free space and triggers storage-cleanup actions when the disk fills up.",
+    "impact": "The system may not free space automatically, so the disk can fill up.",
+  },
+  "com.apple.StorageManagement.Service": {
+    "description": "The Storage Management service. It powers System Settings storage recommendations and purgeable-space calculations.",
+    "impact": "Storage recommendations and purgeable-space reporting may not work.",
+  },
+  "com.apple.StorageManagementUIHelper": {
+    "description": "The UI helper for Storage Management. It displays storage dialogs and progress for cleanup tasks.",
+    "impact": "Storage Management dialogs may not appear.",
+  },
+  "com.apple.storagede.helper": {
+    "description": "A helper for the Storage Data Engine that gathers volume and storage information for the system.",
+    "impact": "Storage details and diagnostics may be incomplete.",
+  },
+  "com.apple.xsan": {
+    "description": "The Xsan daemon. It manages Xsan storage-area-network volumes and metadata controllers.",
+    "impact": "Xsan volumes will not mount or work.",
+  },
+  "com.apple.xscertadmin": {
+    "description": "The Xsan certificate administration tool. It manages certificates used to secure Xsan metadata traffic.",
+    "impact": "You will not be able to administer Xsan certificates.",
+  },
+  "com.apple.xscertd": {
+    "description": "The Xsan certificate daemon. It distributes and validates certificates for Xsan clients and controllers.",
+    "impact": "Xsan authentication may fail.",
+  },
+  "com.apple.xscertd-helper": {
+    "description": "A helper for the Xsan certificate daemon.",
+    "impact": "Xsan certificate operations may fail.",
+  },
+  "com.apple.NVMeAgent": {
+    "description": "An agent that collects NVMe SSD health and telemetry information.",
+    "impact": "NVMe health/diagnostic information may not be collected.",
+  },
+  # --- Game Center ---
+  "com.apple.GameOverlayUI": {
+    "description": "The in-game overlay UI for Game Center, showing achievements, leaderboards, and game status.",
+    "impact": "The Game Center overlay will not appear in games.",
+  },
+  "com.apple.gamecontroller.ConfigService": {
+    "description": "The Game Controller configuration service. It applies controller mappings, profiles, and settings.",
+    "impact": "Custom controller mappings and profiles may not apply.",
+  },
+  # --- Hardware & Drivers ---
+  "com.apple.accessorysensormgrd": {
+    "description": "The accessory sensor manager. It reads sensor data from connected Apple accessories (for example motion or orientation data).",
+    "impact": "Accessory sensor features such as motion input may not work.",
+  },
+  "com.apple.audio.AudioComponentRegistrar.daemon": {
+    "description": "The system daemon for the Audio Component Registrar. It scans and registers Audio Unit plug-ins for all users.",
+    "impact": "Third-party Audio Unit plug-ins may not be discovered.",
+  },
+  "com.apple.audio.micactivityd": {
+    "description": "The system-level microphone activity daemon. It enforces microphone-in-use reporting and privacy indicators.",
+    "impact": "Microphone activity reporting and the orange privacy indicator may fail.",
+  },
+  "com.apple.centaurid": {
+    "description": "The Centauri firmware daemon. It manages firmware loading and sleep-state bookkeeping for Apple's Centauri wireless/companion chip.",
+    "impact": "Wireless/companion hardware managed by Centauri may behave incorrectly.",
+  },
+  "com.apple.CSCSupportd": {
+    "description": "The Common Smart Card support daemon. It provides smart card services (for example PIV/CAC authentication) to the system.",
+    "impact": "Smart card authentication may fail.",
+  },
+  "com.apple.colorsync.useragent": {
+    "description": "The per-user ColorSync agent. It applies display color profiles for the logged-in session.",
+    "impact": "Display color profiles may not apply correctly in the user session.",
+  },
+  "com.apple.cmio.ContinuityCaptureAgent": {
+    "description": "The Continuity Camera agent. It lets an iPhone be used as a webcam or scanner by the Mac.",
+    "impact": "Continuity Camera will not work.",
+  },
+  "com.apple.cmio.registerassistantservice": {
+    "description": "A CoreMediaIO service that registers CMIO assistant plug-ins for camera and capture devices.",
+    "impact": "Some camera/capture assistants may not load.",
+  },
+  "com.apple.cmio.videodriverkithostextension": {
+    "description": "The DriverKit host extension for video drivers. It loads user-space camera/video drivers.",
+    "impact": "Third-party or Apple DriverKit video devices may not work.",
+  },
+  "com.apple.MTLAssetUpgraderD": {
+    "description": "The Metal asset upgrader. It converts Metal shader and asset caches to the current format after OS or driver updates.",
+    "impact": "Apps may stutter or fail on first launch while their Metal shaders are rebuilt.",
+  },
+  "com.apple.ExpansionSlotNotification": {
+    "description": "A helper that reports changes in expansion slots (for example PCIe slots on Mac Pro).",
+    "impact": "Expansion-slot change notifications may not appear.",
+  },
+  "com.apple.MemorySlotNotification": {
+    "description": "A helper that reports changes in memory slots (for example on Mac Pro).",
+    "impact": "Memory-slot change notifications may not appear.",
+  },
+  "com.apple.gputoolsserviced": {
+    "description": "The GPU tools service. It supports Metal developer tools, GPU captures, and performance analysis.",
+    "impact": "GPU debugging and Metal developer tools may not work.",
+  },
+  "com.apple.lightsoutmanagementd": {
+    "description": "The Lights Out Management daemon. It supports remote power control and management on Mac Pro and server hardware.",
+    "impact": "Remote power management features will not work.",
+  },
+  "com.apple.preference.displays.MirrorDisplays": {
+    "description": "The Mirror Displays helper from the Displays preference pane. It applies display mirroring settings.",
+    "impact": "Display mirroring controls may not work from the preferences pane.",
+  },
+  "com.apple.uarppersonalizationd": {
+    "description": "The UARP personalization daemon. It fetches device-specific firmware personalization data for accessory updates.",
+    "impact": "Accessory firmware updates may fail because the image cannot be personalized.",
+  },
+  "com.apple.videoconference.camera": {
+    "description": "The AV conference daemon (avconferenced). It provides audio/video conferencing and camera capture services for FaceTime and other apps.",
+    "impact": "Video-conferencing apps may not be able to access the camera.",
+  },
+  # --- Security & Keychain ---
+  "com.apple.EscrowSecurityAlert": {
+    "description": "The escrow security alert agent. It warns when the recovery key for FileVault/iCloud Keychain escrow is missing or invalid.",
+    "impact": "You may not be warned about recovery-key escrow problems.",
+  },
+  "com.apple.prngseedd": {
+    "description": "The PRNG seed daemon. It seeds the system random number generator from the Secure Enclave at boot.",
+    "impact": "Early-boot entropy may be weaker, which can slow or weaken cryptographic operations.",
+  },
+  "com.apple.seserviced": {
+    "description": "The Secure Element service daemon. It provides applets and secure-element services for NFC, Apple Pay, and similar features.",
+    "impact": "Secure Element-backed features such as NFC and some Apple Pay operations may fail.",
+  },
+  "com.apple.security.xprotectd": {
+    "description": "The XProtect daemon. It performs background malware scanning using Apple's XProtect signatures.",
+    "impact": "Built-in malware scanning will be reduced or disabled.",
+  },
+  "com.apple.securityuploadd": {
+    "description": "The security analytics uploader. It uploads security-related analytics and telemetry to Apple.",
+    "impact": "Security telemetry will not be uploaded.",
+  },
+  "com.apple.security.DiskUnmountWatcher": {
+    "description": "A Kerberos helper that watches for disk unmounts so it can clear credentials associated with removed volumes.",
+    "impact": "Kerberos credentials on removable volumes may not be cleared promptly.",
+  },
+  "com.apple.security.FDERecoveryAgent": {
+    "description": "The FileVault recovery agent. It handles recovery-key operations and FileVault unlock support.",
+    "impact": "FileVault recovery key operations may fail.",
+  },
+  "com.apple.security.XPCKeychainSandboxCheck": {
+    "description": "An XPC service that verifies keychain sandbox access for clients.",
+    "impact": "Apps may fail keychain sandbox checks and lose keychain access.",
+  },
+  "com.apple.security.XPCTimeStampingService": {
+    "description": "An XPC time-stamping service used when signing code and timestamping requests.",
+    "impact": "Timestamped code signing operations may fail.",
+  },
+  "com.apple.LocalAuthentication.userauthd": {
+    "description": "The user authentication daemon. It evaluates Touch ID and password prompts for LocalAuthentication clients.",
+    "impact": "Touch ID and password prompts for apps may fail.",
+  },
+  "com.apple.CryptoTokenKit.ahp.agent": {
+    "description": "The per-user CryptoTokenKit authentication helper. It connects smart cards and hardware tokens to the user session.",
+    "impact": "Smart cards and hardware tokens may not work in apps.",
+  },
+  "com.apple.filevaultd": {
+    "description": "The FileVault daemon. It coordinates FileVault encryption state and unlock operations.",
+    "impact": "FileVault encryption or unlock operations may fail.",
+  },
+  "com.apple.securemessagingagent": {
+    "description": "The Secure Messaging agent. It supports encrypted/secure messaging features.",
+    "impact": "Secure messaging features may not work.",
+  },
+  "com.apple.transparencyd": {
+    "description": "The Apple Account transparency daemon. It maintains verifiable transparency data for account security.",
+    "impact": "Account transparency and verification features may fail.",
+  },
+  "com.apple.transparencyStaticKey": {
+    "description": "The transparency static key service. It manages static keys used by Apple Account transparency.",
+    "impact": "Account transparency verification may fail.",
+  },
+  "com.apple.swtransparencyd": {
+    "description": "The software transparency daemon. It verifies transparency data for software and services.",
+    "impact": "Software transparency checks may fail.",
+  },
+  "com.apple.appleaccounttransparencyd": {
+    "description": "The Apple Account transparency daemon (per-user). It verifies account transparency records in the user session.",
+    "impact": "Apple Account transparency features may not work in the user session.",
+  },
+  "com.apple.auditd": {
+    "description": "The audit daemon. It writes kernel audit records for security auditing.",
+    "impact": "Security audit logs will not be written.",
+  },
+  "com.apple.lockoutagent": {
+    "description": "The lockout agent. It enforces login lockouts after repeated failed authentication attempts.",
+    "impact": "Failed-login lockout enforcement may not work.",
+  },
+  "com.apple.locationaccessstored": {
+    "description": "The location access store. It records which apps and services are authorized to access location data.",
+    "impact": "Location permission state may not be stored correctly.",
+  },
+  "com.apple.scopedbookmarksagent.xpc": {
+    "description": "The scoped bookmark agent. It resolves security-scoped bookmarks so sandboxed apps can reopen files.",
+    "impact": "Sandboxed apps may lose access to previously bookmarked files.",
+  },
+  # --- HomeKit ---
+  "com.apple.homeeventsd": {
+    "description": "The HomeKit events daemon. It records and delivers HomeKit accessory events, triggers, and automations.",
+    "impact": "HomeKit automations and event notifications may not fire.",
+  },
+  # --- Installation & Updates ---
+  "com.apple.PackageUIKit.InstallStatus": {
+    "description": "The 'Install in Progress' UI helper. It shows progress and status for package installations.",
+    "impact": "Package install progress may not be shown.",
+  },
+  "com.apple.dt.CommandLineTools.installondemand": {
+    "description": "The on-demand installer for Apple's Command Line Tools. It prompts for and installs the developer tools when needed.",
+    "impact": "Tools that trigger an on-demand Command Line Tools install (git, clang, make) may not install.",
+  },
+  "com.apple.postupgraded": {
+    "description": "A one-shot daemon that performs post-upgrade cleanup and migration tasks after a macOS update.",
+    "impact": "Post-update cleanup tasks may not run, potentially leaving stale data.",
+  },
+  "com.apple.package-script-service": {
+    "description": "A transient service that runs package installer scripts.",
+    "impact": "Some package installers may fail to run their scripts.",
+  },
+  # --- Mgt & Development ---
+  "com.apple.RemoteDesktop": {
+    "description": "The Apple Remote Desktop agent. It allows this Mac to be controlled or observed remotely via ARD.",
+    "impact": "Apple Remote Desktop control and observation will not work.",
+  },
+  "com.apple.RemoteDesktop.agent": {
+    "description": "The per-user Apple Remote Desktop agent. It handles the user-session side of ARD sessions.",
+    "impact": "Remote Desktop sessions in the user session may fail.",
+  },
+  "com.apple.RemoteManagementAgent": {
+    "description": "The Remote Management agent. It applies management commands (MDM/ARD) in the user session.",
+    "impact": "Remote management commands may not be applied.",
+  },
+  "com.apple.ssinvitationagent": {
+    "description": "The screen-sharing invitation agent. It asks the user to accept or decline a Screen Sharing/Remote Management session.",
+    "impact": "You may not be able to accept screen-sharing invitations.",
+  },
+  "com.apple.managedappdistributionagent": {
+    "description": "The managed app distribution agent. It installs apps pushed by an MDM server.",
+    "impact": "MDM-pushed apps will not install.",
+  },
+  "com.apple.dmd.agent": {
+    "description": "The per-user Device Management daemon agent. It applies MDM commands and queries in the user session.",
+    "impact": "Some MDM commands may not be applied in the user session.",
+  },
+  "com.apple.mdmclient.daemon.runatboot": {
+    "description": "The MDM client run at boot. It connects to the MDM server early in startup to pick up pending commands.",
+    "impact": "Early-boot MDM check-ins and commands will not happen.",
+  },
+  "com.apple.dt.AutomationModeUI": {
+    "description": "The UI for Xcode's automation mode, which temporarily enables UI automation for testing.",
+    "impact": "Xcode UI tests may not be able to enable automation mode.",
+  },
+  "com.apple.dt.previewsd": {
+    "description": "The Xcode Previews daemon. It builds and serves SwiftUI previews.",
+    "impact": "Xcode Previews may not work.",
+  },
+  "com.apple.dt.previewsviewservice": {
+    "description": "The view service for Xcode Previews. It renders preview content in a separate process.",
+    "impact": "SwiftUI previews may not render.",
+  },
+  "com.apple.previewshellapp": {
+    "description": "PreviewShell, the host app used to render previews and UI snapshots for developer tools.",
+    "impact": "Some preview/pre-rendering features may not work.",
+  },
+  "com.apple.swiftuitraced": {
+    "description": "The SwiftUI tracing daemon. It collects trace data for debugging SwiftUI apps.",
+    "impact": "SwiftUI debugging and tracing will not work.",
+  },
+  # --- Networking ---
+  "com.apple.mDNSResponderHelper": {
+    "description": "The helper for mDNSResponder. It performs privileged Bonjour/mDNS tasks that the main responder cannot do itself.",
+    "impact": "Some Bonjour discovery and DNS Service Discovery features may fail.",
+  },
+  "com.apple.dhcp6d": {
+    "description": "The DHCPv6 client daemon. It obtains IPv6 addresses and configuration from DHCPv6 servers.",
+    "impact": "DHCPv6 address assignment may fail.",
+  },
+  "com.apple.sntpd": {
+    "description": "The SNTP/NTP client daemon. It synchronizes the system clock with network time servers.",
+    "impact": "The clock may drift, which can break authentication and time-sensitive operations.",
+  },
+  "com.apple.netauth.user.gui": {
+    "description": "The GUI for network authentication. It shows login prompts for network accounts.",
+    "impact": "The login UI for network accounts may not appear.",
+  },
+  "com.apple.msrpc.echosvc": {
+    "description": "The MSRPC echo service. It provides an RPC endpoint used for Windows/SMB interoperability.",
+    "impact": "Windows RPC interoperability features may not work.",
+  },
+  "com.apple.ftp-proxy": {
+    "description": "The FTP proxy helper for the pf packet filter. It allows passive FTP through the firewall.",
+    "impact": "Passive FTP may fail when the firewall is enabled.",
+  },
+  "com.apple.screensharing.agent": {
+    "description": "The Screen Sharing agent. It runs the user-session side of VNC/Screen Sharing sessions.",
+    "impact": "Screen Sharing into the user session may fail.",
+  },
+  "com.apple.screensharing.menuextra": {
+    "description": "The Screen Sharing menu extra. It provides the menu item for sharing and controlling this Mac.",
+    "impact": "The Screen Sharing menu extra may be missing.",
+  },
+  "com.apple.screensharing.MessagesAgent": {
+    "description": "The AppleVNC helper used when screen sharing is initiated through Messages.",
+    "impact": "Screen sharing via Messages may fail.",
+  },
+  "com.apple.cfnetwork.AuthBrokerAgent": {
+    "description": "The CFNetwork authentication broker agent. It handles proxy and network challenge authentication for apps.",
+    "impact": "Apps may fail to authenticate to proxies or networks.",
+  },
+  "com.apple.ftp": {
+    "description": "The FTP server wrapper.",
+    "impact": "FTP sharing will not work.",
+  },
+  "com.openssh.sshd": {
+    "description": "The SSH server (sshd) launchd wrapper. It accepts incoming SSH connections when Remote Login is enabled.",
+    "impact": "Remote Login (SSH) will not work.",
+  },
+  "com.openssh.ssh-agent": {
+    "description": "The OpenSSH agent. It holds private keys for SSH authentication and answers signing requests.",
+    "impact": "SSH keys added to the agent will not be available for passwordless login.",
+  },
+  "org.apache.httpd": {
+    "description": "The Apache HTTP server. It serves websites when Web Sharing is configured.",
+    "impact": "The built-in Apache web server will not start.",
+  },
+  "org.net-snmp.snmpd": {
+    "description": "The Net-SNMP daemon. It provides SNMP monitoring and management for this Mac.",
+    "impact": "SNMP monitoring will not work.",
+  },
+  "org.openldap.slapd": {
+    "description": "The OpenLDAP slapd server. It can serve directory data over LDAP.",
+    "impact": "An LDAP directory served by this Mac will not work.",
+  },
+  "org.cups.cups-lpd": {
+    "description": "The CUPS line printer daemon. It accepts legacy LPD print jobs.",
+    "impact": "Legacy LPD printing to this Mac will not work.",
+  },
+  "com.apple.tftpd": {
+    "description": "The TFTP server. It serves files over Trivial FTP for network boot and device provisioning.",
+    "impact": "TFTP file transfers will not work.",
+  },
+  "com.apple.uucp": {
+    "description": "The legacy UUCP daemon (uucico). It handles Unix-to-Unix Copy file transfers and remote execution.",
+    "impact": "Legacy UUCP transfers will not work. Not relevant for most users.",
+  },
+  "com.apple.ntalkd": {
+    "description": "The legacy talk daemon. It supports the old Unix talk protocol.",
+    "impact": "Legacy talk requests will not work. Not relevant for most users.",
+  },
+  "com.apple.getty": {
+    "description": "The getty daemon. It provides text console login prompts on ttys.",
+    "impact": "Text console logins may not be available.",
+  },
+  # --- Power Management ---
+  "com.apple.PerfPowerServices": {
+    "description": "The performance and power services daemon. It collects detailed power/performance telemetry for diagnostics and optimization.",
+    "impact": "Power and performance telemetry will not be collected.",
+  },
+  "com.apple.PerfPowerServicesExtended": {
+    "description": "The extended performance and power services daemon. It collects additional long-term telemetry.",
+    "impact": "Extended power/performance telemetry will not be collected.",
+  },
+  "com.apple.PowerUIAgent": {
+    "description": "The power UI agent. It shows battery, charging, and low-power alerts and manages related UI.",
+    "impact": "Battery and power notifications may not appear.",
+  },
+  "com.apple.peakpowermanagerd": {
+    "description": "The peak power manager daemon. It caps short-term CPU/GPU power draw to protect the power supply and manage thermals.",
+    "impact": "The system may allow power spikes that trigger throttling or shutdowns.",
+  },
+  "com.apple.powerexperienced": {
+    "description": "The power experience daemon. It adapts power behavior and collects data for battery/energy optimization.",
+    "impact": "Adaptive power management may be less effective.",
+  },
+  "com.apple.powerchime": {
+    "description": "The power chime app. It plays the chime when the charger is connected.",
+    "impact": "The charger-connect chime will not play.",
+  },
+  # --- Photos & Media ---
+  "com.apple.sportsd": {
+    "description": "The sports daemon. It fetches sports scores and schedules for the TV and News apps.",
+    "impact": "Sports scores and schedules may not update.",
+  },
+  "com.apple.replayd": {
+    "description": "The ReplayKit daemon. It handles screen recording and broadcast features for apps and games.",
+    "impact": "Screen recording and game broadcast features may not work.",
+  },
+  "com.apple.voicememod": {
+    "description": "The Voice Memos daemon. It manages voice memo recordings and their metadata.",
+    "impact": "Voice Memos may not record or manage recordings correctly.",
+  },
+  "com.apple.mobiletimerd": {
+    "description": "The timer daemon for the Clock app. It runs timers and alarms.",
+    "impact": "Timers and alarms may not fire.",
+  },
+  "com.apple.MENotificationAgent": {
+    "description": "The notification agent for MediaExtension. It displays prompts and notifications for media extensions.",
+    "impact": "Notifications about media extensions may not appear.",
+  },
+  "com.apple.sociallayerd": {
+    "description": "The SocialLayer daemon. It provides shared links and social content in Messages and other apps.",
+    "impact": "Shared links and social content may not appear.",
+  },
+  "com.apple.stickersd": {
+    "description": "The Stickers daemon. It provides sticker data and sticker pickers to Messages and other apps.",
+    "impact": "Stickers may not appear or sync.",
+  },
+  # --- Proactive & Intelligence ---
+  "com.apple.ModelCatalogAgent": {
+    "description": "The Model Catalog agent. It manages the on-device catalog of available machine-learning models.",
+    "impact": "ML-backed features may not find or update their models.",
+  },
+  "com.apple.milod": {
+    "description": "The MicroLocation daemon. It learns fine-grained location context from nearby signals for proactive features.",
+    "impact": "Micro-location based suggestions may not work.",
+  },
+  "com.apple.mlhostd": {
+    "description": "The machine-learning host daemon. It hosts Core ML models for other processes.",
+    "impact": "Apps and system features that use hosted ML models may fail.",
+  },
+  "com.apple.mlruntimed": {
+    "description": "The machine-learning runtime daemon. It executes ML models on behalf of clients.",
+    "impact": "ML-backed features may fail to run.",
+  },
+  "com.apple.intelligencetasksd": {
+    "description": "The intelligence tasks daemon. It schedules and runs on-device intelligence tasks.",
+    "impact": "On-device intelligence features may not run.",
+  },
+  "com.apple.siriinferenced": {
+    "description": "The Siri inference daemon. It runs on-device inference for Siri and related intelligence features.",
+    "impact": "Siri and other on-device intelligence features may not work.",
+  },
+  "com.apple.proactived": {
+    "description": "The proactive daemon. It coordinates proactive suggestions and predictions.",
+    "impact": "Proactive suggestions may not appear.",
+  },
+  "com.apple.reversetemplated": {
+    "description": "The CoreSuggestions reverse-templating service. It extracts structured data from text for suggestions.",
+    "impact": "Suggestions from mail/messages content may be less accurate.",
+  },
+  "com.apple.searchtoold": {
+    "description": "The OmniSearch tool daemon. It supports Spotlight/OmniSearch queries and ranking.",
+    "impact": "Search results may be incomplete or slower.",
+  },
+  "com.apple.spotlightknowledged.importer": {
+    "description": "The Spotlight knowledge importer. It imports data into the on-device knowledge store for search and Siri.",
+    "impact": "Spotlight and Siri knowledge results may be less complete.",
+  },
+  "com.apple.spotlightknowledged.updater": {
+    "description": "The Spotlight knowledge updater. It keeps the on-device knowledge store current.",
+    "impact": "Spotlight and Siri knowledge results may become stale.",
+  },
+  "com.apple.peopled": {
+    "description": "The People daemon. It finds and suggests people from contacts, mail, and messages for sharing and Siri.",
+    "impact": "People suggestions in sharing sheets and Siri may not work.",
+  },
+  "com.apple.contacts.donation-agent": {
+    "description": "The contacts donation agent. It donates contact information to Spotlight and Siri for search and suggestions.",
+    "impact": "Contacts may not appear in Spotlight/Siri suggestions.",
+  },
+  "com.apple.biomesyncd": {
+    "description": "The Biome sync daemon. It syncs on-device behavioral data used by proactive and intelligence features.",
+    "impact": "Behavioral data will not sync, reducing proactive feature quality.",
+  },
+  # --- Safari & WebKit ---
+  "com.apple.Safari.SafeBrowsing.Service": {
+    "description": "The Safari Safe Browsing service. It checks URLs against Apple/Google safe-browsing lists to block malicious sites.",
+    "impact": "Safari will not warn about or block known malicious websites.",
+  },
+  # --- Siri & Dictation ---
+  "com.apple.assistant_cdmd": {
+    "description": "The Siri continuous dialog manager daemon. It manages multi-turn Siri conversations.",
+    "impact": "Multi-turn Siri conversations may not work.",
+  },
+  "com.apple.speech.speechsynthesisd.arm64": {
+    "description": "The Apple Silicon build of the speech synthesis daemon.",
+    "impact": "Text-to-speech may fail on Apple Silicon if this architecture-specific job is missing.",
+  },
+  # --- System Core ---
+  "com.apple.coredatad": {
+    "description": "The Core Data daemon. It supports Core Data stores, including CloudKit mirroring.",
+    "impact": "Apps using Core Data with CloudKit may fail to sync.",
+  },
+  "com.apple.datastored": {
+    "description": "The XPC data store daemon. It publishes and manages data-store endpoints for system frameworks.",
+    "impact": "Some system frameworks may fail to access their data stores.",
+  },
+  "com.apple.accounts.dom": {
+    "description": "The accounts daemon (DOM variant). It maintains account data for the system.",
+    "impact": "Some account-management features may fail.",
+  },
+  "com.apple.linkd": {
+    "description": "The link index daemon. It maintains the shared index used to resolve app links and related metadata.",
+    "impact": "Universal Links and some app-link resolution may fail.",
+  },
+  "com.apple.xtyped": {
+    "description": "The XType/font daemon (the successor to fontd). It activates and manages fonts for the user session and system.",
+    "impact": "Some text/font services may not work.",
+  },
+  "com.apple.kcgend": {
+    "description": "The KernelCGEvent daemon. It delivers low-level kernel events to user space.",
+    "impact": "Low-level kernel event delivery may be impaired.",
+  },
+  "com.apple.atrun": {
+    "description": "The at-job runner. It executes jobs scheduled with the at command.",
+    "impact": "Jobs scheduled with at will not run.",
+  },
+  "com.apple.toolkitd": {
+    "description": "The App Intents toolkit daemon. It indexes and resolves App Intents metadata for Shortcuts and Siri.",
+    "impact": "Shortcuts and Siri may not discover app actions.",
+  },
+  "com.apple.uikitsystemapp": {
+    "description": "UIKitSystem, the host app that runs UIKit apps and system UI on macOS.",
+    "impact": "UIKit-based apps and some system UI may fail to run.",
+  },
+  "com.apple.AEServer": {
+    "description": "The Apple Event Program-to-Program Communication server (AEServer). It routes Apple Events between processes.",
+    "impact": "AppleScript and Apple Event automation may fail.",
+  },
+  "com.apple.jetsamproperties.Mac": {
+    "description": "A property list (not a runnable service) that defines Jetsam memory limits for macOS.",
+    "impact": "Jetsam memory limits may fall back to defaults, changing memory-pressure behavior.",
+  },
+  "com.apple.loginwindow.LWWeeklyMessageTracer": {
+    "description": "The loginwindow weekly analytics helper. It reports weekly login/window-server statistics.",
+    "impact": "Weekly login analytics will not be reported.",
+  },
+  "com.apple.UserEventAgent-CryptexContainer": {
+    "description": "A UserEventAgent instance for cryptex containers. It routes system events inside the cryptex environment.",
+    "impact": "Some events inside cryptex containers may not be handled.",
+  },
+  "com.apple.UserEventAgent-LoginWindow": {
+    "description": "A UserEventAgent instance for the login window. It routes events before a user logs in.",
+    "impact": "Some login-window events may not be handled.",
+  },
+  # --- Undocumented ---
+  "com.apple.ctcategories.service": {
+    "description": "The CT categories service. It manages category data for CoreTelephony-style services.",
+    "impact": "Some telephony/communication categorization features may not work.",
+  },
+  # --- Text & Input ---
+  "com.apple.textcomposerd": {
+    "description": "The text composer daemon. It composes and transforms text for input methods and writing tools.",
+    "impact": "Text composition and writing tools may not work.",
+  },
+  "com.apple.translationd": {
+    "description": "The translation daemon. It provides on-device and server translation for apps and system text.",
+    "impact": "Translation features will not work.",
+  },
+  "com.apple.DataDetectorsLocalSources": {
+    "description": "A helper that supplies local data-detector sources (dates, addresses, phone numbers) to apps.",
+    "impact": "Data detection in text may fail.",
+  },
+  "com.apple.CharacterPicker.FileService": {
+    "description": "The Character Viewer file service. It supplies character/emoji data to the picker.",
+    "impact": "The Character Viewer may not show all characters or emoji.",
+  },
+  "com.apple.CharacterPicker.RemoteGenerationViewService": {
+    "description": "The remote view service that renders characters and emoji for the Character Viewer.",
+    "impact": "Character/emoji previews may not render.",
+  },
+  "com.apple.fontd.useragent": {
+    "description": "The per-user font daemon. It activates and manages fonts for the logged-in user.",
+    "impact": "User-installed fonts may not be available to apps.",
+  },
+  "com.apple.FontValidator": {
+    "description": "A validation tool for fonts. It checks fonts for corruption and policy compliance.",
+    "impact": "Invalid fonts may not be detected before use.",
+  },
+  "com.apple.FontRegistryUIAgent": {
+    "description": "The Font Registry UI agent. It shows font activation and registration dialogs.",
+    "impact": "Font activation dialogs may not appear.",
+  },
+  # --- User Interface & Windowing ---
+  "com.apple.Dock": {
+    "description": "The Dock process. It draws and manages the Dock, app icons, and window minimization.",
+    "impact": "The Dock will disappear and window management from the Dock will stop.",
+  },
+  "com.apple.AquaAppearanceHelper": {
+    "description": "A helper for the Aqua appearance system. It applies theme colors and appearance settings for the window server.",
+    "impact": "System appearance and accent colors may not apply correctly.",
+  },
+  "com.apple.AquaAppearanceHelper.agent": {
+    "description": "The per-user Aqua appearance agent. It applies appearance settings in the user session.",
+    "impact": "Appearance changes may not take effect for the user.",
+  },
+  "com.apple.SystemUIServer": {
+    "description": "The SystemUIServer process. It runs the menu bar status items such as Wi-Fi, battery, and the clock.",
+    "impact": "Menu bar status icons may disappear.",
+  },
+  "com.apple.WindowManager": {
+    "description": "The WindowManager app. It provides Stage Manager and window tiling/management features.",
+    "impact": "Stage Manager and window management features will not work.",
+  },
+  "com.apple.Spotlight": {
+    "description": "The Spotlight menu process. It shows the Spotlight search field and results in the menu bar.",
+    "impact": "Spotlight search from the menu bar will not work.",
+  },
+  "com.apple.notificationcenterui": {
+    "description": "The Notification Center UI process. It draws notifications, widgets, and the Notification Center panel.",
+    "impact": "Notifications and widgets will not be displayed.",
+  },
+  "com.apple.UserNotificationCenterAgent-LoginWindow": {
+    "description": "The Notification Center agent for the login window. It shows notifications before login.",
+    "impact": "Notifications at the login window may not appear.",
+  },
+  "com.apple.screencaptureui.agent": {
+    "description": "The screenshot UI agent. It provides the screenshot and screen-recording interface (Cmd+Shift+5).",
+    "impact": "The screenshot interface may not open.",
+  },
+  "com.apple.wallpaper": {
+    "description": "The WallpaperAgent process. It displays and manages the desktop wallpaper and dynamic wallpapers.",
+    "impact": "Wallpapers may not display or change.",
+  },
+  "com.apple.ScriptMenuApp": {
+    "description": "The Script Menu extra. It provides the menu bar Scripts menu.",
+    "impact": "The Scripts menu will not appear.",
+  },
+  "com.apple.ServicesUIAgent": {
+    "description": "The Services UI agent. It provides the Services menu and service-related UI.",
+    "impact": "The Services menu and many app services may not work.",
+  },
+  "com.apple.OSDUIHelper": {
+    "description": "The on-screen display helper. It draws volume, brightness, and other HUD overlays.",
+    "impact": "Volume/brightness HUDs and similar on-screen overlays will not appear.",
+  },
+  "com.apple.PIPAgent": {
+    "description": "The Picture-in-Picture agent. It manages the PiP window and controls.",
+    "impact": "Picture-in-Picture video will not work.",
+  },
+  "com.apple.nowplayingtouchui": {
+    "description": "The Now Playing UI for the Touch Bar. It shows media controls on the Touch Bar.",
+    "impact": "Media controls on the Touch Bar may not appear.",
+  },
+  "com.apple.PosterBoard": {
+    "description": "The PosterBoard UI process. It renders the lock screen and poster-style background content.",
+    "impact": "Lock-screen/poster UI may not render correctly.",
+  },
+  "com.apple.FollowUpUI": {
+    "description": "The Follow Up UI. It presents Follow Up items (for example in Mail) to the user.",
+    "impact": "Follow Up items may not be shown.",
+  },
+  "com.apple.menuextra.battery.helper": {
+    "description": "The battery menu extra helper. It supplies battery status to the menu bar item.",
+    "impact": "The battery menu extra may not display status correctly.",
+  },
+  "com.apple.TextInputUI.xpc.CursorUIViewService": {
+    "description": "The cursor UI view service for text input. It draws the text cursor and related input UI.",
+    "impact": "The text cursor or input UI may not render.",
+  },
+  "com.apple.quicklook.ui.helper": {
+    "description": "The Quick Look UI helper. It displays the Quick Look preview window.",
+    "impact": "Quick Look previews may not open.",
+  },
+  "com.apple.FolderActionsDispatcher": {
+    "description": "The Folder Actions dispatcher. It runs Folder Action scripts when folders change.",
+    "impact": "Folder Actions will not run.",
+  },
+  "com.apple.appkit.xpc.ColorSampler": {
+    "description": "The AppKit color sampler service. It provides the magnifier color picker used by color panels and Digital Color Meter.",
+    "impact": "The on-screen color picker may not work.",
+  },
+  # --- Third-Party ---
+  "com.google.GoogleUpdater.wake.system": {
+    "description": "Google Updater wake daemon. It periodically wakes to check for and install updates to Google applications.",
+    "impact": "Google apps such as Chrome will not update automatically.",
+  },
+  "com.google.keystone.agent": {
+    "description": "The Google Keystone agent (user). It checks for updates to Google applications.",
+    "impact": "Google apps will not update automatically for this user.",
+  },
+  "com.google.keystone.daemon": {
+    "description": "The Google Keystone daemon (system). It performs privileged update tasks for Google software.",
+    "impact": "Google software updates may fail to install.",
+  },
+  "com.google.keystone.xpcservice": {
+    "description": "The Google Keystone XPC service. It supports update tasks for Google software.",
+    "impact": "Google software update tasks may fail.",
+  },
+  "us.zoom.ZoomDaemon": {
+    "description": "The Zoom daemon. It is a privileged helper used by Zoom for system-level features.",
+    "impact": "Some Zoom features (installation, sharing, or updates) may not work.",
+  },
+  "us.zoom.updater": {
+    "description": "The Zoom updater agent. It checks for and installs Zoom updates.",
+    "impact": "Zoom will not update automatically.",
+  },
+  "us.zoom.updater.login.check": {
+    "description": "The Zoom updater login check agent. It checks for updates at login.",
+    "impact": "Zoom updater checks at login will not run.",
+  },
+  "Adobe_Genuine_Software_Integrity_Service": {
+    "description": "The Adobe Genuine Software Integrity Service. It verifies that installed Adobe apps are genuine and licensed.",
+    "impact": "Adobe apps may report licensing problems or refuse to launch.",
+  },
+  "com.docker.socket": {
+    "description": "The Docker Desktop socket helper. It manages the Docker daemon socket and related privileged networking.",
+    "impact": "Docker Desktop may not be able to start or communicate with its daemon.",
+  },
+  "com.docker.vmnetd": {
+    "description": "The Docker Desktop VM networking daemon. It sets up networking for Docker virtual machines.",
+    "impact": "Docker containers may have no network connectivity.",
+  },
+  "com.figma.daemon": {
+    "description": "The Figma daemon. It supports Figma desktop features such as local font access and deep links.",
+    "impact": "Some Figma desktop features may not work.",
+  },
+  "com.macpaw.CleanMyMac-setapp.HealthMonitor": {
+    "description": "The CleanMyMac Health Monitor agent from Setapp. It monitors system health for the CleanMyMac app.",
+    "impact": "CleanMyMac health monitoring may not work.",
+  },
+  "com.postgresapp.Postgres2LoginHelper": {
+    "description": "The Postgres.app login helper. It helps Postgres.app set up its environment at login.",
+    "impact": "Postgres.app helper tasks may not run at login.",
+  },
+  "homebrew.mxcl.redis": {
+    "description": "The Homebrew-managed Redis server service. It runs a local Redis instance.",
+    "impact": "The local Redis server will not start.",
+  },
+  # --- Third-Party ---
+  "com.appfactory.core": {
+    "description": "The AppLab Core helper from AppFactory. It runs the AppFactory/AppLab development environment.",
+    "impact": "AppFactory/AppLab projects may not launch or build.",
+  },
+  # --- User Interface & Windowing ---
+  "com.apple.LinkedNotesUIService": {
+    "description": "The PaperKit linked-notes UI service. It renders linked notes and markup previews inside documents.",
+    "impact": "Linked notes and markup previews may not render.",
+  },
+  "com.apple.SpacesTouchBarAgent.app": {
+    "description": "The Spaces agent app for the Touch Bar. It shows Mission Control and Spaces controls on the Touch Bar.",
+    "impact": "Spaces controls on the Touch Bar will not work.",
+  },
+  "com.apple.liveactivitiesd": {
+    "description": "The Live Activities daemon (SessionKit/ActivityKit). It manages Live Activities and their updates on the Mac.",
+    "impact": "Live Activities may not start or update.",
+  },
+  # --- Installation & Updates ---
+  "com.apple.inboxupdaterd": {
+    "description": "The Mobile Inbox Updater daemon. It installs preinstalled 'inbox' assets during macOS updates.",
+    "impact": "Some preinstalled assets may not be updated during an OS update.",
+  },
+  "com.apple.jetpackassetd": {
+    "description": "The Jet asset daemon. It downloads and manages JetPack assets used by Apple's store and service UIs.",
+    "impact": "Store-related artwork and UI assets may not load.",
+  },
+  # --- Diagnostics & Logging ---
+  "com.apple.feedbackd": {
+    "description": "The Feedback Assistant daemon. It collects and submits feedback and diagnostic reports to Apple.",
+    "impact": "Feedback Assistant reports may not be collected or submitted.",
+  },
+  "com.apple.symptomsd-diag.agent": {
+    "description": "The diagnostics symptoms agent. It collects and reports network and system symptoms for diagnostics.",
+    "impact": "Diagnostic symptom reports may not be collected.",
+  },
+  "com.apple.symptomsd.distributed-agent": {
+    "description": "The distributed symptoms agent. It gathers symptoms from other processes for system diagnostics.",
+    "impact": "Distributed diagnostic symptom reporting may fail.",
+  },
+  # --- System Core ---
+  "com.apple.AddressBook.AssistantService": {
+    "description": "The Address Book assistant service (ABAssistantService). It provides assistant and automation support for Contacts.",
+    "impact": "Contacts-related assistant features may fail.",
+  },
+  "com.apple.AddressBook.abd": {
+    "description": "The Address Book manager daemon. It manages the central Contacts database.",
+    "impact": "Contacts may not be available or may stop syncing.",
+  },
+  "com.apple.MailServiceAgent": {
+    "description": "The Mail service agent. It performs background Mail tasks such as rules processing and junk-mail handling.",
+    "impact": "Mail background processing may fail.",
+  },
+  "com.apple.email.maild": {
+    "description": "The Mail daemon from the EmailDaemon framework. It manages mail accounts, messages, and background fetching.",
+    "impact": "Mail may not fetch, send, or update messages.",
+  },
+  "com.apple.csuseragent": {
+    "description": "The CoreServices user agent. It registers and launches user-level CoreServices helper applications.",
+    "impact": "Some CoreServices helper apps may not launch.",
+  },
+  "com.apple.usernoted": {
+    "description": "The user notification daemon. It delivers notifications to Notification Center and apps.",
+    "impact": "Notifications may not be delivered.",
+  },
+  "com.apple.usernotificationsd": {
+    "description": "The UserNotificationsCore daemon. It provides the core notification service used by apps and the system.",
+    "impact": "Notifications and notification-related APIs may fail.",
+  },
+  "com.apple.systemsettingsagent": {
+    "description": "The System Settings agent. It applies settings changes and secure-pairing state for System Settings.",
+    "impact": "Some System Settings changes may not apply.",
+  },
+  "com.apple.syncdefaultsd": {
+    "description": "The SyncedDefaults daemon. It syncs app preferences through iCloud key-value storage.",
+    "impact": "App settings may not sync between devices.",
+  },
+  "com.apple.syncservices.SyncServer": {
+    "description": "The legacy Sync Services server. It supports older sync schemas and clients.",
+    "impact": "Legacy sync clients may not synchronize. Modern macOS uses CloudKit instead.",
+  },
+  "com.apple.warmd_agent": {
+    "description": "The per-user warmd agent. It tracks login-session exit and warm-cache state at logout.",
+    "impact": "Warm-cache cleanup at logout may not run correctly.",
+  },
+  "com.apple.pluginkit.pkreporter": {
+    "description": "The PlugInKit reporter. It reports plug-in and extension state to the system.",
+    "impact": "Plug-in diagnostics and state reporting may be incomplete.",
+  },
+  # --- Device Communication ---
+  "com.apple.businessservicesd": {
+    "description": "The Business Chat daemon. It supports Messages for Business conversations.",
+    "impact": "Messages for Business may not work.",
+  },
+  "com.apple.coreservices.UASharedPasteboardProgressUI": {
+    "description": "The Universal Clipboard progress UI. It shows transfer progress when a large clipboard item moves between nearby devices.",
+    "impact": "Universal Clipboard transfer progress may not appear.",
+  },
+  "com.apple.nexusd": {
+    "description": "The Nexus daemon. It manages nearby-device connections used by Continuity and handoff features.",
+    "impact": "Nearby-device Continuity features may not work.",
+  },
+  # --- iCloud & CloudKit ---
+  "com.apple.contacts.postersyncd": {
+    "description": "The Contacts poster sync daemon. It syncs Contact Posters across your devices.",
+    "impact": "Contact Posters may not sync between devices.",
+  },
+  "com.apple.StatusKitAgent": {
+    "description": "The StatusKit agent. It shares user status such as Focus across your Apple devices.",
+    "impact": "Focus status sharing across devices may not work.",
+  },
+  "com.apple.bookdatastored": {
+    "description": "The BookDataStore daemon. It stores and syncs Books data such as reading position and library state.",
+    "impact": "Books data may not be stored or synced.",
+  },
+  # --- Filesystem & Storage ---
+  "com.apple.STMUIHelper": {
+    "description": "The Storage Management UI helper. It shows dialogs and progress for storage cleanup and optimization.",
+    "impact": "Storage Management dialogs may not appear.",
+  },
+  "com.apple.FilesystemUI": {
+    "description": "The File System UI agent. It displays filesystem-related alerts, such as unreadable or damaged disk warnings.",
+    "impact": "Filesystem warning dialogs may not appear.",
+  },
+  "com.apple.metadata.mdwrite": {
+    "description": "The Spotlight metadata writer. It writes metadata attributes to files so Spotlight can index them.",
+    "impact": "Spotlight metadata may not be written, making search results incomplete.",
+  },
+  "com.apple.coreimportd": {
+    "description": "The Spotlight core importer. It imports metadata from files and stores it in the Spotlight index.",
+    "impact": "New or changed files may not appear in Spotlight search.",
+  },
+  # --- Hardware & Drivers ---
+  "com.apple.MobileAccessoryUpdater.fudHelperAgent": {
+    "description": "The firmware update helper agent for MobileAccessoryUpdater. It assists with firmware updates for connected Apple accessories.",
+    "impact": "Accessory firmware updates may fail.",
+  },
+  "com.apple.mobilerepaird": {
+    "description": "The CoreRepair daemon. It manages parts pairing, repair status, and repair follow-ups for Apple device repairs.",
+    "impact": "Repair status and parts-pairing information may not work.",
+  },
+  "com.apple.firmwaresyncd": {
+    "description": "The firmware sync daemon (part of bless). It synchronizes boot firmware data to the startup volume.",
+    "impact": "Boot firmware updates or firmware stamps may not be applied correctly.",
+  },
+  "com.apple.arkitd": {
+    "description": "The ARKit daemon. It provides augmented-reality tracking and sensor services to ARKit apps.",
+    "impact": "ARKit-based apps and features may not work.",
+  },
+  "com.apple.remotecompositorclientd": {
+    "description": "The remote compositor client daemon (WakeBoard/CompositorServices). It supports remote compositor sessions such as Mac Virtual Display.",
+    "impact": "Remote display and virtual-display features may not work.",
+  },
+  "com.apple.icdd": {
+    "description": "The Image Capture daemon. It detects and communicates with cameras and scanners.",
+    "impact": "Image Capture may not detect cameras or scanners.",
+  },
+  "com.apple.printtool.agent": {
+    "description": "The print tool agent from PrintCore. It handles print-job processing and printer communication.",
+    "impact": "Printing may fail or print jobs may hang.",
+  },
+  "com.apple.printuitool.agent": {
+    "description": "The Print UI tool agent. It displays printing dialogs and manages print options.",
+    "impact": "Print dialogs and print options may not work.",
+  },
+  "com.apple.cvmsCompAgent3425AMD_x86_64": {
+    "description": "An OpenGL shader compiler agent for the AMD 3425 GPU family. It precompiles shaders used by OpenGL apps.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent3425AMD_x86_64_1": {
+    "description": "A second instance of the OpenGL shader compiler agent for the AMD 3425 GPU family.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent3600_arm64": {
+    "description": "An OpenGL shader compiler agent for the 3600 GPU family on Apple Silicon. It precompiles OpenGL shaders.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent3600_arm64_1": {
+    "description": "A second instance of the OpenGL shader compiler agent for the 3600 GPU family on Apple Silicon.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent3600_x86_64": {
+    "description": "An OpenGL shader compiler agent for the 3600 GPU family on Intel Macs. It precompiles OpenGL shaders.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent3600_x86_64_1": {
+    "description": "A second instance of the OpenGL shader compiler agent for the 3600 GPU family on Intel Macs.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent_arm64": {
+    "description": "The OpenGLES shader compiler agent for Apple Silicon. It precompiles OpenGLES shaders.",
+    "impact": "OpenGLES apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent_arm64_1": {
+    "description": "A second instance of the OpenGLES shader compiler agent for Apple Silicon.",
+    "impact": "OpenGLES apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent_x86_64": {
+    "description": "The OpenGL shader compiler agent for Intel Macs. It precompiles OpenGL shaders.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  "com.apple.cvmsCompAgent_x86_64_1": {
+    "description": "A second instance of the OpenGL shader compiler agent for Intel Macs.",
+    "impact": "OpenGL apps may compile shaders on first use, causing slower launches.",
+  },
+  # --- Photos & Media ---
+  "com.apple.avatarsd": {
+    "description": "The avatar persistence daemon. It stores and manages Memoji and other avatar data.",
+    "impact": "Memoji and avatar data may not persist.",
+  },
+  # --- Maps & Location ---
+  "com.apple.CoreLocationAgent": {
+    "description": "The Core Location agent. It provides location data and location-based services to apps in the user session.",
+    "impact": "Apps may not be able to determine your location.",
+  },
+  "com.apple.Maps.mapssyncd": {
+    "description": "The MapsSync daemon. It syncs Maps data such as favorites, recents, and guides across devices.",
+    "impact": "Maps favorites and recent places may not sync.",
+  },
+  "com.apple.geodMachServiceBridge": {
+    "description": "The GeoServices Mach service bridge. It connects apps to the geod location and mapping services.",
+    "impact": "Location and mapping services may fail to connect.",
+  },
+  # --- Mgt & Development ---
+  "com.apple.CoreDevice.remotepairingd": {
+    "description": "The CoreDevice remote pairing daemon. It pairs this Mac with development devices for Xcode and device management.",
+    "impact": "Xcode and developer tools may not be able to pair with devices.",
+  },
+  "com.apple.ManagedClient.startup": {
+    "description": "The ManagedClient startup agent. It applies managed preferences and legacy management settings at login.",
+    "impact": "Managed preferences may not be applied.",
+  },
+  "com.apple.ManagedClientAgent.enrollagent": {
+    "description": "The ManagedClient enrollment agent. It enrolls the Mac in device management and processes enrollment profiles.",
+    "impact": "Automatic MDM enrollment may fail.",
+  },
+  # --- Networking ---
+  "com.apple.AirPortBaseStationAgent": {
+    "description": "The AirPort Base Station Agent. It discovers and manages AirPort base stations and Time Capsules.",
+    "impact": "AirPort base stations cannot be configured or monitored from this Mac.",
+  },
+  "com.apple.bootpd": {
+    "description": "The BOOTP/DHCP server daemon. It provides legacy network boot and DHCP services.",
+    "impact": "Legacy BOOTP/DHCP serving will not work.",
+  },
+  "com.apple.odproxyd": {
+    "description": "The Open Directory proxy daemon. It proxies directory-service requests to Open Directory and LDAP servers.",
+    "impact": "Directory authentication and lookups may fail.",
+  },
+  "com.apple.wifi.WiFiAgent": {
+    "description": "The Wi-Fi agent. It provides the Wi-Fi menu and user-session Wi-Fi management.",
+    "impact": "The Wi-Fi menu and user-session Wi-Fi controls may not work.",
+  },
+  # --- Proactive & Intelligence ---
+  "com.apple.corespotlightd": {
+    "description": "The CoreSpotlight daemon. It manages the Spotlight index and answers search queries.",
+    "impact": "Spotlight search results may be incomplete or unavailable.",
+  },
+  "com.apple.corespotlightservice": {
+    "description": "The CoreSpotlight service. It indexes app content for Spotlight search.",
+    "impact": "Content from apps may not appear in Spotlight results.",
+  },
+  "com.apple.managedcorespotlightd": {
+    "description": "The managed CoreSpotlight daemon. It indexes managed content for Spotlight while respecting management restrictions.",
+    "impact": "Managed content may not appear in Spotlight search.",
+  },
+  "com.apple.mdworker.application": {
+    "description": "A Spotlight metadata worker for application content. It extracts metadata from app bundles and documents.",
+    "impact": "Some application content may not be indexed for Spotlight.",
+  },
+  "com.apple.mdworker.single.arm64": {
+    "description": "A single-process Spotlight metadata worker for Apple Silicon. It extracts metadata from files for indexing.",
+    "impact": "Some files may not be indexed for Spotlight.",
+  },
+  "com.apple.mdworker.single.x86_64": {
+    "description": "A single-process Spotlight metadata worker for Intel Macs. It extracts metadata from files for indexing.",
+    "impact": "Some files may not be indexed for Spotlight.",
+  },
+  "com.apple.mdworker.sizing": {
+    "description": "A Spotlight metadata worker that calculates file sizes and related attributes for indexing.",
+    "impact": "File-size metadata in Spotlight may be incomplete.",
+  },
+  "com.apple.ciphermld": {
+    "description": "The CipherML daemon. It runs privacy-preserving machine-learning operations on encrypted data.",
+    "impact": "Privacy-preserving ML features may not work.",
+  },
+  # --- Security & Keychain ---
+  "com.apple.TrustEvaluationAgent": {
+    "description": "The trust evaluation agent. It evaluates certificate and TLS trust for apps and system services.",
+    "impact": "Certificate trust evaluation may fail, breaking secure connections.",
+  },
+  "com.apple.AuthenticationServicesCore.AuthenticationServicesAgent": {
+    "description": "The AuthenticationServices agent. It supports passkeys, password autofill, and sign-in with Apple in apps.",
+    "impact": "Passkeys, password autofill, and Sign in with Apple may fail.",
+  },
+  "com.apple.AutoFillPanel": {
+    "description": "The AutoFill panel service. It displays saved-password and passkey suggestions in apps and browsers.",
+    "impact": "Autofill suggestions may not appear.",
+  },
+  "com.apple.PasswordService": {
+    "description": "The password service. It provides saved-password and credential services to Safari and other apps.",
+    "impact": "Saved-password features may fail.",
+  },
+  "com.apple.XProtect.agent.scan.startup": {
+    "description": "The XProtect on-demand scan agent. It performs a malware scan at startup.",
+    "impact": "The startup malware scan will not run.",
+  },
+  "com.apple.communicationtrustd": {
+    "description": "The communication trust daemon. It evaluates trust signals for messages and calls, such as unknown-sender filtering.",
+    "impact": "Spam and unknown-sender filtering may be less effective.",
+  },
+  "com.apple.coreidvd": {
+    "description": "The CoreIDV daemon. It performs identity-document verification and liveness checks for identity features.",
+    "impact": "Identity verification and liveness checks may not work.",
+  },
+  # --- Family & ScreenTime ---
+  "com.apple.AskPermissionUI": {
+    "description": "The Ask Permission UI. It displays Ask to Buy and parental-approval prompts.",
+    "impact": "Ask to Buy and permission prompts may not appear.",
+  },
+  "com.apple.Notes.datastore": {
+    "description": "The Notes data store daemon. It manages the Notes database and serves note content to the Notes app.",
+    "impact": "Notes may not open, save, or sync correctly.",
+  },
 }
 
 CATEGORIZATION_MAP = {
   "♿️ Accessibility": [
     "com.apple.accessibility.MotionTrackingAgent",
     "com.apple.accessibility.axassetsd",
+    "com.apple.AccessibilityVisualsAgent",
+    "com.apple.scrod",
     "com.apple.universalaccessd",
     "com.apple.voicebankingd",
     "com.apple.AXMediaUtilitiesService",
@@ -2970,6 +4171,7 @@ CATEGORIZATION_MAP = {
     "com.apple.ap.adprivacyd",
     "com.apple.ap.promotedcontentd",
     "com.apple.adid",
+    "com.apple.ecosystemagent",
     "com.apple.parsec-fbf",
     "com.apple.analyticsd",
     "com.apple.osanalytics.osanalyticshelper",
@@ -2988,10 +4190,16 @@ CATEGORIZATION_MAP = {
   ],
   "🛒 App & Store Related": [
     "com.apple.appstoreagent",
+    "com.apple.appstorecomponentsd",
     "com.apple.appstored",
+    "com.apple.backgroundassets.user",
     "com.apple.commerce",
+    "com.apple.ndoagent",
     "com.apple.passd",
     "com.apple.financed",
+    "com.apple.storeassetd",
+    "com.apple.storelegacy",
+    "com.apple.triald",
     "com.apple.watchlistd",
     "com.apple.triald.system",
     "com.apple.newsd",
@@ -3019,6 +4227,7 @@ CATEGORIZATION_MAP = {
   "💾 Backup & Time Machine": [
     "com.apple.backupd",
     "com.apple.backupd-helper",
+    "com.apple.mbproximityhelper",
     "com.apple.TMHelperAgent",
     "com.apple.mbsystemadministration",
     "com.apple.mbfloagent",
@@ -3029,6 +4238,7 @@ CATEGORIZATION_MAP = {
   ],
   "📅 Calendar & Reminders": [
     "com.apple.calaccessd",
+    "com.apple.calendar.CalendarAgentBookmarkMigrationService",
     "com.apple.remindd",
     "com.apple.CallHistoryPluginHelper",
     "com.apple.dataaccess.dataaccessd",
@@ -3039,10 +4249,28 @@ CATEGORIZATION_MAP = {
     "com.apple.notes.exchangenotesd",
   ],
   "📱 Device Communication": [
+    "com.apple.AMPDeviceDiscoveryAgent",
+    "com.apple.AMPDevicesAgent",
+    "com.apple.AMPSystemPlayerAgent",
+    "com.apple.bluetoothaudiod",
     "com.apple.bluetoothd",
+    "com.apple.btsa",
+    "com.apple.businessservicesd",
+    "com.apple.cloudpaird",
+    "com.apple.coreservices.UASharedPasteboardProgressUI",
+    "com.apple.ensemble",
+    "com.apple.facetimemessagestored",
+    "com.apple.idsfoundation.IDSRemoteURLConnectionAgent",
+    "com.apple.idsremoteurlconnectionagent",
+    "com.apple.imdpersistence.IMDPersistenceAgent",
+    "com.apple.mediacontinuityd",
+    "com.apple.mobiledeviceupdater",
     "com.apple.nearbyd",
+    "com.apple.nexusd",
     "com.apple.rapportd",
+    "com.apple.rapportd-user",
     "com.apple.sidecar-relay",
+    "com.apple.ThreadCommissionerService",
     "com.apple.usbmuxd",
     "com.apple.CommCenter-osx",
     "com.apple.imagent",
@@ -3069,7 +4297,17 @@ CATEGORIZATION_MAP = {
     "com.apple.sidecar-hid-relay",
   ],
   "🕵️  Diagnostics & Logging": [
+    "com.apple.appleseed.seedusaged.postinstall",
+    "com.apple.diagnosticspushd",
+    "com.apple.DiagnosticsReporter",
+    "com.apple.DumpPanicRecoveryOS",
+    "com.apple.feedbackd",
+    "com.apple.kdumpd",
     "com.apple.logd",
+    "com.apple.ReportGPURestart",
+    "com.apple.symptomsd-diag.agent",
+    "com.apple.symptomsd.distributed-agent",
+    "com.apple.sysdiagnose.darwinos",
     "com.apple.syslogd",
     "com.apple.spindump",
     "com.apple.ReportCrash",
@@ -3112,26 +4350,41 @@ CATEGORIZATION_MAP = {
     "com.apple.systemstats.analysis",
     "com.apple.systemstats.daily",
     "com.apple.systemstats.microstackshot_periodic",
+    "com.apple.thermaltrap",
     "com.apple.usbctelemetryd",
   ],
   "👪 Family & ScreenTime": [
+    "com.apple.AskPermissionUI",
+    "com.apple.asktod",
+    "com.apple.assessmentagent",
     "com.apple.familycontrols.useragent",
     "com.apple.familycircled",
+    "com.apple.macos.studentd",
     "com.apple.ScreenTimeAgent",
     "com.apple.parentalcontrols.check",
     "com.apple.FamilyControlsAgent",
     "com.apple.familycontrols",
     "com.apple.familynotificationd", 
+    "com.apple.ScreenTimeSettingsAgent",
     "com.apple.UsageTrackingAgent",
   ],
   "💽 Filesystem & Storage": [
+    "com.apple.coreimportd",
+    "com.apple.diskspaced",
+    "com.apple.FilesystemUI",
     "com.apple.fseventsd",
     "com.apple.diskarbitrationd",
+    "com.apple.metadata.mdwrite",
+    "com.apple.NVMeAgent",
+    "com.apple.STMUIHelper",
+    "com.apple.storagede.helper",
     "com.apple.storagekitd",
     "com.apple.corestorage.corestoraged",
     "com.apple.hdiejectd",
     "com.apple.nfsd",
     "com.apple.smbd",
+    "com.apple.StorageManagement.Service",
+    "com.apple.StorageManagementUIHelper",
     "com.apple.unmountassistant.useragent",
     "com.apple.apfsuseragent",
     "com.apple.DiskArbitrationAgent",
@@ -3160,10 +4413,16 @@ CATEGORIZATION_MAP = {
     "com.apple.revisiond",
     "com.apple.smb.preferences",
     "com.apple.unmountassistant.sysagent",
+    "com.apple.xsan",
+    "com.apple.xscertadmin",
+    "com.apple.xscertd",
+    "com.apple.xscertd-helper",
   ],
   "🎮 Game Center": [
+    "com.apple.gamecontroller.ConfigService",
     "com.apple.gamed",
     "com.apple.GameController.gamecontrolleragentd",
+    "com.apple.GameOverlayUI",
     "com.apple.gamesaved",
     "com.apple.GamePolicyAgent",
     "com.apple.GameController.gamecontrollerd",
@@ -3171,36 +4430,63 @@ CATEGORIZATION_MAP = {
     "com.apple.gamepolicyd",
   ],
   "🔌 Hardware & Drivers": [
-    "com.apple.IOUserDockChannelSerial-0x10000...",
+    "com.apple.accessorysensormgrd",
     "com.apple.airportd",
     "com.apple.appleh13camerad",
     "com.apple.appleh16camerad",
+    "com.apple.arkitd",
     "com.apple.audio.AudioComponentRegistrar",
+    "com.apple.audio.AudioComponentRegistrar.daemon",
     "com.apple.audio.coreaudiod",
     "com.apple.audio.isolated.historicalaudiod",
     "com.apple.audio.isolated.micactivityd",
+    "com.apple.audio.micactivityd",
     "com.apple.audio.systemsoundserverd",
     "com.apple.audiomxd",
     "com.apple.cameracaptured",
-    "com.apple.cmio.IOSScreenCaptureAssistant",
-    "com.apple.cmio.VCAssistant",
+    "com.apple.centaurid",
+    "com.apple.cmio.ContinuityCaptureAgent",
+    "com.apple.cmio.registerassistantservice",
     "com.apple.cmio.uvcassistantextension",
+    "com.apple.cmio.videodriverkithostextension",
     "com.apple.colorsync.displayservices",
+    "com.apple.colorsync.useragent",
     "com.apple.colorsyncd",
     "com.apple.corebrightnessd",
+    "com.apple.CSCSupportd",
     "com.apple.ctkd",
+    "com.apple.cvmsCompAgent3425AMD_x86_64",
+    "com.apple.cvmsCompAgent3425AMD_x86_64_1",
+    "com.apple.cvmsCompAgent3600_arm64",
+    "com.apple.cvmsCompAgent3600_arm64_1",
+    "com.apple.cvmsCompAgent3600_x86_64",
+    "com.apple.cvmsCompAgent3600_x86_64_1",
+    "com.apple.cvmsCompAgent_arm64",
+    "com.apple.cvmsCompAgent_arm64_1",
+    "com.apple.cvmsCompAgent_x86_64",
+    "com.apple.cvmsCompAgent_x86_64_1",
     "com.apple.deviceinterfaced",
     "com.apple.displaypolicyd",
-    "com.apple.driverkit.AppleUserHIDDrivers-0...",
+    "com.apple.ExpansionSlotNotification",
+    "com.apple.firmwaresyncd",
+    "com.apple.gputoolsserviced",
     "com.apple.hidd",
+    "com.apple.icdd",
     "com.apple.ifdreader",
     "com.apple.iomfb_bics_daemon",
     "com.apple.iomfb_fdr_loader",
     "com.apple.kernelmanagerd",
-    "com.apple.liquidddetectiond",
+    "com.apple.lightsoutmanagementd",
+    "com.apple.MemorySlotNotification",
+    "com.apple.MobileAccessoryUpdater.fudHelperAgent",
+    "com.apple.mobilerepaird",
+    "com.apple.MTLAssetUpgraderD",
     "com.apple.nand.aspcarry",
     "com.apple.nand_task_scheduler",
-    "com.apple.powerd",
+    "com.apple.preference.displays.MirrorDisplays",
+    "com.apple.printtool.agent",
+    "com.apple.printuitool.agent",
+    "com.apple.remotecompositorclientd",
     "com.apple.retimerd",
     "com.apple.scsid",
     "com.apple.sysextd",
@@ -3208,6 +4494,7 @@ CATEGORIZATION_MAP = {
     "com.apple.touchbarserver",
     "com.apple.SafeEjectGPUAgent",
     "com.apple.cmio.LaunchCMIOUserExtensionsAgent",
+    "com.apple.uarppersonalizationd",
     "com.apple.usbnotificationagent",
     "com.apple.IOUIAgent",
     "com.apple.midiserver",
@@ -3246,6 +4533,7 @@ CATEGORIZATION_MAP = {
     "com.apple.usbaudiod",
     "com.apple.usbpowerd",
     "com.apple.usbsmartcardreaderd",
+    "com.apple.videoconference.camera",
     "com.apple.wifiFirmwareLoader",
     "org.cups.cupsd",
     "com.apple.iokit.IOServiceAuthorizeAgent",
@@ -3254,13 +4542,21 @@ CATEGORIZATION_MAP = {
   "🏠 HomeKit": [
     "com.apple.homed",
     "com.apple.homeenergyd",
+    "com.apple.homeeventsd",
   ],
   "☁️  iCloud & CloudKit": [
+    "com.apple.appleidsetupd",
+    "com.apple.bookdatastored",
     "com.apple.cloudd",
     "com.apple.bird",
     "com.apple.cloudphotod",
+    "com.apple.contacts.postersyncd",
+    "com.apple.FeatureAccessAgent",
+    "com.apple.findmy.findmylocateagent",
     "com.apple.icloud.findmydeviced",
     "com.apple.icloud.searchpartyd",
+    "com.apple.iCloudNotificationAgent",
+    "com.apple.icloudwebd",
     "com.apple.protectedcloudstorage.protectedcloudkeysyncing",
     "com.apple.itunescloudd",
     "com.apple.ckdiscretionaryd",
@@ -3281,9 +4577,16 @@ CATEGORIZATION_MAP = {
     "com.apple.icloud.searchpartyuseragent",
     "com.apple.icloud.fmfd",
     "com.apple.icloudmailagent",
+    "com.apple.StatusKitAgent",
   ],
   "📦 Installation & Updates": [
+    "com.apple.dt.CommandLineTools.installondemand",
+    "com.apple.inboxupdaterd",
     "com.apple.installd",
+    "com.apple.jetpackassetd",
+    "com.apple.package-script-service",
+    "com.apple.PackageUIKit.InstallStatus",
+    "com.apple.postupgraded",
     "com.apple.softwareupdated",
     "com.apple.mobileassetd",
     "com.apple.mobile.obliteration",
@@ -3322,10 +4625,25 @@ CATEGORIZATION_MAP = {
     "com.apple.installandsetup.migrationhelper.user",
   ],
   "💼 Mgt & Development": [
+    "com.apple.CoreDevice.remotepairingd",
+    "com.apple.dmd.agent",
+    "com.apple.dt.AutomationModeUI",
+    "com.apple.dt.previewsd",
+    "com.apple.dt.previewsviewservice",
+    "com.apple.managedappdistributionagent",
     "com.apple.ManagedClient",
+    "com.apple.ManagedClient.startup",
+    "com.apple.ManagedClientAgent.enrollagent",
+    "com.apple.mdmclient.daemon.runatboot",
+    "com.apple.previewshellapp",
+    "com.apple.RemoteDesktop",
+    "com.apple.RemoteDesktop.agent",
+    "com.apple.RemoteManagementAgent",
     "com.apple.RemotePairTool",
     "com.apple.ManagedClientAgent.agent",
     "com.apple.ManagedSettingsAgent",
+    "com.apple.ssinvitationagent",
+    "com.apple.swiftuitraced",
     "com.apple.testmanagerd",
     "com.apple.mdmclient.agent",
     "com.apple.dmd",
@@ -3345,8 +4663,23 @@ CATEGORIZATION_MAP = {
     "com.apple.testmanagerd.remote",
   ],
   "🌐 Networking": [
+    "com.apple.AirPortBaseStationAgent",
+    "com.apple.bootpd",
+    "com.apple.cfnetwork.AuthBrokerAgent",
+    "com.apple.dhcp6d",
+    "com.apple.ftp",
+    "com.apple.ftp-proxy",
+    "com.apple.getty",
     "com.apple.mDNSResponder",
     "com.apple.configd",
+    "com.apple.mDNSResponderHelper",
+    "com.apple.msrpc.echosvc",
+    "com.apple.netauth.user.auth",
+    "com.apple.netauth.user.gui",
+    "com.apple.odproxyd",
+    "com.apple.screensharing.agent",
+    "com.apple.screensharing.menuextra",
+    "com.apple.screensharing.MessagesAgent",
     "com.apple.sharingd",
     "com.apple.screensharing",
     "com.apple.netbiosd",
@@ -3360,6 +4693,9 @@ CATEGORIZATION_MAP = {
     "com.apple.NetworkSharing",
     "com.apple.RFBEventHelper",
     "com.apple.SCHelper",
+    "com.apple.sntpd",
+    "com.apple.uucp",
+    "com.apple.wifi.WiFiAgent",
     "com.apple.WirelessRadioManager",
     "com.apple.cfnetwork.cfnetworkagent",
     "com.apple.dpdkswitchd",
@@ -3387,10 +4723,21 @@ CATEGORIZATION_MAP = {
     "com.apple.threadradiod",
     "com.apple.wifip2pd",
     "com.apple.wifivelocityd",
+    "com.openssh.ssh-agent",
+    "com.apple.ntalkd",
+    "org.apache.httpd",
+    "org.cups.cups-lpd",
+    "org.net-snmp.snmpd",
+    "org.openldap.slapd",
+    "com.openssh.sshd",
+    "com.apple.tftpd",
   ],
   "🗺️  Maps & Location": [
+    "com.apple.CoreLocationAgent",
+    "com.apple.geodMachServiceBridge",
     "com.apple.locationd",
     "com.apple.geod",
+    "com.apple.Maps.mapssyncd",
     "com.apple.routined",
     "com.apple.Maps.mapspushd",
     "com.apple.countryd",
@@ -3399,6 +4746,7 @@ CATEGORIZATION_MAP = {
     "com.apple.CoreRoutine.helperservice"
   ],
   "⚡️ Power Management": [
+    "com.apple.powerchime",
       "com.apple.powerd",
       "com.apple.PerfPowerServices",
       "com.apple.PerfPowerServicesExtended",
@@ -3407,6 +4755,9 @@ CATEGORIZATION_MAP = {
       "com.apple.powerexperienced",
   ],
   "🖼️  Photos & Media": [
+    "com.apple.avatarsd",
+    "com.apple.MENotificationAgent",
+    "com.apple.mobiletimerd",
     "com.apple.photoanalysisd",
     "com.apple.photolibraryd",
     "com.apple.mediaanalysisd",
@@ -3415,11 +4766,37 @@ CATEGORIZATION_MAP = {
     "com.apple.avconferenced",
     "com.apple.amp.mediasharingd",
     "com.apple.AMPLibraryAgent",
+    "com.apple.replayd",
+    "com.apple.sociallayerd",
+    "com.apple.sportsd",
+    "com.apple.stickersd",
     "com.apple.tonelibraryd",
     "com.apple.rcd",
     "com.apple.musicd",
+    "com.apple.voicememod",
   ],
   "🧠 Proactive & Intelligence": [
+    "com.apple.ciphermld",
+    "com.apple.contacts.donation-agent",
+    "com.apple.corespotlightd",
+    "com.apple.corespotlightservice",
+    "com.apple.intelligencetasksd",
+    "com.apple.managedcorespotlightd",
+    "com.apple.mdworker.application",
+    "com.apple.mdworker.single.arm64",
+    "com.apple.mdworker.single.x86_64",
+    "com.apple.mdworker.sizing",
+    "com.apple.milod",
+    "com.apple.mlhostd",
+    "com.apple.mlruntimed",
+    "com.apple.ModelCatalogAgent",
+    "com.apple.peopled",
+    "com.apple.proactived",
+    "com.apple.reversetemplated",
+    "com.apple.searchtoold",
+    "com.apple.siriinferenced",
+    "com.apple.spotlightknowledged.importer",
+    "com.apple.spotlightknowledged.updater",
     "com.apple.suggestd",
     "com.apple.parsecd",
     "com.apple.intelligenceplatformd",
@@ -3447,10 +4824,10 @@ CATEGORIZATION_MAP = {
     "com.apple.biomesyncd",
   ],
   "🌐 Safari & WebKit": [
+    "com.apple.Safari.SafeBrowsing.Service",
     "com.apple.SafariHistoryServiceAgent",
     "com.apple.SafariBookmarksSyncAgent",
     "com.apple.Safari.PasswordBreachAgent",
-    "com.apple.Safari.SafeBrowse.Service",
     "com.apple.SafariNotificationAgent",
     "com.apple.SafariLaunchAgent",
     "com.apple.Safari.History",
@@ -3460,17 +4837,44 @@ CATEGORIZATION_MAP = {
     "com.apple.swcd",
   ],
   "🔒 Security & Keychain": [
+    "com.apple.appleaccounttransparencyd",
+    "com.apple.auditd",
+    "com.apple.AuthenticationServicesCore.AuthenticationServicesAgent",
+    "com.apple.AutoFillPanel",
+    "com.apple.communicationtrustd",
+    "com.apple.coreidvd",
+    "com.apple.CryptoTokenKit.ahp.agent",
+    "com.apple.EscrowSecurityAlert",
+    "com.apple.filevaultd",
+    "com.apple.LocalAuthentication.userauthd",
+    "com.apple.locationaccessstored",
+    "com.apple.lockoutagent",
+    "com.apple.PasswordService",
+    "com.apple.prngseedd",
+    "com.apple.scopedbookmarksagent.xpc",
+    "com.apple.securemessagingagent",
+    "com.apple.security.DiskUnmountWatcher",
+    "com.apple.security.FDERecoveryAgent",
+    "com.apple.security.XPCKeychainSandboxCheck",
+    "com.apple.security.XPCTimeStampingService",
+    "com.apple.security.xprotectd",
     "com.apple.securityd",
+    "com.apple.securityuploadd",
+    "com.apple.seserviced",
+    "com.apple.swtransparencyd",
     "com.apple.tccd",
     "com.apple.syspolicyd",
     "com.apple.authd",
-    "com.apple.MRTD",
     "com.apple.cryptexd",
     "com.apple.lockd",
     "com.apple.devicecheckd",
     "com.apple.MRTa",
+    "com.apple.transparencyd",
+    "com.apple.transparencyStaticKey",
     "com.apple.trustd.agent",
     "com.apple.TrustedPeersHelper",
+    "com.apple.TrustEvaluationAgent",
+    "com.apple.XProtect.agent.scan.startup",
     "com.apple.XprotectFramework.PluginService",
     "com.apple.LocalAuthentication.UIAgent",
     "com.apple.security.KeychainStasher",
@@ -3539,11 +4943,13 @@ CATEGORIZATION_MAP = {
     "com.apple.security.cloudkeychainproxy3",
   ],
   "🗣️  Siri & Dictation": [
+    "com.apple.assistant_cdmd",
     "com.apple.assistantd",
     "com.apple.corespeechd",
     "com.apple.siriknowledged",
     "com.apple.Siri.agent",
     "com.apple.shazamd",
+    "com.apple.speech.speechsynthesisd.arm64",
     "com.apple.speech.speechsynthesisd.x86_64",
     "com.apple.speech.synthesisserver",
     "com.apple.speech.speechdatainstallerd",
@@ -3559,7 +4965,23 @@ CATEGORIZATION_MAP = {
     "com.apple.SpeechRecognitionCore.brokerd",
   ],
   "⚙️  System Core": [
+    "com.apple.accounts.dom",
+    "com.apple.AddressBook.abd",
+    "com.apple.AddressBook.AssistantService",
+    "com.apple.atrun",
+    "com.apple.coredatad",
     "com.apple.coreservicesd",
+    "com.apple.csuseragent",
+    "com.apple.datastored",
+    "com.apple.AEServer",
+    "com.apple.email.maild",
+    "com.apple.jetsamproperties.Mac",
+    "com.apple.kcgend",
+    "com.apple.linkd",
+    "com.apple.loginwindow.LWWeeklyMessageTracer",
+    "com.apple.MailServiceAgent",
+    "com.apple.Notes.datastore",
+    "com.apple.pluginkit.pkreporter",
     "com.apple.runningboardd",
     "com.apple.lsd",
     "com.apple.loginwindow",
@@ -3569,6 +4991,16 @@ CATEGORIZATION_MAP = {
     "com.apple.distnoted",
     "com.apple.cfprefsd",
     "com.apple.contactsd",
+    "com.apple.syncdefaultsd",
+    "com.apple.syncservices.SyncServer",
+    "com.apple.systemsettingsagent",
+    "com.apple.toolkitd",
+    "com.apple.uikitsystemapp",
+    "com.apple.UserEventAgent-CryptexContainer",
+    "com.apple.UserEventAgent-LoginWindow",
+    "com.apple.usernoted",
+    "com.apple.usernotificationsd",
+    "com.apple.warmd_agent",
     "com.apple.xpc.smd",
     "com.apple.mds",
     "com.apple.timed",
@@ -3631,6 +5063,7 @@ CATEGORIZATION_MAP = {
     "com.apple.tzlinkd",
     "com.apple.warmd",
     "com.apple.watchdogd",
+    "com.apple.xtyped",
     "com.vix.cron",
     "com.apple.helpd",
     "com.apple.hiservices-xpcservice",
@@ -3641,16 +5074,22 @@ CATEGORIZATION_MAP = {
     "com.apple.pluginkit.pkd",
     "com.apple.usermanagerhelper",
     "com.apple.WorkflowKit.ShortcutsViewService",
-    "com.apple.FolderActionsDispatcher",
     "com.apple.metadata.mdflagwriter"
   ],
   "✍️  Text & Input": [
+    "com.apple.CharacterPicker.FileService",
+    "com.apple.CharacterPicker.RemoteGenerationViewService",
+    "com.apple.DataDetectorsLocalSources",
+    "com.apple.fontd.useragent",
+    "com.apple.FontRegistryUIAgent",
+    "com.apple.FontValidator",
     "com.apple.naturallanguaged",
     "com.apple.languaged",
     "com.apple.applespell",
     "com.apple.FontWorker",
     "com.apple.localizationswitcherd",
     "com.apple.languageassetd",
+    "com.apple.textcomposerd",
     "com.apple.TextInputMenuAgent",
     "com.apple.keyboardservicesd",
     "com.apple.ATS.FontValidator",
@@ -3661,8 +5100,13 @@ CATEGORIZATION_MAP = {
     "com.apple.fontmover",
     "com.apple.handwritingd",
     "com.apple.DictionaryServiceHelper",
+    "com.apple.translationd",
   ],
   "🧩 Third-Party": [
+    "com.appfactory.core",
+    "com.google.GoogleUpdater.wake.system",
+    "com.google.keystone.agent",
+    "com.google.keystone.daemon",
     "com.google.keystone.user.agent",
     "com.google.keystone.user.xpcservice",
     "com.docker.helper",
@@ -3671,6 +5115,7 @@ CATEGORIZATION_MAP = {
     "com.adobe.GC.AGM",
     "com.adobe.GC.Scheduler-1.0",
     "Adobe_Genuine_Software_Integrity_Service",
+    "com.google.keystone.xpcservice",
     "com.microsoft.update.agent",
     "com.microsoft.autoupdate.helper",
     "com.1password.1password-launcher",
@@ -3679,8 +5124,36 @@ CATEGORIZATION_MAP = {
     "com.postgresapp.Postgres2LoginHelper",
     "com.figma.daemon",
     "homebrew.mxcl.redis",
+    "us.zoom.updater",
+    "us.zoom.updater.login.check",
+    "us.zoom.ZoomDaemon",
   ],
   "🖥️  User Interface & Windowing": [
+    "com.apple.appkit.xpc.ColorSampler",
+    "com.apple.AquaAppearanceHelper",
+    "com.apple.AquaAppearanceHelper.agent",
+    "com.apple.Dock",
+    "com.apple.FolderActionsDispatcher",
+    "com.apple.FollowUpUI",
+    "com.apple.LinkedNotesUIService",
+    "com.apple.liveactivitiesd",
+    "com.apple.menuextra.battery.helper",
+    "com.apple.notificationcenterui",
+    "com.apple.nowplayingtouchui",
+    "com.apple.OSDUIHelper",
+    "com.apple.PIPAgent",
+    "com.apple.PosterBoard",
+    "com.apple.quicklook.ui.helper",
+    "com.apple.screencaptureui.agent",
+    "com.apple.ScriptMenuApp",
+    "com.apple.ServicesUIAgent",
+    "com.apple.SpacesTouchBarAgent.app",
+    "com.apple.Spotlight",
+    "com.apple.SystemUIServer",
+    "com.apple.TextInputUI.xpc.CursorUIViewService",
+    "com.apple.UserNotificationCenterAgent-LoginWindow",
+    "com.apple.wallpaper",
+    "com.apple.WindowManager",
     "com.apple.WindowServer",
     "com.apple.Dock.agent",
     "com.apple.SystemUIServer.agent",
@@ -3723,6 +5196,7 @@ CATEGORIZATION_MAP = {
     "com.apple.weather.menu",
   ],
   "❓ Undocumented": [
+    "com.apple.ctcategories.service",
      "com.apple.IFCStart", 
      "com.apple.corercd", 
      "com.apple.filesystems.doubleagentd",
@@ -3764,10 +5238,10 @@ def parse_launchctl_print_output(output: str) -> Tuple[set, Dict[str, str]]:
     disabled_section_match = re.search(r"disabled services = {([^}]+)}", output, re.DOTALL)
     if disabled_section_match:
         disabled_block = disabled_section_match.group(1)
-        disabled_pattern = re.compile(r'"([^"]+)"\s*=>\s*(enabled|disabled)')
+        disabled_pattern = re.compile(r'"([^"]+)"\s*=>\s*(enabled|disabled|true|false)')
         for match in disabled_pattern.finditer(disabled_block):
             service_name, status = match.groups()
-            disabled_status[service_name] = status
+            disabled_status[service_name] = "disabled" if status in ("disabled", "true") else "enabled"
             service_names.add(service_name)
 
     return service_names, disabled_status
@@ -3798,6 +5272,7 @@ def get_service_details(service_name: str, service_type: str, statuses: Dict[str
 
     return {
         "status": status,
+        "enabled_status": statuses.get(service_name, "enabled"),
         "description": stored_info["description"],
         "impact": stored_info["impact"],
         "type": service_type,
@@ -3812,124 +5287,40 @@ def get_live_services(console: Console) -> Dict[str, Dict[str, Dict]]:
     categorized_services["❓ Undocumented"] = {}
 
     uid = get_uid()
-
-    all_daemon_names = set()
-    all_agent_names = set()
-    daemon_pids = {}
-    agent_pids = {}
-    disabled_daemons = {}
-    disabled_agents = {}
-
-    with Progress(console=console, transient=True) as progress:
-        task = progress.add_task("[cyan]Discovering system services...", total=4)
-
+    discovered = {}
+    for domain in ("system", f"gui/{uid}", f"user/{uid}"):
+        prefix = ["sudo", "-n"] if domain == "system" and os.geteuid() != 0 else []
         try:
-            daemons_raw = subprocess.run(
-                ["sudo", "launchctl", "list"], capture_output=True, text=True, check=True
-            ).stdout
-            for line in daemons_raw.strip().split("\n")[1:]:
-                parts = line.split()
-                if len(parts) >= 3:
-                    all_daemon_names.add(parts[2])
-                    if parts[0] != "-":
-                        daemon_pids[parts[2]] = parts[0]
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Parsed system daemons...")
-
-        try:
-            print_system_raw = subprocess.run(
-                ["sudo", "launchctl", "print", "system/"], capture_output=True, text=True, check=True
-            ).stdout
-            names, statuses = parse_launchctl_print_output(print_system_raw)
-            all_daemon_names.update(names)
-            disabled_daemons.update(statuses)
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Analyzed system overrides...")
-
-        try:
-            agents_raw = subprocess.run(
-                ["launchctl", "list"], capture_output=True, text=True, check=True
-            ).stdout
-            for line in agents_raw.strip().split("\n")[1:]:
-                parts = line.split()
-                if len(parts) >= 3:
-                    all_agent_names.add(parts[2])
-                    if parts[0] != "-":
-                        agent_pids[parts[2]] = parts[0]
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Parsed user agents...")
-
-        try:
-            print_user_raw = subprocess.run(
-                ["launchctl", "print", f"user/{uid}"], capture_output=True, text=True, check=True
-            ).stdout
-            names, statuses = parse_launchctl_print_output(print_user_raw)
-            all_agent_names.update(names)
-            disabled_agents.update(statuses)
-        except Exception: pass
-        progress.update(task, advance=1, description="[cyan]Analyzed user overrides...")
-
-    # Add services from SERVICE_DATABASE that might not be discovered by launchctl
-    all_database_services = set(SERVICE_DATABASE.keys())
-    all_discovered_services = all_daemon_names.union(all_agent_names)
-    missing_services = all_database_services - all_discovered_services
-    
-    # For missing services, try to determine if they're daemons or agents
-    for service in missing_services:
-        # Try to get details for both daemon and agent to see which exists
-        daemon_details = get_service_details(service, "daemon", disabled_daemons, daemon_pids)
-        agent_details = get_service_details(service, "agent", disabled_agents, agent_pids)
-        
-        if daemon_details:
-            all_daemon_names.add(service)
-        elif agent_details:
-            all_agent_names.add(service)
-
-    all_services = sorted(list(all_daemon_names.union(all_agent_names)))
-    
-    with Progress(console=console, transient=True) as progress:
-        fetch_task = progress.add_task("[green]Categorizing services...", total=len(all_services))
-        for name in all_services:
-            # Determine the best service type by checking which has more definitive status info
-            daemon_details = None
-            agent_details = None
-            
-            if name in all_daemon_names:
-                daemon_details = get_service_details(name, "daemon", disabled_daemons, daemon_pids)
-            if name in all_agent_names:
-                agent_details = get_service_details(name, "agent", disabled_agents, agent_pids)
-            
-            # Choose the details with the most specific status info
-            # Priority: running > explicit disabled > explicit enabled > default enabled
-            details = None
-            service_type = None
-            
-            if daemon_details and agent_details:
-                # Both exist, choose the one with more specific status
-                # Priority: running (0) > disabled (1) > enabled (2)
-                daemon_priority = 0 if daemon_details['status'] == 'running' else (1 if daemon_details['status'] == 'disabled' else 2)
-                agent_priority = 0 if agent_details['status'] == 'running' else (1 if agent_details['status'] == 'disabled' else 2)
-                
-                if agent_priority <= daemon_priority:  # Prefer agent if equal priority
-                    details = agent_details
-                    service_type = "agent"
-                else:
-                    details = daemon_details
-                    service_type = "daemon"
-            elif agent_details:
-                details = agent_details
-                service_type = "agent"
-            elif daemon_details:
-                details = daemon_details
-                service_type = "daemon"
-            
-            if details:
-                details['type'] = service_type
-                category = categorize_service(name)
-                categorized_services[category][name] = details
-            progress.update(fetch_task, advance=1)
-
-    return OrderedDict([(cat, servs) for cat, servs in categorized_services.items() if servs])
+            result = subprocess.run(prefix + ["launchctl", "print", domain],
+                                    capture_output=True, text=True)
+            if result.returncode:
+                console.print(Text(f"Could not read {domain}: {result.stderr.strip()}", style="yellow"))
+                continue
+            names, statuses = parse_launchctl_print_output(result.stdout)
+            pids = {}
+            for match in re.finditer(r"^\s*(\d+)\s+[\d-]+\s+(\S+)\s*$", result.stdout, re.MULTILINE):
+                if int(match.group(1)) > 0:
+                    pids[match.group(2)] = match.group(1)
+            overrides = subprocess.run(prefix + ["launchctl", "print-disabled", domain],
+                                       capture_output=True, text=True)
+            if overrides.returncode:
+                console.print(Text(f"Could not read overrides for {domain}: {overrides.stderr.strip()}", style="yellow"))
+            else:
+                override_names, states = parse_launchctl_print_output(overrides.stdout)
+                names.update(override_names)
+                statuses.update(states)
+            for name in sorted(names):
+                details = get_service_details(name, "daemon" if domain == "system" else "agent", statuses, pids)
+                details.update(domain=domain, label=name)
+                discovered.setdefault(name, []).append(details)
+        except OSError as error:
+            console.print(Text(f"Could not read {domain}: {error}", style="yellow"))
+    for name, instances in sorted(discovered.items()):
+        for details in instances:
+            # Keep identical labels in separate domains independently actionable.
+            key = name if len(instances) == 1 else f"{name} ({details['domain']})"
+            categorized_services[categorize_service(name)][key] = details
+    return OrderedDict((cat, services) for cat, services in categorized_services.items() if services)
 
 def categorize_service(service_name: str) -> str:
     """Categorizes a service based on the CATEGORIZATION_MAP."""
@@ -3940,57 +5331,50 @@ def categorize_service(service_name: str) -> str:
         return "🧩 Third-Party"
     return "❓ Undocumented"
 
-def bootout_and_disable(service, uid):
-    """Boots out and disables a user agent, returns (success, error_message)"""
-    bootout_cmd = ["launchctl", "bootout", f"gui/{uid}/{service}"]
-    disable_cmd = ["launchctl", "disable", f"gui/{uid}/{service}"]
-    bootout_result = subprocess.run(bootout_cmd, capture_output=True, text=True)
-    disable_result = subprocess.run(disable_cmd, capture_output=True, text=True)
-    # Check if disabled
-    check_disabled = subprocess.run(["launchctl", "print-disabled", f"gui/{uid}"], capture_output=True, text=True)
-    is_disabled = f'"{service}" => disabled' in check_disabled.stdout
-    # Check if running
-    check_running = subprocess.run(["launchctl", "list"], capture_output=True, text=True)
-    is_running = any(service in line and not line.strip().startswith('-') for line in check_running.stdout.splitlines())
-    if is_disabled and not is_running:
+def set_service_enabled(service, domain, enabled):
+    """Apply an override in the discovered domain and verify the actual result."""
+    prefix = ["sudo", "-n"] if domain == "system" and os.geteuid() != 0 else []
+    target = f"{domain}/{service}"
+
+    def run(action, argument):
+        return subprocess.run(prefix + ["launchctl", action, argument], capture_output=True, text=True)
+
+    try:
+        # Prevent demand/KeepAlive relaunch before removing the loaded job.
+        action = "enable" if enabled else "disable"
+        result = run(action, target)
+        if result.returncode:
+            return False, f"{action} {target}: {result.stderr.strip() or result.stdout.strip()} (exit {result.returncode})"
+        bootout = None if enabled else run("bootout", target)
+        overrides = run("print-disabled", domain)
+        if overrides.returncode:
+            return False, f"Cannot verify override: {overrides.stderr.strip()}"
+        _, states = parse_launchctl_print_output("disabled services = {" + overrides.stdout + "}")
+        expected = "enabled" if enabled else "disabled"
+        if states.get(service) != expected:
+            return False, f"{target} is not verified as {expected}."
+        if not enabled:
+            loaded = run("print", target)
+            # ESRCH (113) and launchctl's exact missing-service diagnostic distinguish
+            # an unloaded job from a permission or domain lookup failure.
+            missing = loaded.returncode == 113 and "Could not find service" in loaded.stderr
+            if not missing:
+                detail = "Service is still loaded." if loaded.returncode == 0 else loaded.stderr.strip()
+                if bootout.returncode:
+                    detail += f" bootout: {bootout.stderr.strip()} (exit {bootout.returncode})"
+                return False, detail
         return True, ""
-    else:
-        msg = []
-        if not is_disabled:
-            msg.append("Service is not marked as disabled.")
-        if is_running:
-            msg.append("Service is still running.")
-        if bootout_result.returncode != 0:
-            msg.append(f"bootout error: {bootout_result.stderr.strip()}")
-        if disable_result.returncode != 0:
-            msg.append(f"disable error: {disable_result.stderr.strip()}")
-        return False, " ".join(msg)
+    except OSError as error:
+        return False, str(error)
+
+
+def bootout_and_disable(service, uid):
+    return set_service_enabled(service, f"gui/{uid}", False)
+
 
 def bootout_and_disable_system_daemon(service):
-    """Boots out and disables a system daemon, returns (success, error_message)"""
-    bootout_cmd = ["sudo", "launchctl", "bootout", f"system/{service}"]
-    disable_cmd = ["sudo", "launchctl", "disable", f"system/{service}"]
-    bootout_result = subprocess.run(bootout_cmd, capture_output=True, text=True)
-    disable_result = subprocess.run(disable_cmd, capture_output=True, text=True)
-    # Check if disabled
-    check_disabled = subprocess.run(["sudo", "launchctl", "print-disabled", "system"], capture_output=True, text=True)
-    is_disabled = f'"{service}" => disabled' in check_disabled.stdout
-    # Check if running
-    check_running = subprocess.run(["sudo", "launchctl", "list"], capture_output=True, text=True)
-    is_running = any(service in line and not line.strip().startswith('-') for line in check_running.stdout.splitlines())
-    if is_disabled and not is_running:
-        return True, ""
-    else:
-        msg = []
-        if not is_disabled:
-            msg.append("Service is not marked as disabled.")
-        if is_running:
-            msg.append("Service is still running.")
-        if bootout_result.returncode != 0:
-            msg.append(f"bootout error: {bootout_result.stderr.strip()}")
-        if disable_result.returncode != 0:
-            msg.append(f"disable error: {disable_result.stderr.strip()}")
-        return False, " ".join(msg)
+    return set_service_enabled(service, "system", False)
+
 
 class ServiceManagerTUI:
     """A terminal UI application for managing macOS services."""
@@ -4091,7 +5475,7 @@ class ServiceManagerTUI:
                     category_name = self.categories[self.active_category_index]
                     info = self.services_data[category_name][service_name]
                     # Toggle logic remains simple: if it's disabled, set pending to enabled, otherwise set to disabled.
-                    current_status = info.get("pending_status", info["status"])
+                    current_status = info.get("pending_status", info.get("enabled_status", info["status"]))
                     info["pending_status"] = "enabled" if current_status == "disabled" else "disabled"
             elif key == "enter": return "apply"
             self._adjust_viewport('service')
@@ -4144,7 +5528,7 @@ class ServiceManagerTUI:
             info = self.services_data[category_name][name]
             display_status = info.get("pending_status", info["status"])
             
-            if "pending_status" in info and info["pending_status"] != info["status"]:
+            if "pending_status" in info and info["pending_status"] != info.get("enabled_status", info["status"]):
                 status_icon, status_style = "🔄", "yellow"
             elif display_status == "running":
                 status_icon, status_style = "🟢", "green"
@@ -4181,9 +5565,12 @@ class ServiceManagerTUI:
         status_styles = {"running": "green", "enabled": "green", "disabled": "red"}
         details_text.append("Status: ", style="bold yellow").append(f"{live_status.capitalize()}\n", style=status_styles.get(live_status, "default"))
         
+        if live_status == "running" and info.get("enabled_status") == "disabled":
+            details_text.append("Launch override: Disabled (process still running)\n", style="yellow")
+
         # Display pending status change
         pending_status = info.get('pending_status')
-        if pending_status and pending_status != live_status:
+        if pending_status and pending_status != info.get("enabled_status", live_status):
             pending_color = "green" if pending_status == "enabled" else "red"
             details_text.append("Pending: ", style="bold yellow").append(f"{pending_status.capitalize()} (press Enter to apply)\n", style=pending_color)
 
@@ -4195,14 +5582,14 @@ class ServiceManagerTUI:
         return Panel(details_text, title="Details", border_style="green")
 
     def confirm_and_apply(self, live):
-        changes = [(s, i) for c in self.services_data.values() for s, i in c.items() if "pending_status" in i and i["pending_status"] != i["status"]]
+        changes = [(s, i) for c in self.services_data.values() for s, i in c.items() if "pending_status" in i and i["pending_status"] != i.get("enabled_status", i["status"])]
 
         if not changes:
-            live.update(Panel(Text("No changes to apply.", justify="center")))
+            self.console.print(Panel(Text("No changes to apply.", justify="center")))
             time.sleep(1.5)
             return
 
-        live.update(Panel(self.generate_command_table(changes), title="[bold yellow]Confirm Changes"))
+        self.console.print(Panel(self.generate_command_table(changes), title="[bold yellow]Confirm Changes"))
         self.console.print(Panel(Text("Press 'y' to apply, any other key to cancel.", justify="center")))
         key = self.read_key()
 
@@ -4213,40 +5600,34 @@ class ServiceManagerTUI:
                 for service, info in changes:
                     action_str = info["pending_status"] # Will be "enabled" or "disabled"
                     command_action = "enable" if action_str == "enabled" else "disable"
-                    target_domain = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
-                    if info["type"] == "daemon":
-                        if command_action == "disable":
-                            # For system daemons, bootout then disable, then check
-                            success, error = bootout_and_disable_system_daemon(service)
-                            if not success:
-                                warnings.append(f"[Daemon] {service}: {error}")
-                        else:
-                            # Just enable
-                            command = ["sudo", "launchctl", command_action, target_domain]
-                            subprocess.run(command, capture_output=True, text=True, check=False)
+                    domain = info.get("domain", "system" if info["type"] == "daemon" else f"gui/{self.uid}")
+                    success, error = set_service_enabled(info.get("label", service), domain, command_action == "enable")
+                    if success:
+                        info["status"] = info["pending_status"]
+                        info["enabled_status"] = info["pending_status"]
+                        del info["pending_status"]
                     else:
-                        if command_action == "disable":
-                            success, error = bootout_and_disable(service, self.uid)
-                            if not success:
-                                warnings.append(f"[Agent] {service}: {error}")
-                        else:
-                            command = ["launchctl", "enable", target_domain]
-                            subprocess.run(command, capture_output=True, text=True, check=False)
-                    info["status"] = "enabled" if command_action == "enable" else "disabled"
-                    del info["pending_status"]
-                    progress.update(task, advance=1, description=f"[cyan]{command_action.capitalize()}d {service}")
+                        warnings.append(f"{service} [{domain}]: {error}")
+                    progress.update(task, advance=1, description=f"[cyan]{'Verified' if success else 'Failed'} {service}")
 
             if warnings:
                 warning_text = "\n".join(warnings)
-                live.update(Panel(Text(f"Some services may not have been fully disabled or stopped:\n\n{warning_text}", justify="left", style="yellow"), title="[bold red]Warning"))
-                time.sleep(4)
+                self.console.print(Panel(Text(f"Some services may not have been fully disabled or stopped:\n\n{warning_text}", justify="left", style="yellow"), title="[bold red]Warning"))
+                self.console.print("Press any key to continue.")
+                self.read_key()
             else:
-                live.update(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"))
+                self.console.print(Panel(Text("✅ Changes applied successfully. Rescanning services...", justify="center"), style="green"))
                 time.sleep(2)
             self.services_data = get_live_services(self.console)
+            self.categories = list(self.services_data)
+            self.active_category_index = min(self.active_category_index, max(0, len(self.categories) - 1))
+            self.active_service_index = 0
+            self.service_scroll_offset = 0
+            if not self.categories:
+                self.exit_app = True
         else:
             for _, info in changes: del info["pending_status"]
-            live.update(Panel(Text("❌ Changes cancelled.", justify="center"), style="red"))
+            self.console.print(Panel(Text("❌ Changes cancelled.", justify="center"), style="red"))
             time.sleep(1.5)
 
     def generate_command_table(self, changes: List[Tuple[str, Dict]]) -> Table:
@@ -4256,9 +5637,12 @@ class ServiceManagerTUI:
         table.add_column("Service Target", style="magenta")
         for service, info in changes:
             action = "disable" if info["pending_status"] == "disabled" else "enable"
-            target = f"system/{service}" if info["type"] == "daemon" else f"gui/{self.uid}/{service}"
+            domain = info.get("domain", "system" if info["type"] == "daemon" else f"gui/{self.uid}")
+            target = f"{domain}/{info.get('label', service)}"
             cmd_prefix = "sudo " if info["type"] == "daemon" else ""
             table.add_row(f"{cmd_prefix}launchctl {action}", target)
+            if action == "disable":
+                table.add_row(f"{cmd_prefix}launchctl bootout", target)
         return table
 
     def run(self):
@@ -4270,16 +5654,18 @@ class ServiceManagerTUI:
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
         try:
-            with Live(self.draw_layout(), screen=True, transient=True, refresh_per_second=20) as live:
+            with Live(self.draw_layout(), screen=True, transient=True, auto_refresh=False) as live:
                 while not self.exit_app:
                     action = self.handle_input(self.read_key())
                     
                     if action == "apply":
                         live.stop()
                         self.confirm_and_apply(live) # This method now handles the rescan
-                        live.start()
+                        if self.exit_app:
+                            break
+                        live.start(refresh=True)
                     
-                    live.update(self.draw_layout())
+                    live.update(self.draw_layout(), refresh=True)
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
@@ -4300,7 +5686,7 @@ if __name__ == "__main__":
     if os.geteuid() != 0:
         console = Console()
         console.print("[bold red]Error:[/] This script must be run with 'sudo' to manage system services.")
-        console.print("Please run as: sudo python3 your_script_name.py")
+        console.print("Please run as: sudo .venv/bin/python3 manage-services.tui.py")
         sys.exit(1)
 
     console = Console()
