@@ -137,6 +137,22 @@ class AccuracyTests(unittest.TestCase):
         app.console.print(app.draw_service_list(), height=22)
         self.assertIn('example.079', output.getvalue())
 
+    def test_long_list_labels_do_not_hide_scrolled_selection(self):
+        entries = {f'{i:03}.example.mdworker.sizing (gui/502)': {'status': 'loaded'} for i in range(80)}
+        app = m.ServiceManagerTUI({'Test': entries})
+        output = io.StringIO()
+        app.console = Console(file=output, width=80, height=24)
+        app.view_mode = 'services'
+        app.active_service_index = 79
+        app._adjust_viewport('service')
+        # Use the complete layout so column wrapping has the real narrow width.
+        # Details are not relevant to this test's scrolling assertion.
+        for info in entries.values():
+            info.update(type='agent', description='Example', impact='Unknown')
+        app.console.print(app.draw_layout())
+        left_column = '\n'.join(line[:38] for line in output.getvalue().splitlines())
+        self.assertIn('079.example.', left_column)
+
     def test_parser_ignores_non_service_tables_and_preserves_full_labels(self):
         output = """gui/502 = {
  services = {

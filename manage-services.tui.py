@@ -5555,7 +5555,7 @@ class ServiceManagerTUI:
     def draw_footer(self) -> Panel:
         # (Same as previous version)
         if self.view_mode == "categories": instructions = "[b]↑/↓[/b]: Navigate | [b]Enter[/b]: Select | [b]Q[/b]: Quit"
-        else: instructions = "[b]↑/↓[/b]: Select | [b]Space[/b]: Toggle | [b]Enter[/b]: Apply | [b]PgUp/PgDn[/b]: Details | [b]B[/b]: Back"
+        else: instructions = "[b]↑/↓[/b]: Move | [b]Space[/b]: Toggle | [b]Enter[/b]: Apply | [b]PgUp/Dn[/b]: Details | [b]B[/b]: Back"
         return Panel(Text.from_markup(instructions, justify="center"), title="Controls")
 
     def draw_category_list(self) -> Panel:
@@ -5576,7 +5576,7 @@ class ServiceManagerTUI:
         category_name = self.categories[self.active_category_index]
         table = Table(show_header=False, box=None, padding=(0, 0), show_edge=False)
         table.add_column(width=3)  # For icon
-        table.add_column()  # For name
+        table.add_column(no_wrap=True, overflow="ellipsis")  # Full label remains in Details
 
         available_height = self.viewport_height
         start = self.service_scroll_offset
