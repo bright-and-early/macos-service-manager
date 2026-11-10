@@ -1,11 +1,13 @@
-Read-only inventory verification — 2026-11-10T10:33:06.450145+00:00
+Read-only inventory verification — 2026-11-10T10:36:03.905225+00:00
 macOS 26.7.2
 No enable, disable, bootstrap, bootout, or kickstart commands executed.
 system: 402 loaded jobs match launchd count; 21 overrides match; 15 override-only entries.
 gui/502: 381 loaded jobs match launchd count; 82 overrides match; 74 override-only entries.
 user/502: 65 loaded jobs match launchd count; 82 overrides match; 78 override-only entries.
 1015 domain-specific entries across 29 categories.
-Observed list states: disabled=147, loaded=492, not loaded=20, running=356
+Observed list states: disabled=147, loaded=491, not loaded=20, running=357
 All running states have a positive launchd PID; saved override values match launchctl.
 Rendered actual TUI layout for com.apple.triald from this live inventory: service-details-trial.svg
 Rendered actual TUI layout for com.apple.Finder from this live inventory: service-details-running.svg
+Rendered actual TUI layout for com.apple.triald from this live inventory: service-details-80x24.svg
+Rendered actual TUI layout for com.apple.triald from this live inventory: service-details-110x30.svg

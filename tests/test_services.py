@@ -92,6 +92,28 @@ class LaunchctlTests(unittest.TestCase):
 
 
 class AccuracyTests(unittest.TestCase):
+    def test_details_can_be_paged_at_normal_terminal_sizes(self):
+        for width, height in ((80, 24), (110, 30)):
+            with self.subTest(width=width, height=height):
+                info = m.get_service_details('com.apple.triald', 'agent', {'com.apple.triald': 'disabled'}, {}, loaded=False)
+                info.update(domain='gui/502', label='com.apple.triald',
+                            plist_path='/System/Library/LaunchAgents/com.apple.triald.plist',
+                            program='/usr/libexec/triald')
+                app = m.ServiceManagerTUI({'Test': {'com.apple.triald': info}})
+                app.view_mode = 'services'
+                output = io.StringIO()
+                app.console = Console(file=output, width=width, height=height)
+                for _ in range(12):
+                    app.console.print(app.draw_layout())
+                    app.handle_input('page_down')
+                rendered = output.getvalue()
+                self.assertIn('Description:', rendered)
+                self.assertIn('Source:', rendered)
+                self.assertIn('Impact of Disabling', rendered)
+                self.assertIn('framework.', rendered)
+                app.handle_input('up')
+                self.assertEqual(app.details_scroll_offset, 0)
+
     def test_cancelled_toggle_retains_running_icon(self):
         info = m.get_service_details('example.running', 'agent', {'example.running': 'enabled'}, {'example.running': '123'})
         app = m.ServiceManagerTUI({'Test': {'example.running': info}})
@@ -172,7 +194,8 @@ class AccuracyTests(unittest.TestCase):
         app = m.ServiceManagerTUI({'Test': {'com.apple.triald': info}})
         app.view_mode = 'services'
         output = io.StringIO()
-        Console(file=output, width=110).print(app.draw_details_view())
+        app.console = Console(file=output, width=110, height=52)
+        app.console.print(app.draw_details_view())
         rendered = output.getvalue()
         self.assertIn('gui/502', rendered)
         self.assertIn('Override only', rendered)

@@ -1,0 +1,26 @@
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ ╭──────────────────────────────────────────────────────────────────────────╮ │
+│ │                          macOS Service Manager                           │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│ ╭─ Services in 🧠 Proactive & Intell─╮╭─────── Details (PgUp/PgDn) ────────╮ │
+│ │  🔴 com.apple.mdworker.single.x86… ││ Its launch configuration schedules │ │
+│ │    (user/502)                      ││ experiment fetching and            │ │
+│ │  🔴 com.apple.mdworker.sizing      ││ maintenance.                       │ │
+│ │    (gui/502)                       ││                                    │ │
+│ │  🔴 com.apple.mdworker.sizing      ││ Source:                            │ │
+│ │    (user/502)                      ││ /System/Library/LaunchAgents/com.a │ │
+│ │  🔴 com.apple.parsecd (gui/502)    ││ pple.triald.plist (Trial           │ │
+│ │  🔴 com.apple.parsecd (user/502)   ││ activities)                        │ │
+│ │  🔴 com.apple.siriinferenced       ││                                    │ │
+│ │    (gui/502)                       ││ Impact of Disabling (estimate):    │ │
+│ │  🔴 com.apple.siriinferenced       ││ Disabling may prevent Trial        │ │
+│ │    (user/502)                      ││ experiment configuration and       │ │
+│ │  🔴 com.apple.spotlightknowledged  ││ maintenance. Effects depend on the │ │
+│ │    (gui/502)                       ││ features using this framework.     │ │
+│ │  🔴 com.apple.spotlightknowledged  ││                                    │ │
+│ │    (user/502)                      ││                                    │ │
+│ ╰────────────────────────────────────╯╰────────────────────────────────────╯ │
+│ ╭──────────────────────────────── Controls ────────────────────────────────╮ │
+│ │   ↑/↓: Select | Space: Toggle | Enter: Apply | PgUp/PgDn: Details | B:   │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────╯

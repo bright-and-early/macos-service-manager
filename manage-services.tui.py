@@ -5438,6 +5438,7 @@ class ServiceManagerTUI:
         self.exit_app = False
         self.category_scroll_offset = 0
         self.service_scroll_offset = 0
+        self.details_scroll_offset = 0
         self.uid = get_uid()
         # Define the sort order for statuses
         self.status_sort_order = {"running": 0, "loaded": 1, "enabled": 1, "not loaded": 2, "disabled": 3}
@@ -5488,6 +5489,9 @@ class ServiceManagerTUI:
             char = sys.stdin.read(1)
             if char == '\x1b':
                 seq = sys.stdin.read(2)
+                if seq in ('[5', '[6'):
+                    if sys.stdin.read(1) == '~':
+                        return "page_up" if seq == '[5' else "page_down"
                 if seq == '[A': return "up"
                 if seq == '[B': return "down"
                 if seq == '[D': return "left"
@@ -5499,6 +5503,8 @@ class ServiceManagerTUI:
 
     def handle_input(self, key: str):
         # (Same as previous version, but now interacts with sorted list)
+        if key in ("up", "down", "b", "left", "enter"):
+            self.details_scroll_offset = 0
         if key == "q":
             self.exit_app = True
             return
@@ -5514,7 +5520,11 @@ class ServiceManagerTUI:
         
         elif self.view_mode == "services":
             current_services = self.get_current_services()
-            if key in ["b", "left"]: self.view_mode = "categories"
+            if key == "page_down":
+                self.details_scroll_offset += max(1, self.viewport_height - 2)
+            elif key == "page_up":
+                self.details_scroll_offset = max(0, self.details_scroll_offset - max(1, self.viewport_height - 2))
+            elif key in ["b", "left"]: self.view_mode = "categories"
             elif key == "up": self.active_service_index = max(0, self.active_service_index - 1)
             elif key == "down":
                 if current_services: self.active_service_index = min(len(current_services) - 1, self.active_service_index + 1)
@@ -5545,7 +5555,7 @@ class ServiceManagerTUI:
     def draw_footer(self) -> Panel:
         # (Same as previous version)
         if self.view_mode == "categories": instructions = "[b]↑/↓[/b]: Navigate | [b]Enter[/b]: Select | [b]Q[/b]: Quit"
-        else: instructions = "[b]↑/↓[/b]: Navigate | [b]Space[/b]: Toggle | [b]Enter[/b]: Apply Changes | [b]←/B[/b]: Back"
+        else: instructions = "[b]↑/↓[/b]: Select | [b]Space[/b]: Toggle | [b]Enter[/b]: Apply | [b]PgUp/PgDn[/b]: Details | [b]B[/b]: Back"
         return Panel(Text.from_markup(instructions, justify="center"), title="Controls")
 
     def draw_category_list(self) -> Panel:
@@ -5649,7 +5659,15 @@ class ServiceManagerTUI:
         impact_style = "bold red" if "CRITICAL" in impact_text.upper() else "default"
         details_text.append("Impact of Disabling (estimate):\n", style="bold yellow").append(impact_text, style=impact_style)
 
-        return Panel(details_text, title="Details", border_style="green")
+        # Match the existing two-column layout: outer panel + details borders/padding.
+        detail_width = max(1, (self.console.width - 4) // 2 - 4)
+        lines = details_text.wrap(self.console, detail_width)
+        page_height = self.viewport_height
+        self.details_scroll_offset = min(self.details_scroll_offset, max(0, len(lines) - page_height))
+        start = self.details_scroll_offset
+        visible = Text("\n").join(lines[start:start + page_height])
+        title = "Details" if len(lines) <= page_height else "Details (PgUp/PgDn)"
+        return Panel(visible, title=title, border_style="green")
 
     def confirm_and_apply(self, live):
         changes = [(s, i) for c in self.services_data.values() for s, i in c.items() if "pending_status" in i and i["pending_status"] != i.get("enabled_status", i["status"])]

@@ -78,6 +78,9 @@ configuration is unavailable, policy remains **unknown** instead of assuming
 enabled. A saved override can outlive an uninstalled app; the Details panel
 identifies override-only entries and does not claim they are installed.
 
+Use **Page Up/Page Down** to scroll long Details panels; selecting a different
+service returns Details to the top.
+
 Details include the domain, PID, and matching configuration/program when available.
 Configuration lookup uses the plist's `Label`, not its filename. Plists are
 supporting evidence, not extra list entries, and unrecognized or unreadable

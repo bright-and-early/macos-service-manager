@@ -55,17 +55,29 @@ def main():
     report.append('All running states have a positive launchd PID; saved override values match launchctl.')
 
     artifacts = root / 'artifacts'
-    for label, filename in [('com.apple.triald', 'service-details-trial'), ('com.apple.Finder', 'service-details-running')]:
+    for label, filename, width, height, paged in [
+        ('com.apple.triald', 'service-details-trial', 160, 52, False),
+        ('com.apple.Finder', 'service-details-running', 160, 52, False),
+        ('com.apple.triald', 'service-details-80x24', 80, 24, True),
+        ('com.apple.triald', 'service-details-110x30', 110, 30, True),
+    ]:
         category = next(cat for cat, group in data.items() if any(i['label'] == label for i in group.values()))
         key = next(key for key, info in data[category].items() if info['label'] == label)
         app = m.ServiceManagerTUI(data)
-        screen = Console(file=io.StringIO(), record=True, width=160, height=52, force_terminal=True, color_system='truecolor')
+        screen = Console(file=io.StringIO(), record=True, width=width, height=height, force_terminal=True, color_system='truecolor')
         app.console = screen
         app.view_mode = 'services'
         app.active_category_index = app.categories.index(category)
         app.active_service_index = app.get_current_services().index(key)
         app._adjust_viewport('service')
+        if paged:
+            app.handle_input('page_down')
+            app.handle_input('page_down')
+            app.handle_input('page_down')
         screen.print(app.draw_layout())
+        if paged:
+            assert 'Impact of Disabling' in screen.export_text(clear=False)
+
         screen.save_svg(str(artifacts / f'{filename}.svg'), title='macOS Service Manager — live read-only inventory', clear=False)
         screen.save_text(str(artifacts / f'{filename}.txt'), clear=False)
         report.append(f'Rendered actual TUI layout for {label} from this live inventory: {filename}.svg')
